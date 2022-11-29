@@ -15,6 +15,9 @@ function Navbar() {
             <div className="NavButtons">
                 <SuperMarketButton></SuperMarketButton>
                 <ProductsButton></ProductsButton>
+
+            </div>
+            <div className="LoginButton">
                 <LoginButton></LoginButton>
             </div>
             

@@ -4,7 +4,7 @@ import React from "react";
 function LoginButton(){
     
     return (
-        <button className="LoginButton">login</button>
+        <button className="LoginButton">Login</button>
     );
 
     
