@@ -8,15 +8,13 @@ function Navbar() {
     return (
         <div className="front-nav-bar">
             
-            <div className="title">
-                <div className="title">e-consumer</div>
-            </div>
-            
+            <div className="Title"><i class="uil uil-shopping-cart"></i>e-consumer</div>
+
             <div className="NavButtons">
                 <SuperMarketButton></SuperMarketButton>
                 <ProductsButton></ProductsButton>
-
             </div>
+
             <div className="LoginButton">
                 <LoginButton></LoginButton>
             </div>
@@ -27,4 +25,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
