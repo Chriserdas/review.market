@@ -1,47 +1,79 @@
-/* {
-  box-sizing: border-box;
-}*/
+@font-face {
+  font-family: Rubiks;
+  src: url("./fonts/Rubik/Rubik-Regular.ttf");
+}
 
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
+  /*font-family: 'Poppins', sans-serif;*/
+  font-family: Rubiks;
+  background-color: #141f29;
 }
 
 .front-nav-bar {
-  display: flex;
-  justify-content: center;
+  display:flex;
+  font-family: Rubiks;
+  justify-content: space-around;
   align-items: baseline;
-  background-color: #052b3f;
-  height: 5vh;
-  width: 100%;
+  /*background-color: #052b3f;*/
+  background-color: #17232d;
+  height: 2vh;
+  min-height:1vh;
+  width: 100vw;
   padding: 30px 25px;
   color:White;
 }
 
-.uil uil-angle-down{
-  vertical-align: middle;
-  text-align: center;
-}
 
 .Title{
-  position:fixed;
-  left: 1%;
+  position: fixed;
+  left:1%;
+  font-size: 15px;
+  
+}
+
+.Title::after{
+  content: ".market";
+  position: relative;
+  left:-3px;
+  color: #57636d;
+  border-left: none;
+  padding-bottom: 2px;
+  padding-right:5px;
+  border-right: solid 1px white;
+  border-bottom: solid 1px white;
 }
 
 .SupermarketButton,.ProductsButton{
+  position:relative;
+  top:.5vh;
   background:none; 
-  border:none;
-  color:white;
+  font-family: Rubiks;
+  font-size: 17px;
+  border: none;
+  color:#abb6bb;
   cursor: pointer;
-
+  margin-right:100px;
+  
 }
 
 .SupermarketButton:hover{
-  color:#FF6314;
+  color:white;
 }
 
+
+
 .ProductsButton:hover{
-  color:#FF6314;
+  color:white;
+}
+
+.SupermarketButton::after{
+  position:relative;
+  content: ".";
+  width:40px;
+  height:10px;
+  background-color: white;
+  border-bottom: 1px solid white;
 }
 
 

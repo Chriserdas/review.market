@@ -4,9 +4,7 @@ import React from "react";
 function SuperMarketButton(){
     
     return (
-        <button className="SupermarketButton">Supermarkets
-           <i class="uil uil-angle-down"></i>
-        </button>
+        <button className="SupermarketButton">Supermarkets</button>
 
     );
 
