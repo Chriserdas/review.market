@@ -1,6 +1,5 @@
 import React from "react";
-import Login from "./Login.js"
-import "./login.css"
+import LoginForm from "./LoginForm.js"
 
 function LoginButton({handleLoginClick}){
     const [isShown, setIsShown] = React.useState(false);
@@ -13,7 +12,7 @@ function LoginButton({handleLoginClick}){
         <div> 
             <button onClick={handleClick} className="LoginButton">Sign in</button>
 
-            {isShown && <Login />}
+            {isShown && <LoginForm />}
         </div>
     );
     
