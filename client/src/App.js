@@ -1,16 +1,29 @@
-import React from "react"
-import Navbar from "./components/NavigationBar/Navbar.js"
-import MainSection from "./components/MainSection/MainSection"
+import React, { useState } from "react";
+import "./index.css";
+import { Login } from "./components/Login";
+import { LoginAdmin } from "./components/LoginAdmin";
+import { Register } from "./components/Register";
 
 
-export default function App() {
+function App() {
+  const [currentForm, setCurrentForm] = useState("login");
+
+  const toggleForm = (formName) => {
+    setCurrentForm(formName);
+  };
+
   return (
-    
-    <div className="container">
-      <Navbar />
-      <MainSection />
+    <div className="App">
+      {currentForm === "login" ? (
+        <Login onFormSwitch={toggleForm} />
+      ) : currentForm === "loginAdmin" ?
+        <LoginAdmin onFormSwitch={toggleForm} />
+        :
+        <Register onFormSwitch={toggleForm} />
+      
+      }
     </div>
-    
-  )
+  );
 }
 
+export default App;
