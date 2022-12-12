@@ -208,10 +208,3 @@
   color:white;
 }
 
-
-@keyframes rotate180{
-  50% {opacity: 0;}
-  100%{
-    opacity: 1;
-  }
-}
