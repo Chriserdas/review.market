@@ -1,79 +1,218 @@
-.App {
-  text-align: center;
-  display: flex;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  background-image: linear-gradient(79deg, #000000, #5c2e7e 48%, #8bbccc);
+@font-face {
+  font-family: Rubik;
+  src: url("./fonts/Rubik/Rubik-Regular.ttf");
 }
 
-.auth-form-container,
-.login-form,
-.register-form {
-  display: flex;
-  flex-direction: column;
+@font-face {
+  font-family: Toboggan;
+  src: url("./fonts/Kanit/Kanit-SemiBold.ttf");
 }
 
-.auth-form-container {
-    padding: 5rem;
-    border: 1px solid white;
-    border-radius: 10px;
-    margin: 0.5rem;
-  }
-
-label {
-  text-align: left;
-  padding: 0.25rem 0;
+@font-face {
+  font-family: kanit-light;
+  src: url("./fonts/Kanit/Kanit-ExtraLight.ttf");
 }
 
-input {
-  margin: 0.5rem 0;
-  padding: 1rem;
-  border: none;
-  border-radius: 10px;
-}
-
-.link-btn {
-  border: none;
-  padding: 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  color: rgb(5, 3, 5);
-  text-decoration: underline;
-  background: none;
-}
-
-.link-btn:hover{
-  color:rgba(126, 169, 33, 0.969);
-}
-
-
-
-.login-btn {
+.login_container {
+  display:flex;
+  position: absolute;
+  font-family: Rubik;
+  flex-wrap: wrap;
+  top: 0px;
+  left: 0;
   width: 100%;
-  justify-content: center;
-  align-items: center;
-  background-color: rgb(48,172,251);
-  color: white;
-  margin-top: 5px;
-  border-radius: 20px;
-  border: none;
-  font-size: 15pt;
-  font-weight: 700;
-  transition: 1s;
-  outline: none;
-  cursor: pointer;
-  margin-bottom: 20px;background-color: white; 
-  color: black;
-  border-radius: 20px;
-  color: black;
-  padding: 8px 22px;
+  justify-content: flex-start;
+  overflow: auto;
+  font-weight: 800;
+  background-color: #f2f2f2;
+  min-width: 600px;
 }
 
-.login-btn:hover {
-  transform: scale(1.03);
-  letter-spacing: 4px;
-  background-color: #54145b;
-  color: #1E90FF;
+.login-title-container {
+  width: 37%;
+  height:100vh;
+  min-width:600px;
+  user-select: none;
+}
+
+.login_title::before{
+  position: relative;
+  content: url('https://api.iconify.design/uil/shopping-cart-alt.svg?color=rgb(36, 36, 36)&width=20&height=20');
+  top:5px;
+}
+
+
+.login_title{
+  position: relative;
+  left:1%;
+  top:2%;
+  -webkit-user-drag: none;
+  color: rgb(36, 36, 36);
+}
+
+.login_title::after{
+  content: ".market";
+  color: grey;
+  border-right: 2px solid grey;
+  border-bottom: 2px solid grey;
+  padding-right: 2px;
+}
+
+.login_txt{
+  position: relative;
+  top:20%;
+  left:25%;
+  letter-spacing: 1px;
+  font-family:Toboggan;
+  font-size: 40px;
+  font-weight:bold;
+  user-select: none;
+}
+
+.mapContainer{
+  position:relative;
+  background-image: url("./images/map_image.png");
+  background-repeat: no-repeat;
+  background-size:cover;
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-width: 600px;
+  height:100vh;
+  overflow: hidden;
+}
+
+.authenticate-form-container{
+  position:relative;
+  left:22vw;
+  top:25% ;
+  width: 400px;
+  height: 470px;
+  background-color: #f2f2f2;
+  box-shadow: 0px 0px 15px 5px #757575;
+  border-radius:2.5%;
+}
+
+.sign_in_title{
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  top:35px;
+  width:100%;
+  text-align: center;
+  justify-content: center;
+  font-family: Toboggan;
+  font-size:32px;
+  user-select: none;
+  z-index: 1;
+}
+
+.sign_in_title::after{
+  position: relative;
+  width: 100%;
+  content:"Please enter your credentials here!";
+  font-size:12px;
+  font-family: kanit-light;
+}
+
+.authenticate-form{
+  position: relative;
+  left:10%;
+  top: 70px;
+}
+
+
+#email,#pass,#username{
+  background-color: rgb(216, 216, 216);
+  padding-top:15px;
+  padding-bottom:15px;
+  padding-right:10px;
+  padding-left:10px;
+  width:300px;
+  border:0px;
+  border-radius:5px;
+  font-size:15px;
+  font-family: Rubik;
+  margin-bottom:20px;
+}
+
+#email::placeholder,#pass::placeholder,#username::placeholder{
+  font-size:15px;
+  font-family: Rubik;
+}
+
+/*#username{
+  display:block;
+}*/
+
+/*#email:focus,#pass:focus{
+  outline:none;
+  box-shadow: 0px 0px 20px 10px #e9e7e7;
+}
+
+.login_btn:focus{
+  outline:none;
+  box-shadow: 0px 0px 20px 10px #e9e7e7;
+}*/
+
+.login_btn{
+  background-color: #dd3b39;
+  padding-top:20px;
+  padding-bottom:15px;
+  padding-right:10px;
+  padding-left:10px;
+  width:320px;
+  color:white;
+  border:0px;
+  border-radius:5px;
+  font-size:17px;
+  font-family: Rubik;
+}
+
+.login_btn:hover {
+  cursor: pointer;
+  transform:scale(.99);
+}
+
+.goToRegister_container{
+  position: relative;
+  left:0px;
+  display: flex;
+  justify-content: center;
+  position:relative;
+  /*top:100px;*/
+}
+
+.goToRegister{
+  font-family: kanit-light;
+  font-size:15px;
+  margin-right: 15px;
+  user-select: none;
+}
+
+.register_btn{
+  position: relative;
+  top:-10px;
+  border:1px solid #dd3b39;
+  color:#dd3b39;
+  background-color:transparent;
+  padding:10px 20px 10px 20px;
+  font-size:15px;
+  transition:all 0.3 linear;
+  border-radius: 5px;
+}
+
+.register_btn:hover{
+  cursor:pointer;
+  background-color:#dd3b39;
+  color:white;
+}
+
+
+@keyframes rotate180{
+  50% {transform:rotateY(90deg);}
+  100%{
+    transform:rotateY(180deg);
+    transform:rotateY(0deg);
+  }
 }
