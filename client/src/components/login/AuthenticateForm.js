@@ -1,4 +1,4 @@
-import React,{ useState,useRef,useEffect}  from "react";
+import React,{ useState}  from "react";
 
 
 const AuthenticateForm = (props)=>{
@@ -14,43 +14,31 @@ const AuthenticateForm = (props)=>{
     const[top,setTop]= useState(props.goToRegisterTop);
     const[goTo,setGoTo] = useState(props.goTo);
     const[displayUsername,setDisplayUsername] = useState(props.displayUsername);
-    const[animation,setAnimation] = useState("");
 
-    function waitForAnimation(){
-            setAnimation("rotate180 2s cubic-bezier( 0.51, 0.5, 0.86, 0.82 ) forwards");
-            setTimeout(()=>{
-                
-                if(title === "Log in"){
-                    setTitle("Register");
-                    setTop("100px");
-                    setGoTo("Log in");
-                    setDisplayUsername("block");
-                }
-                else if(title === "Register"){
-                    setTitle("Log in");
-                    setTop("110px");
-                    setGoTo("Register");
-                    setDisplayUsername("none");
-                }
-                setTimeout(()=>{
-                    setAnimation("");
-                },1000);
-            },1000);
-           
-    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
     };
 
     const register = (e) => {
-        waitForAnimation()
+        if(title === "Log in"){
+            setTitle("Register");
+            setTop("100px");
+            setGoTo("Log in");
+            setDisplayUsername("block");
+        }
+        else if(title === "Register"){
+            setTitle("Log in");
+            setTop("110px");
+            setGoTo("Register");
+            setDisplayUsername("none");
+        }
     }
     
     
 
     return (
-        <div className="authenticate-form-container" style={{animation:animation}}>
+        <div className="authenticate-form-container" >
             <div className="sign_in_title">{title}</div>
             <form className="authenticate-form" onSubmit={handleSubmit}>
                 <input 
