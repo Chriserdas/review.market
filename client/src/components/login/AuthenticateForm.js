@@ -1,11 +1,7 @@
 import React,{ useState}  from "react";
-
+import axios from "axios";
 
 const AuthenticateForm = (props)=>{
-    /*const title = props.title;
-    const goToRegisterTop = props.goToRegisterTop;
-    const goTo = props.goTo;
-    const displayUsername = props.displayUsername;*/
 
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
@@ -43,7 +39,7 @@ const AuthenticateForm = (props)=>{
             <form className="authenticate-form" onSubmit={handleSubmit}>
                 <input 
                     defaultValue={email}
-                    type="text"
+                    type="email"
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email address"
                     id="email"
@@ -51,7 +47,7 @@ const AuthenticateForm = (props)=>{
                 />
                  <input
                     defaultValue={username}
-                    type="text"
+                    type="username"
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Username"
                     id="username"
