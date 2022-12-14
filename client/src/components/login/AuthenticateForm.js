@@ -1,58 +1,20 @@
 import React,{ useState}  from "react";
-import axios from "axios";
 
 const AuthenticateForm = (props)=>{
+    
 
-    const [data, setData] = useState({
-		username: "",
-		email: "",
-		password: "",
-	});
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
     const[title,setTitle] = useState(props.title);
     const[top,setTop]= useState(props.goToRegisterTop);
     const[goTo,setGoTo] = useState(props.goTo);
     const[displayUsername,setDisplayUsername] = useState(props.displayUsername);
-    
-    const [error, setError] = useState("");
 
-    const handleChange = ({ currentTarget: input }) => {
-		setData({ ...data, [input.name]: input.value });
+
+    const handleSubmit = async (e) => {
+		e.preventDefault();
 	};
-
-    const handleSubmit = async(e) => {
-        e.preventDefault()
-        if(title === "Log in"){
-            try {
-                const url = "http://localhost:5000/api/auth";
-                const { data: res } = await axios.post(url, data);
-                localStorage.setItem("token", res.data);
-                window.location = "/";
-            } catch (error) {
-                if (
-                    error.response &&
-                    error.response.status >= 400 &&
-                    error.response.status <= 500
-                ) {
-                    setError(error.response.data.message);
-                }
-            }
-        }
-        else if(title === "Register"){
-            try {
-                const url = "http://localhost:5000/api/users";
-                const { data: res } = await axios.post(url, data);
-                console.log(res.message);
-            } catch (error) {
-                if (
-                    error.response &&
-                    error.response.status >= 400 &&
-                    error.response.status <= 500
-                ) {
-                    setError(error.response.data.message);
-                }
-            }
-        }
-    };
 
     const register = (e) => {
         if(title === "Log in"){
@@ -76,26 +38,26 @@ const AuthenticateForm = (props)=>{
             <div className="sign_in_title">{title}</div>
             <form className="authenticate-form" onSubmit={handleSubmit}>
                 <input 
-                    value={data.email}
+                    defaultValue={email}
                     type="email"
-                    onChange={handleChange}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email address"
                     id="email"
                     name="email"
                 />
                  <input
-                    value={data.username}
+                    defaultValue={username}
                     type="username"
-                    onChange={handleChange}
+                    onChange={(e) => setUsername(e.target.value)}
                     placeholder="Username"
                     id="username"
                     name="username"
                     style={{display:displayUsername}}
                 />
                  <input
-                    value={data.password}
+                    defaultValue={password}
                     type="password"
-                    onChange={handleChange}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
                     id="pass"
                     name="password"
