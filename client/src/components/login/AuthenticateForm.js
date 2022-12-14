@@ -3,17 +3,55 @@ import axios from "axios";
 
 const AuthenticateForm = (props)=>{
 
-    const [email, setEmail] = useState("");
-    const [pass, setPass] = useState("");
-    const [username, setUsername] = useState("");
+    const [data, setData] = useState({
+		username: "",
+		email: "",
+		password: "",
+	});
     const[title,setTitle] = useState(props.title);
     const[top,setTop]= useState(props.goToRegisterTop);
     const[goTo,setGoTo] = useState(props.goTo);
     const[displayUsername,setDisplayUsername] = useState(props.displayUsername);
+    
+    const [error, setError] = useState("");
 
+    const handleChange = ({ currentTarget: input }) => {
+		setData({ ...data, [input.name]: input.value });
+	};
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        if(title === "Log in"){
+            try {
+                const url = "http://localhost:5000/api/auth";
+                const { data: res } = await axios.post(url, data);
+                localStorage.setItem("token", res.data);
+                window.location = "/";
+            } catch (error) {
+                if (
+                    error.response &&
+                    error.response.status >= 400 &&
+                    error.response.status <= 500
+                ) {
+                    setError(error.response.data.message);
+                }
+            }
+        }
+        else if(title === "Register"){
+            try {
+                const url = "http://localhost:5000/api/users";
+                const { data: res } = await axios.post(url, data);
+                console.log(res.message);
+            } catch (error) {
+                if (
+                    error.response &&
+                    error.response.status >= 400 &&
+                    error.response.status <= 500
+                ) {
+                    setError(error.response.data.message);
+                }
+            }
+        }
     };
 
     const register = (e) => {
@@ -38,26 +76,26 @@ const AuthenticateForm = (props)=>{
             <div className="sign_in_title">{title}</div>
             <form className="authenticate-form" onSubmit={handleSubmit}>
                 <input 
-                    defaultValue={email}
+                    value={data.email}
                     type="email"
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Email address"
                     id="email"
                     name="email"
                 />
                  <input
-                    defaultValue={username}
+                    value={data.username}
                     type="username"
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Username"
                     id="username"
                     name="username"
                     style={{display:displayUsername}}
                 />
                  <input
-                    defaultValue={pass}
+                    value={data.password}
                     type="password"
-                    onChange={(e) => setPass(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Password"
                     id="pass"
                     name="password"
