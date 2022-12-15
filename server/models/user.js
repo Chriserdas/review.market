@@ -11,16 +11,18 @@ const userSchema = new mongoose.Schema({
     email:{
         type:String,
         required:true,
-        validate:{
-            validator:validator.isEmail,
-            message:'Please provide a valid email adress'
-        },
+        unique: true,
     },
     password:{
         type:String,
         required:[true,'Please provide password'],
         minlength:6,
         select:false
+    },
+    isAdmin:{
+        type:Boolean,
+        default:false,
+        require:true,
     },
 });
 
