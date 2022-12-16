@@ -18,8 +18,13 @@ const AuthenticateForm = (props)=>{
             const user =  { email, password}
             axios.post("http://localhost:5000/api/auth", user)
         .then(res => {
-            alert(res.data.message)
-            window.location = '/UserHome'
+            if (res.data.user) {
+                localStorage.setItem('token', res.data.user)
+                alert('Login successful')
+                window.location = '/UserHome'
+            } else {
+                alert('Please check your username and password')
+            }
         })
 
         } else if(title === "Register"){

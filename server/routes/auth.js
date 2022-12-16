@@ -4,32 +4,31 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
 
 router.post("/", async(req, res)=> {
-    const user = await User.findOne({
-		email: req.body.email,
-	})
-
-	if (!user) {
-		res.send({message: "User not found"})
-	}
-
-	const isPasswordValid = await bcrypt.compare(
-		req.body.password,
-		user.password
-	)
-
-	if (isPasswordValid) {
-		const token = jwt.sign(
-			{
-				username: user.username,
-				email: user.email,
-			},
-			'secret123'
-		)
-
-		res.send({message: "Login Successfull", user: token})
-	} else {
-		res.send({ message: "Password didn't match"})
-	}
+    const { email, password} = req.body
+    User.findOne({ email: email}, async(err, user) => {
+        if(user){
+            const isPasswordValid = await bcrypt.compare(
+				req.body.password,
+				user.password
+			)
+		
+			if (isPasswordValid) {
+				const token = jwt.sign(
+					{
+						name: user.name,
+						email: user.email,
+					},
+					'secret123'
+				)
+		
+				res.send({message: "Login Successfull", user: user})
+			} else {
+				res.send({ message: "Password didn't match"})
+			}
+        } else {
+            res.send({message: "User not registered"})
+        }
+    })
 }) 
 
 
