@@ -15,8 +15,8 @@ const AuthenticateForm = (props)=>{
     const handleSubmit = async (e) => {
 		e.preventDefault();
         if(title === "Log in"){
-            const user =  { email, password}
-            axios.post("http://localhost:5000/api/auth", user)
+            const cred =  { email, password}
+            axios.post("http://localhost:5000/api/auth", cred)
         .then(res => {
             if (res.data.user) {
                 localStorage.setItem('token', res.data.user)
@@ -28,10 +28,10 @@ const AuthenticateForm = (props)=>{
         })
 
         } else if(title === "Register"){
-            const user =  { username, email, password}
+            const cred =  { username, email, password}
             if( username && email && password){
             try{
-            axios.post("http://localhost:5000/api/users", user)
+            axios.post("http://localhost:5000/api/users", cred)
             .then( res => {
                 alert(res.data.message)
                 window.location = '/'
