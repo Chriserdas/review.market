@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:[true,'Please provide password'],
         minlength:6,
-        select:false
     },
     isAdmin:{
         type:Boolean,
@@ -29,4 +28,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("user", userSchema);
 
+
 module.exports = { User };
+
+//(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}

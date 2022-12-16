@@ -1,4 +1,5 @@
 import React,{ useState}  from "react";
+import axios from 'axios';
 
 const AuthenticateForm = (props)=>{
     
@@ -11,9 +12,32 @@ const AuthenticateForm = (props)=>{
     const[goTo,setGoTo] = useState(props.goTo);
     const[displayUsername,setDisplayUsername] = useState(props.displayUsername);
 
-
     const handleSubmit = async (e) => {
 		e.preventDefault();
+        if(title === "Log in"){
+            const user =  { email, password}
+            axios.post("http://localhost:5000/api/auth", user)
+        .then(res => {
+            alert(res.data.message)
+            window.location = '/UserHome'
+        })
+
+        } else if(title === "Register"){
+            const user =  { username, email, password}
+            if( username && email && password){
+            try{
+            axios.post("http://localhost:5000/api/users", user)
+            .then( res => {
+                alert(res.data.message)
+                window.location = '/'
+            })}
+            catch(err){
+                alert(err)
+            }
+            } else {
+                alert("invalid input")
+            }   
+        }
 	};
 
     const register = (e) => {
