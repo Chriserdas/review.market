@@ -19,10 +19,16 @@ const AuthenticateForm = (props)=>{
             axios.post("http://localhost:5000/api/auth", cred)
         .then(res => {
             if (res.data.user) {
-                localStorage.setItem('token', res.data.user)
-                alert('Login successful')
-                window.location = '/UserHome'
-            } else {
+                if(res.data.user.isAdmin){
+                    localStorage.setItem('token', res.data.user)
+                    alert('Login successful')
+                    window.location = '/AdminHome'
+                }else{
+                    localStorage.setItem('token', res.data.user)
+                    alert('Login successful')
+                    window.location = '/UserHome'
+                }
+            }else{
                 alert('Please check your username and password')
             }
         })
