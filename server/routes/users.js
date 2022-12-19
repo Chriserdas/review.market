@@ -18,7 +18,7 @@ router.post("/", async(req, res)=> {
                 if(err) {
                     res.send(err)
                 } else {
-                    res.send( { message: "Successfully Registered, Please login now." })
+                    res.send( { message: "Successfully Registered, Please login now." });
                 }
             })
         }

@@ -7,10 +7,10 @@ const AuthenticateForm = (props)=>{
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
-    const[title,setTitle] = useState(props.title);
-    const[top,setTop]= useState(props.goToRegisterTop);
-    const[goTo,setGoTo] = useState(props.goTo);
-    const[displayUsername,setDisplayUsername] = useState(props.displayUsername);
+    const [title,setTitle] = useState(props.title);
+    const [top,setTop]= useState(props.goToRegisterTop);
+    const [goTo,setGoTo] = useState(props.goTo);
+    const [displayUsername,setDisplayUsername] = useState(props.displayUsername);
 
     const handleSubmit = async (e) => {
 		e.preventDefault();

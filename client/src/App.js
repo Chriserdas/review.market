@@ -9,11 +9,12 @@ function App() {
   return (
     <div className="App">
       <Routes>
-      <Route path="/" exact element={<Authenticate />} />
-      <Route path="/UserHome" exact element={<UserHome />} />
+        <Route path="/" exact element={<Authenticate />} />
+        <Route path="/UserHome" exact element={<UserHome />} />
 			</Routes>
     </div>
   );
+
 }
 
 export default App;
