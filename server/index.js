@@ -27,15 +27,15 @@ app.use("/api/auth", authRoutes);
 
 //insert admins directly to database
 app.get("/seed", async (req, res) => {
-  const createdUsers = await User.insertMany(adminData.users);
-  res.send({ createdUsers });
+    const createdUsers = await User.insertMany(adminData.users);
+    res.send({ createdUsers });
 });
 
 app.get("/", (req, res) => {
-  res.send("Server is ready");
+    res.send("Server is ready");
 });
 
 const port = process.env.PORT || 5000;
 app.listen(5000, () => {
-  console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
