@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React from 'react';
 import "./index.css";
 import Authenticate from "./components/login/Authenticate.js";
-import { Routes, Route } from 'react-router-dom'
+import {Routes, Route,  BrowserRouter} from 'react-router-dom';
 import UserHome from "./components/User/UserHome";
-import AdminHome from "./components/Admin/AdminHome"
+import AdminHome from "./components/Admin/AdminHome";
+import ProfileSettings from "./components/User/ProfileSettings";
+import SearchPOIs from "./components/User/SearchPOIs";
 
 function App() {
     return (
