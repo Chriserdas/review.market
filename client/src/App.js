@@ -9,6 +9,7 @@ import SearchPOIs from "./components/User/SearchPOIs";
 
 function App() {
     return (
+        <BrowserRouter>
         <div className="App">
             <Routes>
                 <Route path="/" exact element={<Authenticate />} />
@@ -16,8 +17,12 @@ function App() {
                 <Route path="/AdminHome" exact element={<AdminHome />} />
             </Routes>
         </div>
+</BrowserRouter>
     );
       
 }
 
 export default App;
+
+
+
