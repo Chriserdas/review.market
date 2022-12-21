@@ -8,26 +8,16 @@ import ProfileSettings from "./components/User/ProfileSettings";
 import SearchPOIs from "./components/User/SearchPOIs";
 
 function App() {
-
-  return (
-    <BrowserRouter>
-     <div className="App">
-      <Routes>
-          <Route path="/" exact element={<Authenticate />} />
-          
-          <Route  path="UserHome" element={<UserHome />} />
-          <Route path="/SearchPOIs" exact element={<SearchPOIs />} />
-          <Route path="/ProfileSettings" exact element={<ProfileSettings />} />
-
-
-
-          <Route path="/AdminHome" exact element= {<AdminHome/>} />
-
-      </Routes>
-     </div>
-  </BrowserRouter>
-  );
-
+    return (
+        <div className="App">
+            <Routes>
+                <Route path="/" exact element={<Authenticate />} />
+                <Route path="/UserHome" exact element={<UserHome />} />
+                <Route path="/AdminHome" exact element={<AdminHome />} />
+            </Routes>
+        </div>
+    );
+      
 }
 
 export default App;
