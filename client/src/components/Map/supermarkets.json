@@ -1,4 +1,8 @@
 {
+    "type": "FeatureCollection",
+    "generator": "overpass-ide",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+    "timestamp": "2022-12-18T21:24:14Z",
     "features": [
       {
         "type": "Feature",
@@ -1564,4 +1568,4 @@
         "id": "node/9785335420"
       }
     ]
-}
+  }

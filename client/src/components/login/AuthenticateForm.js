@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const AuthenticateForm = (props)=>{
     
+    localStorage.clear();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

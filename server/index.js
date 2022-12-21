@@ -3,12 +3,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
-const { User, Product, Category } = require("./models/Schemas");
+const { User, Data, Supermarket } = require("./models/Schemas");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const adminData = require("./data/adminData");
-const product = require("./data/productData");
-const category = require("./data/categoryData");
+const data = require('./data/product_category.json');
+const supermarket = require("./data/supermarkets.json");
 
 // database connection
 mongoose
@@ -33,19 +33,18 @@ app.get('/adminData', async(req, res) => {
   const createdUsers = await User.insertMany(adminData.users);
   res.send({ createdUsers });
 });
-
-//insert categories, products
-app.get('/products', async(req, res) => {
-  await Product.remove({});
-  const createdProducts = await Product.insertMany(product);
-  res.send({ createdProducts });
+//insert product,categories,subcategories
+app.get('/prodCateg', async(req, res) => {
+  await Data.remove({});
+   const createdProdCateg = await Data.insertMany(data);
+   res.send({ createdProdCateg });
+});
+//insert supermarket
+app.get('/supermarket', async(req, res) => {
+  const createdSupermarket = await Supermarket.insertMany(supermarket);
+   res.send({ createdSupermarket });
 });
 
-app.get('/categories', async(req, res) => {
-  await Category.remove({});
-  const createdCategory = await Category.insertMany(category);
-  res.send({ createdCategory });
-});
 
 app.get("/", (req, res) => {
   res.send("Server is ready");
