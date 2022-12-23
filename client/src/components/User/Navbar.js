@@ -35,28 +35,28 @@ function Navbar() {
                     <h3>The review <br/><span>Marketplace</span></h3>
                 </div>
                 <div className="menu-trigger" onClick={()=>{setOpen(!open)}}>
-                    <img src={user_image}></img>
+                    <img src={user_image} alt=""></img>
                 </div>
     
                 <div className={`dropdown-menu ${open ? 'active': 'inactive'}`}>
                     <h3>The review <br/><span>Marketplace</span></h3>
                     <ul>
                         <li className='menu-item'>
-                            <Link onClick={window.location.reload} className='menu-links'>
-                                <img className="menu-icons" src={marker}></img>
-                                <i class='text-link' />Current location
+                            <Link to='/UserHome' className='menu-links'>
+                                <img className="menu-icons" src={marker} alt=""></img>
+                                <i className='text-link' />Current location
                             </Link>
                         </li>
                         <li className='menu-item'>
                             <Link to='/SearchPOIs' className='menu-links'>
-                                <img className="menu-icons" src={searchbar}></img>
-                                <i class='text-link' />Search POIs
+                                <img className="menu-icons" src={searchbar} alt=""></img>
+                                <i className='text-link' />Search POIs
                             </Link>
                         </li>
                         <li className='menu-item'>
                             <Link to='/ProfileSettings' className='menu-links'>
-                                <img className="menu-icons" src={settings}></img>
-                                <i class='text-link' />Profile Settings
+                                <img className="menu-icons" src={settings} alt=""></img>
+                                <i className='text-link' />Profile Settings
                             </Link>
                         </li>
                         <li className='menu-item'>

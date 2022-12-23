@@ -45,6 +45,10 @@ app.get('/supermarket', async(req, res) => {
    res.send({ createdSupermarket });
 });
 
+app.get('/api/supermarket', async(req,res) => {
+    const stores = await Supermarket.find({});
+    res.send(stores);
+});
 
 app.get("/", (req, res) => {
     res.send("Server is ready");
