@@ -57,38 +57,38 @@ function Search() {
   const map = useMap();
 
   
-  useEffect(() => {
-    const markersLayer = new L.LayerGroup(); //layer contain searched elements
-    map.addLayer(markersLayer);
-    const controlSearch = new L.Control.Search({
-      position: "topleft",
-      layer: markersLayer,
-      initial: false,
-      zoom: 20,
-      marker: false,
-    });
+    useEffect(() => {
+        const markersLayer = new L.LayerGroup(); //layer contain searched elements
+        map.addLayer(markersLayer);
+        const controlSearch = new L.Control.Search({
+        position: "topleft",
+        layer: markersLayer,
+        initial: false,
+        zoom: 20,
+        marker: false,
+        });
 
-    map.addControl(controlSearch);
+        map.addControl(controlSearch);
 
-    const getPois = async () => {
-      try {
-            const response = await Axios.get("http://localhost:5000/api/supermarket"); 
-            response.data.forEach((item) =>{
-                let marker = new L.Marker(new L.latLng(item.coordinates[1],item.coordinates[0]), {title: item.name});
-                marker.bindPopup(
-                    "Name: " + item.features.properties.name
-                );
-                markersLayer.addLayer(marker);
-           });
+        const getPois = async () => {
+        try {
+                const response = await Axios.get("http://localhost:5000/api/supermarket"); 
+                response.data.forEach((item) =>{
+                    let marker = new L.Marker(new L.latLng(item.coordinates[1],item.coordinates[0]), {title: item.name});
+                    marker.bindPopup(
+                        "Name: " + item.features.properties.name
+                    );
+                    markersLayer.addLayer(marker);
+                });
+                
             
-         
-      } catch (err) {
-          // Handle Error Here
-          console.error(err);
-      }
-  };
-  getPois()
-  },[map]);
+        } catch (err) {
+            // Handle Error Here
+            console.error(err);
+        }
+        };
+    getPois()
+    },[map]);
 
   return null;  //don't want anything to show up from this comp
 }
