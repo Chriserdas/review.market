@@ -11,7 +11,6 @@ const data = require('./data/product_category.json');
 const supermarket = require("./data/supermarkets.json");
 
 // database connection
-
 mongoose
   .connect(process.env.DB || "mongodb://127.0.0.1:27017" , {
     useNewUrlParser: true,
