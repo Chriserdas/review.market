@@ -21,10 +21,12 @@ const AuthenticateForm = (props)=>{
         .then(res => {
             if (res.data.user) {
                 if(res.data.user.isAdmin){
+                    localStorage.setItem("isAuthenticated", "true");
                     localStorage.setItem('token', res.data.user)
                     alert('Login successful')
                     window.location = '/AdminHome'
                 }else{
+                    localStorage.setItem("isAuthenticated", "true");
                     localStorage.setItem('token', res.data.user)
                     alert('Login successful')
                     window.location = '/UserHome'
