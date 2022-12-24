@@ -35,12 +35,12 @@ const ProdCategSchema = new mongoose.Schema({
 
 
 const SupermarketSchema = new mongoose.Schema({
-        "features":[
+        features:[
                 {
-                        "type":{
+                        type:{
                                 type:String
                         },
-                        "properties":{
+                        properties:{
                                 "@id":String,
                                 "brand":String,
                                 "brand:wikidata":String,
@@ -49,15 +49,15 @@ const SupermarketSchema = new mongoose.Schema({
                                 "opening_hours":String,
                                 "shop":String
                         },
-                        "geometry":{
+                        geometry:{
                                 "type":{
                                         type:String
                                 },
                                 "coordinates":[mongoose.Schema.Types.Mixed]
                         },
-                        "id":String
+                        id:String
                 },
-        ],
+        ]
 });
 
 const User = mongoose.model("users", userSchema);

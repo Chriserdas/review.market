@@ -10,15 +10,18 @@ const adminData = require("./data/adminData");
 const data = require('./data/product_category.json');
 const supermarket = require("./data/supermarkets.json");
 
-// database connection
-mongoose
-  .connect(process.env.DB || "mongodb://127.0.0.1:27017" , {
-    useNewUrlParser: true,
-  })
-  .then(() => console.log("Database successfully connected"))
-  .catch((err) => console.log(err));
+//connect to database
+const url = "mongodb+srv://dionusia:dionusia@reviewmarket.rppj5dm.mongodb.net/reviewMarket?retryWrites=true&w=majority"
+async function connect(){
+  try{
+    await mongoose.connect(url);
+    console.log("Connected to MongoDB");
+  }catch(error){
+    console.error(error)
+  }
+}
+connect();
 
-  
 // middlewares
 app.use(express.json());
 app.use(cors());
@@ -41,15 +44,10 @@ app.get('/prodCateg', async(req, res) => {
 });
 //insert supermarket
 app.get('/supermarket', async(req, res) => {
+  await Supermarket.remove({});
   const createdSupermarket = await Supermarket.insertMany(supermarket);
    res.send({ createdSupermarket });
 });
-
-app.get('/api/supermarket', async(req,res) => {
-    const stores = await Supermarket.find({});
-    res.send(stores);
-});
-
 app.get("/", (req, res) => {
     res.send("Server is ready");
 });
