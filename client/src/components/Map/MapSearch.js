@@ -28,7 +28,6 @@ export default function MapSearch() {
 function LocationMarker() {
   const [position, setPosition] = useState(null);
   const [bbox, setBbox] = useState([]);
-
   const map = useMap();
 
   useEffect(() => {
@@ -56,10 +55,9 @@ function LocationMarker() {
 function Search() {
   const map = useMap();
 
-
+  const markersLayer = new L.LayerGroup(); //layer contain searched elements
+  map.addLayer(markersLayer);
   useEffect(() => {
-    const markersLayer = new L.LayerGroup(); //layer contain searched elements
-    map.addLayer(markersLayer);
     const controlSearch = new L.Control.Search({
       position: "topleft",
       layer: markersLayer,
@@ -69,13 +67,26 @@ function Search() {
     });
 
     map.addControl(controlSearch);
+
+    const LeafIcon = L.Icon.extend({
+      options: {}
+    });
+  
+    const orangeIcon = new LeafIcon({
+        iconUrl:
+          "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ffa500&chf=a,s,ee00FFFF"
+      }),
+      redIcon = new LeafIcon({
+        iconUrl:
+          "https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|ff0000&chf=a,s,ee00FFFF"
+      });
   
     const getPois = async () => {
       try {
             const responce = await Axios.get("http://localhost:5000/api/supermarket")
             responce.data.forEach((item) =>{
               for(let i = 0; i<item.features.length; i++){
-                let marker = new L.Marker(new L.latLng(item.features[i].geometry.coordinates[1],item.features[i].geometry.coordinates[0]), {title: item.features[i].properties.name});
+                let marker = new L.Marker(new L.latLng(item.features[i].geometry.coordinates[1],item.features[i].geometry.coordinates[0]), {title: item.features[i].properties.name, icon: orangeIcon});
                 marker.bindPopup(
                     "Name: " + item.features[i].properties.name  + " | " +
                     "Shop: " + item.features[i].properties.shop
