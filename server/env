@@ -1,0 +1,2 @@
+DB = "mongodb+srv://dionusia:dionusia@reviewmarket.jh805of.mongodb.net/reviewMarket?retryWrites=true&w=majority"
+PORT = 5000
