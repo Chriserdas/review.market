@@ -54,7 +54,6 @@ function LocationMarker() {
 
 function Search() {
   const map = useMap();
-
   const markersLayer = new L.LayerGroup(); //layer contain searched elements
   map.addLayer(markersLayer);
   useEffect(() => {
@@ -86,7 +85,7 @@ function Search() {
             const responce = await Axios.get("http://localhost:5000/api/supermarket")
             responce.data.forEach((item) =>{
               for(let i = 0; i<item.features.length; i++){
-                let marker = new L.Marker(new L.latLng(item.features[i].geometry.coordinates[1],item.features[i].geometry.coordinates[0]), {title: item.features[i].properties.name, icon: orangeIcon});
+                let marker = new L.Marker(new L.latLng(item.features[i].geometry.coordinates[1],item.features[i].geometry.coordinates[0]), {title:item.features[i].properties.name, icon: orangeIcon});
                 marker.bindPopup(
                     "Name: " + item.features[i].properties.name  + " | " +
                     "Shop: " + item.features[i].properties.shop
@@ -94,15 +93,13 @@ function Search() {
                 markersLayer.addLayer(marker);
               }
            });
-            
-         
       } catch (err) {
           // Handle Error Here
           console.error(err);
       }
   };
   getPois()
-  }, [map]);
+  }, []);
 
   return null;
 }

@@ -36,18 +36,31 @@ app.get('/adminData', async(req, res) => {
   const createdUsers = await User.insertMany(adminData.users);
   res.send({ createdUsers });
 });
+
 //insert product,categories,subcategories
 app.get('/prodCateg', async(req, res) => {
   await Data.remove({});
    const createdProdCateg = await Data.insertMany(data);
    res.send({ createdProdCateg });
 });
+
 //insert supermarket
 app.get('/supermarket', async(req, res) => {
   await Supermarket.remove({});
   const createdSupermarket = await Supermarket.insertMany(supermarket);
    res.send({ createdSupermarket });
 });
+
+//search pois
+app.get('/api/supermarket', async(req,res) => {
+  const stores = await Supermarket.find();
+  res.send(stores);
+  /*stores.forEach(element => {
+    res.send(element.features)
+  });*/
+});
+
+
 app.get("/", (req, res) => {
     res.send("Server is ready");
 });
