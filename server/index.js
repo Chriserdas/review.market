@@ -11,7 +11,7 @@ const data = require('./data/product_category.json');
 const supermarket = require("./data/supermarkets.json");
 
 //connect to database
-const url = "mongodb+srv://dionusia:dionusia@reviewmarket.rppj5dm.mongodb.net/reviewMarket?retryWrites=true&w=majority"
+const url = "mongodb+srv://dionusia:dionusia@reviewmarket.rppj5dm.mongodb.net/?retryWrites=true&w=majority";
 async function connect(){
   try{
     await mongoose.connect(url);
@@ -65,7 +65,9 @@ app.get("/", (req, res) => {
     res.send("Server is ready");
 });
 
+
 const port = process.env.PORT || 5000;
+
 app.listen(5000, () => {
     console.log(`Server running at http://localhost:${port}`);
 });

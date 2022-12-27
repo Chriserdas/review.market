@@ -1,5 +1,8 @@
-import React,{ useState}  from "react";
+import React,{ useEffect, useState}  from "react";
 import axios from 'axios';
+import NotificationPopup from "../NotificationPopup";
+import { Link } from "react-router-dom";
+
 
 const AuthenticateForm = (props)=>{
     
@@ -12,9 +15,15 @@ const AuthenticateForm = (props)=>{
     const [top,setTop]= useState(props.goToRegisterTop);
     const [goTo,setGoTo] = useState(props.goTo);
     const [displayUsername,setDisplayUsername] = useState(props.displayUsername);
+    const [serverResponse,setServerResponse] = useState({
+        message: "",
+        color: "",
+    });
+    const [isClicked,setIsClicked] = useState(false);
 
     const handleSubmit = async (e) => {
 		e.preventDefault();
+        setIsClicked(!isClicked);
         if(title === "Log in"){
             const cred =  { email, password}
             axios.post("http://localhost:5000/api/auth", cred)
@@ -22,14 +31,22 @@ const AuthenticateForm = (props)=>{
             if (res.data.user) {
                 if(res.data.user.isAdmin){
                     localStorage.setItem("isAuthenticated", "true");
-                    localStorage.setItem('token', res.data.user)
-                    alert('Login successful')
+                    localStorage.setItem('token', res.data.user);
+
+                    /*setServerResponse({
+                        message :"Login Successful",
+                        color:"green"
+                    });*/
+
                     window.location = '/AdminHome'
                 }else{
                     localStorage.setItem("isAuthenticated", "true");
-                    localStorage.setItem('token', res.data.user)
-                    alert('Login successful')
-                    window.location = '/UserHome'
+                    localStorage.setItem('token', res.data.user);
+                    setServerResponse({
+                        message :"Login Successful",
+                        color:"green"
+                    });
+                   
                 }
             }else{
                 alert('Please check your username and password')
@@ -39,15 +56,17 @@ const AuthenticateForm = (props)=>{
         } else if(title === "Register"){
             const cred =  { username, email, password}
             if( username && email && password){
-            try{
-            axios.post("http://localhost:5000/api/users", cred)
-            .then( res => {
-                alert(res.data.message)
-                window.location = '/'
-            })}
-            catch(err){
-                alert(err)
-            }
+
+                try{
+                    axios.post("http://localhost:5000/api/users", cred)
+                .then( res => {
+                    alert(res.data.message)
+                    window.location = '/'
+                })}
+                catch(err){
+                    alert(err)
+                }
+
             } else {
                 alert("invalid input")
             }   
@@ -109,6 +128,7 @@ const AuthenticateForm = (props)=>{
                 <div className="goToRegister">Dont have an account?</div>
                 <button className="register_btn" onClick={register}>{goTo}</button>
             </div>
+            <NotificationPopup message={serverResponse.message} color={serverResponse.color} activate={isClicked}/>
         </div>
     );
 }

@@ -1,4 +1,5 @@
 import React from "react";
+import NotificationPopup from "../NotificationPopup.js";
 import AuthenticateForm from "./AuthenticateForm.js";
 
 
@@ -20,6 +21,7 @@ export default function Authenticate(props) {
                     displayUsername="none"
                 />    
             </div>
+            
         </div>
     );
 }

@@ -12,17 +12,17 @@ function App() {
     return (
         <BrowserRouter>
           <div className="App">
-          <Routes>
-            <Route  path="/" element={<Authenticate/>} />
-            <Route  path="/UserHome" element={<ProtectedRoutes><UserHome /></ProtectedRoutes>} />
-            <Route  path="/SearchPOIs" element={<ProtectedRoutes><SearchPOIs /></ProtectedRoutes>} />
-            <Route  path="/SearchPOIs" element={<ProtectedRoutes><ProfileSettings /></ProtectedRoutes>} />
-            <Route  path="/AdminHome" element={<ProtectedRoutes><AdminHome /></ProtectedRoutes>} />
-          </Routes>
+            <Routes>
+                <Route  path="/" element={<Authenticate/>} />
+                <Route  path="/UserHome" element={<ProtectedRoutes><UserHome /></ProtectedRoutes>} />
+                <Route  path="/SearchPOIs" element={<ProtectedRoutes><SearchPOIs /></ProtectedRoutes>} />
+                <Route  path="/SearchPOIs" element={<ProtectedRoutes><ProfileSettings /></ProtectedRoutes>} />
+                <Route  path="/AdminHome" element={<ProtectedRoutes><AdminHome /></ProtectedRoutes>} />
+            </Routes>
           </div>
        </BrowserRouter>
           
-       );
+    );
 }
 
 export default App;
