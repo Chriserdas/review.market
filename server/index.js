@@ -11,7 +11,7 @@ const data = require('./data/product_category.json');
 const supermarket = require("./data/supermarkets.json");
 
 //connect to database
-const url = "mongodb+srv://dionusia:dionusia@reviewmarket.rppj5dm.mongodb.net/?retryWrites=true&w=majority";
+const url = "mongodb://127.0.0.1:27017/reviewMarket";
 async function connect(){
   try{
     await mongoose.connect(url);
