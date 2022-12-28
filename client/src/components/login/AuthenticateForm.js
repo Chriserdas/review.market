@@ -1,7 +1,6 @@
 import React,{ useEffect, useState}  from "react";
 import axios from 'axios';
 import NotificationPopup from "../NotificationPopup";
-import { Link } from "react-router-dom";
 
 
 const AuthenticateForm = (props)=>{
@@ -18,38 +17,74 @@ const AuthenticateForm = (props)=>{
     const [serverResponse,setServerResponse] = useState({
         message: "",
         color: "",
+        open: false
     });
-    const [isClicked,setIsClicked] = useState(false);
+    const [info,setInfo] = useState({
+        isAuth:false,
+        data:"",
+        page:""
+    });
+
+   useEffect(()=>{
+    
+    if(serverResponse.open){
+        const timeout = setTimeout(()=>{
+
+            if(info.isAuth){
+                localStorage.setItem("isAuthenticated", "true");
+                localStorage.setItem('token',info.data);
+            }
+            window.location = info.page;
+        }, 3000);
+        return () => clearTimeout(timeout);
+    }
+   },[info.page,serverResponse.open]);
 
     const handleSubmit = async (e) => {
 		e.preventDefault();
-        setIsClicked(!isClicked);
         if(title === "Log in"){
             const cred =  { email, password}
             axios.post("http://localhost:5000/api/auth", cred)
         .then(res => {
             if (res.data.user) {
                 if(res.data.user.isAdmin){
-                    localStorage.setItem("isAuthenticated", "true");
-                    localStorage.setItem('token', res.data.user);
 
-                    /*setServerResponse({
-                        message :"Login Successful",
-                        color:"green"
-                    });*/
-
-                    window.location = '/AdminHome'
-                }else{
-                    localStorage.setItem("isAuthenticated", "true");
-                    localStorage.setItem('token', res.data.user);
-                    setServerResponse({
-                        message :"Login Successful",
-                        color:"green"
+                    setInfo({
+                        isAuth:true,
+                        data:res.data.user,
+                        page:'/AdminHome'
                     });
-                   
+                    setServerResponse({
+                        message :"Login Successful!",
+                        color:"green",
+                        open:true
+                    });
+
+                }else{
+                    setInfo({
+                        isAuth:true,
+                        data:res.data.user,
+                        page:'/UserHome'
+                    });
+                
+                    setServerResponse({
+                        message :"Login Successful!",
+                        color:"green",
+                        open:true
+                    });
+                    
+                
                 }
             }else{
-                alert('Please check your username and password')
+                setServerResponse({
+                    message :"Please check your username and password",
+                    color:"#dd3b39",
+                    open:true
+                });
+
+                setInfo({
+                    page:"/",
+                })
             }
         })
 
@@ -88,49 +123,49 @@ const AuthenticateForm = (props)=>{
         }
     }
     
-    
-
     return (
-        <div className="authenticate-form-container" >
-            <div className="sign_in_title">{title}</div>
-            <form className="authenticate-form" onSubmit={handleSubmit}>
-                <input 
-                    defaultValue={email}
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email address"
-                    id="email"
-                    name="email"
-                />
-                 <input
-                    defaultValue={username}
-                    type="username"
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Username"
-                    id="username"
-                    name="username"
-                    style={{display:displayUsername}}
-                />
-                 <input
-                    defaultValue={password}
-                    type="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    id="pass"
-                    name="password"
-                />
-                <button
-                    className="login_btn"
-                    type="submit"
-                >{title}</button>
-            </form>
-            <div className="goToRegister_container" style={{top:top}}>            
-                <div className="goToRegister">Dont have an account?</div>
-                <button className="register_btn" onClick={register}>{goTo}</button>
-            </div>
-            <NotificationPopup message={serverResponse.message} color={serverResponse.color} activate={isClicked}/>
-        </div>
+        <>
+            <div className="authenticate-form-container" >
+                <div className="sign_in_title">{title}</div>
+                <div className="authenticate-form">
+                    <input 
+                        defaultValue={email}
+                        type="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email address"
+                        id="email"
+                        name="email"
+                    />
+                    <input
+                        defaultValue={username}
+                        type="username"
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Username"
+                        id="username"
+                        name="username"
+                        style={{display:displayUsername}}
+                    />
+                    <input
+                        defaultValue={password}
+                        type="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        id="pass"
+                        name="password"
+                    />
+                    <button
+                        className="login_btn"
+                        onClick={handleSubmit}
+                    >{title}</button>
+                    
+                </div>
+                <div className="goToRegister_container" style={{top:top}}>            
+                    <div className="goToRegister">Dont have an account?</div>
+                    <button className="register_btn" onClick={register}>{goTo}</button>
+                </div>
+            </div>  
+            <NotificationPopup color ={serverResponse.color} message={serverResponse.message} activate = {serverResponse.open} />
+        </>
     );
 }
-
 export default AuthenticateForm;

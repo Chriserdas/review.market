@@ -51,6 +51,7 @@ body{
   top:2%;
   -webkit-user-drag: none;
   color: rgb(36, 36, 36);
+  z-index: 1;
 }
 
 .login_title::after{
@@ -214,7 +215,7 @@ body{
 .notification_popup_container{
     display: flex;
     position:fixed;
-    top: 5%;
+    top:5%;
     left: 0;
     justify-content: center;
     width:100%;
@@ -230,6 +231,7 @@ body{
     font-size:18px;
     color:rgb(238, 232, 232);
     font-family: kanit-light;
+    user-select: none;
 }
 
 

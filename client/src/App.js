@@ -1,5 +1,6 @@
 import React from 'react';
 import "./index.css";
+import './components/User/MainContent.css';
 import Authenticate from "./components/login/Authenticate.js";
 import {Routes, Route,  BrowserRouter} from 'react-router-dom';
 import ProtectedRoutes from './ProtectedRoutes';
@@ -13,11 +14,11 @@ function App() {
         <BrowserRouter>
           <div className="App">
             <Routes>
-                <Route  path="/" element={<Authenticate/>} />
-                <Route  path="/UserHome" element={<ProtectedRoutes><UserHome /></ProtectedRoutes>} />
-                <Route  path="/SearchPOIs" element={<ProtectedRoutes><SearchPOIs /></ProtectedRoutes>} />
-                <Route  path="/SearchPOIs" element={<ProtectedRoutes><ProfileSettings /></ProtectedRoutes>} />
-                <Route  path="/AdminHome" element={<ProtectedRoutes><AdminHome /></ProtectedRoutes>} />
+                <Route exact path="/" element={<Authenticate/>} />
+                <Route exact path="/UserHome" element={<ProtectedRoutes><UserHome/></ProtectedRoutes>}/>
+                <Route exact path="/SearchPOIs" element={<ProtectedRoutes><SearchPOIs /></ProtectedRoutes>} />
+                <Route exact path="/SearchPOIs" element={<ProtectedRoutes><ProfileSettings /></ProtectedRoutes>} />
+                <Route exact path="/AdminHome" element={<ProtectedRoutes><AdminHome /></ProtectedRoutes>} />
             </Routes>
           </div>
        </BrowserRouter>

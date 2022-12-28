@@ -1,16 +1,15 @@
 import React, {useState, useEffect, useRef} from 'react'
-import './Navbar.css'
 import { Link } from 'react-router-dom';
 import user_image from '../../images/user_image.png';
 import settings from '../../images/settings.png';
 import marker from '../../images/marker.png';
 import searchbar from '../../images/search-bar.png';
 
-function Navbar() {
+/*function Navbar() {
     const handleLogout = () => {
         localStorage.clear();
         window.location.pathname = "/";
-      }
+    }
 
     const [open,setOpen] = useState(false);
 
@@ -67,6 +66,17 @@ function Navbar() {
     
             </div>
         </div>
+    );
+}*/
+
+const Navbar = ()=>{
+    return (
+        <>
+            <div className = "navbar">
+                
+
+            </div>
+        </>
     );
 }
 export default Navbar

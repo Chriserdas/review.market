@@ -6,27 +6,25 @@ export default function NotificationPopup(props){
     const color = props.color;
     const activate = props.activate;
     const controlAnimation = useAnimation();
-
     useEffect(()=>{
-        controlAnimation.start({
-            initial:{y:"-20%"},
-            y:["5%","1%"],
-            transition :{durations:"3s"},
-            onTransitionEnd:{display: "none"}
-        });
-
-        return ()=>{
-            window.location = '/UserHome'
+        if (activate) {
+            controlAnimation.start({
+                y:[-1000,0,0,0,-1000],
+            });
         }
     },[activate]);
+
     return (
-        <div className="notification_popup_container">
-            <motion.div 
+        <motion.div className="notification_popup_container"
+            initial={{y:"-100vh"}}
+            animate={controlAnimation}
+            transition={{duration:3}}
+        >
+            <div 
                 className="notification_popup" 
                 style={{backgroundColor:color}}
-                animate={controlAnimation}
-            >{message}</motion.div>
-        </div>
+            >{message}</div>
+        </motion.div>
         
     );
 }

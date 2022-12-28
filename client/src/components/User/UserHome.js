@@ -4,12 +4,23 @@ import Navbar from './Navbar';
 
 
 function UserHome() {
-    return (
+    /*return (
         <div>
             <Navbar/>
             <MapCurrentLocation/>
         </div>
-    )
+    )*/
+
+    return (
+        <>
+            <div className="logo">review</div>
+            <div className = "mainContent_container">
+                
+                <Navbar/>
+
+            </div>
+        </>
+    );
 }
 
 export default UserHome
