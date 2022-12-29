@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import {motion,useAnimation} from "framer-motion";
 import { Link } from "react-router-dom";
+
 export default function NotificationPopup(props){
     const message = props.message;
     const color = props.color;

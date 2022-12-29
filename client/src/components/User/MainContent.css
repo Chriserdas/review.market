@@ -144,24 +144,24 @@ h3 span{
 
 .logo{
     position: fixed;
-    left:1%;
-    top:2%;
+    left:0%;
+    top:1%;
     -webkit-user-drag: none;
     color: rgb(36, 36, 36);
     z-index: 1;
     font-family: Rubik;
-    background-color: black;
-    padding:7px 10px 7px 10px;
-    border-radius:30px;
+    background-color: #3e3d3d;
+    padding-bottom: 15px;
+    padding-top: 5px;
     color:white;
-    font-size: 15px;
+    font-size: 14px;
 }
   
 .logo::after{
     content: ".market";
     color: grey;
-    border-right: 2px solid grey;
-    border-bottom: 2px solid grey;
+    border-right: 2px solid whitesmoke;
+    border-bottom: 2px solid whitesmoke;
     padding-right: 2px;
 }
 
@@ -172,12 +172,66 @@ h3 span{
     height: 100%;
     justify-content: flex-start;
     flex-wrap: nowrap;
+    background-color: black;
 }
 
 .navbar{
     position: fixed;
     top:0;
+    display: flex;
     height: 100%;
-    min-width: 100px;
-    background-color:#414040;
+    width: 120px;
+    background-color:#3e3d3d;
+}
+
+.navbar_buttons_container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.current_location_container{
+    display: flex;
+    height: 30px;;
+    position: fixed;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x:hidden;
+    overflow-y: hidden;
+    align-items: center;
+    left:50px;
+    width: 120px;
+    text-overflow: "";
+    border-radius:5px;
+    padding-top: 5px;
+    padding-bottom: 8px;
+}
+
+.current_location_container img{
+    width: 25px;
+    position: relative;
+    height: 25px;
+}
+
+.current_location_container img:hover{
+    cursor: pointer;
+    background-color: #dd3b39;
+}
+
+.current_location_container:hover{
+    cursor: pointer;
+    background-color: #dd3b39;
+}
+
+.current_location_name{
+    position: relative;
+    color:white;
+    top: 5px;
+    left:100px;
+    text-overflow: "";
+    font-size: 12px;
+    display: none;
+    font-family: Toboggan;
 }

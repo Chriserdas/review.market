@@ -4,6 +4,8 @@ import user_image from '../../images/user_image.png';
 import settings from '../../images/settings.png';
 import marker from '../../images/marker.png';
 import searchbar from '../../images/search-bar.png';
+import current_location from '../../images/current_location.png';
+import {motion,useAnimation} from "framer-motion";
 
 /*function Navbar() {
     const handleLogout = () => {
@@ -70,10 +72,59 @@ import searchbar from '../../images/search-bar.png';
 }*/
 
 const Navbar = ()=>{
+
+    const [ishovered,setHover] = useState(false);
+    const animateDiv = useAnimation();
+    const animateText = useAnimation();
+    useEffect(()=>{
+        if (ishovered) {
+            animateDiv.start({
+                x:-50,
+            });
+
+            animateText.start({
+                display: "block",
+                x:-97
+            });
+        }
+
+        if(!ishovered) {
+            animateDiv.start({
+                x:0,
+            });
+
+            animateText.start({
+                display:"none",
+                x:0
+            });
+        }
+    },[ishovered]);
+
     return (
         <>
             <div className = "navbar">
-                
+                <div className = "navbar_buttons_container">
+
+                    <motion.div className = "current_location_container"
+                        onMouseEnter={()=>{
+                            setHover(true);
+                        }}
+                        onMouseLeave={()=>{
+                            setHover(false);
+                        }}
+
+                        animate = {animateDiv}
+                    > 
+                        <img src={current_location} alt=""/>
+                        <motion.div className = "current_location_name"
+                            animate = {animateText}
+                        >Current location
+                        </motion.div> 
+
+
+                    </motion.div>
+
+                </div> 
 
             </div>
         </>
