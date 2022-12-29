@@ -44,66 +44,82 @@ const AuthenticateForm = (props)=>{
 		e.preventDefault();
         if(title === "Log in"){
             const cred =  { email, password}
-            axios.post("http://localhost:5000/api/auth", cred)
-        .then(res => {
-            if (res.data.user) {
-                if(res.data.user.isAdmin){
+            if(email && password){
+                axios.post("http://localhost:5000/api/auth", cred)
+                .then(res => {
+                    if (res.data.user) {
+                        if(res.data.user.isAdmin){
 
-                    setInfo({
-                        isAuth:true,
-                        data:res.data.user,
-                        page:'/AdminHome'
-                    });
-                    setServerResponse({
-                        message :"Login Successful!",
-                        color:"green",
-                        open:true
-                    });
+                            setInfo({
+                                isAuth:true,
+                                data:res.data.user,
+                                page:'/AdminHome'
+                            });
+                            setServerResponse({
+                                message :res.data.message,
+                                color:"green",
+                                open:true
+                            });
 
-                }else{
-                    setInfo({
-                        isAuth:true,
-                        data:res.data.user,
-                        page:'/UserHome'
-                    });
-                
-                    setServerResponse({
-                        message :"Login Successful!",
-                        color:"green",
-                        open:true
-                    });
-                    
-                
-                }
+                        }else{
+                            setInfo({
+                                isAuth:true,
+                                data:res.data.user,
+                                page:'/UserHome'
+                            });
+                        
+                            setServerResponse({
+                                message :res.data.message,
+                                color:"green",
+                                open:true
+                            });
+                            
+                        
+                        }
+                    }else{
+                        setServerResponse({
+                            message :res.data.message,
+                            color:"#dd3b39",
+                            open:true
+                        });
+
+                        setInfo({
+                            page:"/",
+                        })
+                    }
+                })
             }else{
                 setServerResponse({
-                    message :"Please check your username and password",
+                    message :"Please fill all required fields",
                     color:"#dd3b39",
                     open:true
                 });
-
-                setInfo({
-                    page:"/",
-                })
             }
-        })
-
         } else if(title === "Register"){
             const cred =  { username, email, password}
             if( username && email && password){
-
                 try{
                     axios.post("http://localhost:5000/api/users", cred)
                 .then( res => {
-                    alert(res.data.message)
-                    window.location = '/'
+                    setInfo({
+                        page:'/'
+                    });
+                
+                    setServerResponse({
+                        message : res.data.message,
+                        color:"green",
+                        open:true
+                    });
                 })}
                 catch(err){
                     alert(err)
                 }
-
             } else {
-                alert("invalid input")
+                setServerResponse({
+                    message : "Please fill all required fields",
+                    color:"green",
+                    open:true
+                });
             }   
         }
 	};
