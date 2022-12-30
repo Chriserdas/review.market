@@ -60,8 +60,24 @@ const SupermarketSchema = new mongoose.Schema({
         ]
 });
 
+const OfferSchema = new mongoose.Schema({
+        offer:[
+                {
+                        product:String,
+                        supermarket:String,
+                        price:Number,
+                        criteria:Boolean,
+                        createDate:{type:Date,default:Date()},
+                        likes:Number,
+                        dislikes:Number,
+                        stock:Boolean
+                }      
+        ],
+});
+
 const User = mongoose.model("users", userSchema);
 const Data = mongoose.model("products_categories", ProdCategSchema);
 const Supermarket = mongoose.model("supermarkets", SupermarketSchema);
+const Offer = mongoose.model("offers", OfferSchema);
 
-module.exports= {User, Data, Supermarket}
+module.exports= {User, Data, Supermarket, Offer}
