@@ -13,12 +13,12 @@ const supermarket = require("./data/supermarkets.json");
 //connect to database
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
 async function connect(){
-  try{
-    await mongoose.connect(url);
-    console.log("Connected to MongoDB");
-  }catch(error){
-    console.error(error)
-  }
+    try{
+        await mongoose.connect(url);
+        console.log("Connected to MongoDB");
+    }catch(error){
+        console.error(error)
+    }
 }
 connect();
 

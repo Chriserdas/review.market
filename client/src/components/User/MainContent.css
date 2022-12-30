@@ -136,33 +136,34 @@ h3 span{
     transition: 500ms ease;
 }*/
 
-.logo::before{
-    position: relative;
-    content: url('https://api.iconify.design/uil/shopping-cart-alt.svg?color=white&width=20&height=20');
-    top:5px;
+.logo_container{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top:15px;
+    height: 45px;;
+    border-radius:50%;
+    width: 45px;
+    background-color:#fef9ff;
+    left:25%;
+    z-index: 1;
 }
 
-.logo{
-    position: fixed;
-    left:0%;
-    top:1%;
-    -webkit-user-drag: none;
-    color: rgb(36, 36, 36);
-    z-index: 1;
-    font-family: Rubik;
-    background-color: #3e3d3d;
-    padding-bottom: 15px;
-    padding-top: 5px;
-    color:white;
-    font-size: 14px;
+.logo_container img{
+    position: relative;
+    top:22%;
+    left:-1%;
+    width:24px;
+    height: 24px;
 }
-  
-.logo::after{
-    content: ".market";
-    color: grey;
-    border-right: 2px solid whitesmoke;
-    border-bottom: 2px solid whitesmoke;
-    padding-right: 2px;
+
+.logo_b{
+    position: absolute;
+    top:10px;
+    left:25%;
+    border-bottom: 2px solid #1F38FE;
+    width: 25px;
+    height: 25px;
 }
 
 .mainContent_container{
@@ -172,66 +173,81 @@ h3 span{
     height: 100%;
     justify-content: flex-start;
     flex-wrap: nowrap;
-    background-color: black;
+    background-color: #f7f8ff;
 }
 
 .navbar{
     position: fixed;
     top:0;
     display: flex;
-    height: 100%;
-    width: 120px;
-    background-color:#3e3d3d;
-}
-
-.navbar_buttons_container{
-    display: flex;
-    width: 100%;
-    height: 100%;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    width: 100px;
+    background-color:#5e7eff;
 }
 
-.current_location_container{
+.navbar_button_container{
     display: flex;
-    height: 30px;;
-    position: fixed;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    overflow-x:hidden;
-    overflow-y: hidden;
-    align-items: center;
-    left:50px;
-    width: 120px;
-    text-overflow: "";
-    border-radius:5px;
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+    height:30px;
     padding-top: 5px;
     padding-bottom: 8px;
-}
-
-.current_location_container img{
-    width: 25px;
-    position: relative;
-    height: 25px;
-}
-
-.current_location_container img:hover{
-    cursor: pointer;
-    background-color: #dd3b39;
-}
-
-.current_location_container:hover{
-    cursor: pointer;
-    background-color: #dd3b39;
-}
-
-.current_location_name{
-    position: relative;
-    color:white;
-    top: 5px;
-    left:100px;
     text-overflow: "";
-    font-size: 12px;
-    display: none;
+    overflow: hidden;
+}
+
+.navbar_button_container img{
+    width: 26px;
+    height: 26px;
+    background-color: #999dc9;
+    border-radius:50%;
+}
+
+.navbar_button_name{
+    text-overflow: "";
     font-family: Toboggan;
+    align-self: center;
+    font-size: 13px;
+    color: #fff;
+    user-select: none;
+    display: none;
+}
+
+.navbar_button_container:hover{
+    cursor: pointer;
+    background-color: #BDC2F5;
+}
+
+.secondNavbar{
+    position: relative;
+    height: 100%;
+    left: 100px;
+    width: 0px;
+    background-color: black;
+}
+
+.MapContainer{
+    position: relative;
+    flex-grow: 2;
+    top:0px;
+    left: 100px;
+}
+
+.map{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color:white;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.wrapper{
+    position: relative;
+    width: 100%;
 }

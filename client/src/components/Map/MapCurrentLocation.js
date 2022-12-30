@@ -9,7 +9,7 @@ export default function MapCurrentLocation() {
       zoom={13}
       scrollWheelZoom
       animate={true}
-      style={{ width: "100%", height: "90vh" }}
+      style={{ width: "100%", height: "100%" }}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -23,7 +23,6 @@ export default function MapCurrentLocation() {
 
 function LocationMarker() {
   const [position, setPosition] = useState(null);
-  const [bbox, setBbox] = useState([]);
 
   const map = useMap();
 
@@ -31,7 +30,6 @@ function LocationMarker() {
     map.locate().on("locationfound", function (e) {
       setPosition(e.latlng);
       map.flyTo(e.latlng, map.getZoom());
-      setBbox(e.bounds.toBBoxString().split(","));
     });
   }, [map]);
 
@@ -39,11 +37,6 @@ function LocationMarker() {
     <Marker position={position}>
       <Popup>
         You're current location. <br />
-        Map bbox: <br />
-        <b>Southwest lng</b>: {bbox[0]} <br />
-        <b>Southwest lat</b>: {bbox[1]} <br />
-        <b>Northeast lng</b>: {bbox[2]} <br />
-        <b>Northeast lat</b>: {bbox[3]}
       </Popup>
     </Marker>
   );
