@@ -161,7 +161,7 @@ h3 span{
     position: absolute;
     top:10px;
     left:25%;
-    border-bottom: 2px solid #1F38FE;
+    border-bottom: 2px solid #353535;
     width: 25px;
     height: 25px;
 }
@@ -185,7 +185,7 @@ h3 span{
     justify-content: center;
     height: 100%;
     width: 100px;
-    background-color:#5e7eff;
+    background-color:#353535;
 }
 
 .navbar_button_container{
@@ -204,7 +204,7 @@ h3 span{
 .navbar_button_container img{
     width: 26px;
     height: 26px;
-    background-color: #999dc9;
+    background-color: #555555;
     border-radius:50%;
 }
 
@@ -220,7 +220,7 @@ h3 span{
 
 .navbar_button_container:hover{
     cursor: pointer;
-    background-color: #BDC2F5;
+    background-color: #36827F;
 }
 
 .secondNavbar{

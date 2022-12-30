@@ -233,16 +233,3 @@ body{
     font-family: kanit-light;
     user-select: none;
 }
-
-
-@keyframes popup_animation {
-    0% { 
-        top:-15%;
-    }
-    80%{
-        top:5%;
-    }
-    100%{
-        top:-15%;
-    }
-}
