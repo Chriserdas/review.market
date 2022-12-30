@@ -3,12 +3,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
-const { User, Data, Supermarket } = require("./models/Schemas");
+const { User, Data, Supermarket, Offer } = require("./models/Schemas");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const adminData = require("./data/adminData");
 const data = require('./data/product_category.json');
 const supermarket = require("./data/supermarkets.json");
+const offer = require("./data/offer");
 
 //connect to database
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
@@ -49,6 +50,24 @@ app.get('/supermarket', async(req, res) => {
   await Supermarket.remove({});
   const createdSupermarket = await Supermarket.insertMany(supermarket);
   res.send({ createdSupermarket });
+});
+
+//insert offer
+app.get('/offer', async(req,res) => {
+  const createOffer = await Offer.insertMany(offer);
+  res.send(createOffer);
+});
+
+app.get('/api/offer', async(req,res) => {
+  Offer.aggregate([{
+    $lookup: {
+        from: "supermarkets", // collection name in db
+        localField: "supermarket_id",
+        foreignField: "_id",
+        as: "supermarkets"
+    }
+}]).exec(function(err, _id) {
+});
 });
 
 //search pois
