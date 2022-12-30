@@ -39,7 +39,7 @@ app.get('/adminData', async(req, res) => {
 
 //insert product,categories,subcategories
 app.get('/prodCateg', async(req, res) => {
-  await Data.remove({});
+   await Data.remove({});
    const createdProdCateg = await Data.insertMany(data);
    res.send({ createdProdCateg });
 });
@@ -48,16 +48,18 @@ app.get('/prodCateg', async(req, res) => {
 app.get('/supermarket', async(req, res) => {
   await Supermarket.remove({});
   const createdSupermarket = await Supermarket.insertMany(supermarket);
-   res.send({ createdSupermarket });
+  res.send({ createdSupermarket });
 });
 
 //search pois
 app.get('/api/supermarket', async(req,res) => {
-  const stores = await Supermarket.find();
-  res.send(stores);
-  /*stores.forEach(element => {
-    res.send(element.features)
-  });*/
+   await Supermarket.find()
+   .then((result) => {
+    res.send(result)
+   })
+   .catch((err) => {
+    console.log(err);
+   })
 });
 
 
