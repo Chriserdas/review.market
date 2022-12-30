@@ -1,6 +1,8 @@
 import React from 'react'
 import MapCurrentLocation from '../Map/MapCurrentLocation'
 import Navbar from './Navbar';
+import SecondNavbar from "./SecondNavbar";
+import MapContainer from './MapContainer';
 
 
 function UserHome() {
@@ -13,14 +15,14 @@ function UserHome() {
 
     return (
         <>
-            <div className="logo">review</div>
             <div className = "mainContent_container">
-                
                 <Navbar/>
+                <SecondNavbar/>
+                <MapContainer/>
 
             </div>
         </>
     );
 }
 
-export default UserHome
+export default UserHome;
