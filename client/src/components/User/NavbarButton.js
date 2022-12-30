@@ -16,12 +16,12 @@ const NavbarButton = (props)=>{
 
             animateDiv.start({
                 x:"flex-start",
-                backgroundColor: "#BDC2F5",    
+                backgroundColor: "#ED474A",    
                 width: "100%"            
             });
 
             animateImg.start({
-                backgroundColor:"#BDC2F5",
+                backgroundColor:"#ED474A",
                 padding:"0px 0xp 0px 0px",
             });
 
@@ -34,12 +34,12 @@ const NavbarButton = (props)=>{
                 animateDiv.start({
                     x:"flex-start",
                     borderLeft:"2px solid white",
-                    backgroundColor: "#BDC2F5",
+                    backgroundColor: "#ED474A",
                     width: "100%"
                 });
 
                 animateImg.start({
-                    backgroundColor:"#BDC2F5",
+                    backgroundColor:"#ED474A",
                     padding:"0px 0xp 0px 0px",
                 });
     
@@ -55,7 +55,7 @@ const NavbarButton = (props)=>{
             animateDiv.start({
                 x:0,
                 borderLeft:"0px solid white",
-                backgroundColor: "#5e7eff"
+                backgroundColor: "#353535"
             });
 
             animateText.start({
@@ -64,7 +64,7 @@ const NavbarButton = (props)=>{
             });
 
             animateImg.start({
-                backgroundColor:"#999dc9",
+                backgroundColor:"#555555",
                 padding:"5px 5px 5px 5px",
             });
         }
