@@ -54,21 +54,24 @@ app.get('/supermarket', async(req, res) => {
 
 //insert offer
 app.get('/offer', async(req,res) => {
-  const createOffer = await Offer.insertMany(offer);
+  const createOffer = await Offer.insertMany(offer.offer);
   res.send(createOffer);
 });
 
 app.get('/api/offer', async(req,res) => {
-  Offer.aggregate([{
-    $lookup: {
-        from: "supermarkets", // collection name in db
-        localField: "supermarket_id",
-        foreignField: "_id",
-        as: "supermarkets"
-    }
-}]).exec(function(err, _id) {
-});
-});
+  Offer.aggregate([
+    { $lookup:
+       {
+         from: 'supermarkets',
+         localField: 'supermarket_id',
+         foreignField: '_id',
+         as: 'supermarketdetails'
+       }
+     },
+    ]).then((result) => {
+      res.send(result)
+     })
+  });
 
 //search pois
 app.get('/api/supermarket', async(req,res) => {

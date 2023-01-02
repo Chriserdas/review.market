@@ -61,18 +61,14 @@ const SupermarketSchema = new mongoose.Schema({
 });
 
 const OfferSchema = new mongoose.Schema({
-        offer:[
-                {
-                        product_id:{ type: mongoose.Schema.ObjectId},
-                        supermarket_id:{ type: mongoose.Schema.ObjectId},
-                        price:{type:Number,required:true},
-                        criteria:Boolean,
-                        createDate:{type:Date,default:Date()},
-                        likes:Number,
-                        dislikes:Number,
-                        stock:Boolean
-                }      
-        ],
+                product_id:{ type: mongoose.Schema.ObjectId, ref:'products_categories'},
+                supermarket_id:{ type: mongoose.Schema.ObjectId, ref:'supermarkets'},
+                price:{type:Number,required:true},
+                criteria:Boolean,
+                createDate:{type:Date,default:Date()},
+                likes:Number,
+                dislikes:Number,
+                stock:Boolean      
 });
 
 const User = mongoose.model("users", userSchema);

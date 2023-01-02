@@ -17,8 +17,8 @@ const offer = {
         likes:10,
         dislikes:10,
         stock:true
-      }
+      },
     ],
   };
   
-  module.exports = offer;
+module.exports = offer;
