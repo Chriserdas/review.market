@@ -8,7 +8,7 @@ const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const adminData = require("./data/adminData");
 const data = require('./data/product_category.json');
-const supermarket = require("./data/supermarkets.json");
+const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
 
 //connect to database
@@ -48,30 +48,32 @@ app.get('/prodCateg', async(req, res) => {
 //insert supermarket
 app.get('/supermarket', async(req, res) => {
   await Supermarket.remove({});
-  const createdSupermarket = await Supermarket.insertMany(supermarket);
+  const createdSupermarket = await Supermarket.insertMany(supermarket.features);
   res.send({ createdSupermarket });
 });
 
 //insert offer
 app.get('/offer', async(req,res) => {
+  await Offer.remove({});
   const createOffer = await Offer.insertMany(offer.offer);
   res.send(createOffer);
 });
 
+//supermarkets with offers
 app.get('/api/offer', async(req,res) => {
   Offer.aggregate([
-    { $lookup:
-       {
-         from: 'supermarkets',
-         localField: 'supermarket_id',
-         foreignField: '_id',
-         as: 'supermarketdetails'
-       }
-     },
-    ]).then((result) => {
-      res.send(result)
-     })
-  });
+    {
+      "$lookup": {
+          "from": "supermarkets",
+          "localField": "supermarket_id",
+          "foreignField": "_id",
+          "as": "supermarket"
+      }
+  }
+  ]).then((result) => {
+    res.send(result)
+   })
+});
 
 //search pois
 app.get('/api/supermarket', async(req,res) => {

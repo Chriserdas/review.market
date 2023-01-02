@@ -35,29 +35,25 @@ const ProdCategSchema = new mongoose.Schema({
 
 
 const SupermarketSchema = new mongoose.Schema({
-        features:[
-                {
-                        type:{
-                                type:String
-                        },
-                        properties:{
-                                "@id":String,
-                                "brand":String,
-                                "brand:wikidata":String,
-                                "brand:wikipedia":String,
-                                "name":String,
-                                "opening_hours":String,
-                                "shop":String
-                        },
-                        geometry:{
-                                "type":{
-                                        type:String
-                                },
-                                "coordinates":[mongoose.Schema.Types.Mixed]
-                        },
-                        id:String
+        type:{
+                type:String
+        },
+        properties:{
+                "@id":String,
+                "brand":String,
+                "brand:wikidata":String,
+                "brand:wikipedia":String,
+                "name":String,
+                "opening_hours":String,
+                "shop":String
+        },
+        geometry:{
+                "type":{
+                        type:String
                 },
-        ]
+                "coordinates":[mongoose.Schema.Types.Mixed]
+        },
+        id:String
 });
 
 const OfferSchema = new mongoose.Schema({
