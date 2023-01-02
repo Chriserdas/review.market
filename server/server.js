@@ -33,14 +33,13 @@ app.use("/api/auth", authRoutes);
 
 //insert admins directly to database
 app.get('/adminData', async(req, res) => {
-  //await User.remove({});
   const createdUsers = await User.insertMany(adminData.users);
   res.send({ createdUsers });
 });
 
 //insert product,categories,subcategories
 app.get('/prodCateg', async(req, res) => {
-   await Data.remove({});
+   //await Data.remove({});
    const createdProdCateg = await Data.insertMany(data);
    res.send({ createdProdCateg });
 });
@@ -60,29 +59,39 @@ app.get('/offer', async(req,res) => {
 });
 
 //supermarkets with offers
-app.get('/api/offer', async(req,res) => {
-  Offer.aggregate([
-    {
-      "$lookup": {
-          "from": "supermarkets",
-          "localField": "supermarket_id",
-          "foreignField": "_id",
-          "as": "supermarket"
+app.get('/api/getCurrentLocation', async(req,res) => {
+
+
+   Offer.find().populate('supermarkets').exec((error, results) => {
+    if (error) {
+        console.log(error);
+      } else {
+        for(let result of results) {
+            Supermarket.findById(result.supermarkets,(error,supermarket)=>{
+                if (error) {
+                    console.log(error);
+                }
+                else{
+                    console.log({
+                        name: supermarket.properties.name,
+                        coordinates:supermarket.geometry.coordinates
+                    });
+                }
+            })
+
+        }
       }
-  }
-  ]).then((result) => {
-    res.send(result)
-   })
+   });
 });
 
 //search pois
 app.get('/api/supermarket', async(req,res) => {
    await Supermarket.find()
    .then((result) => {
-    res.send(result)
+        res.send(result)
    })
    .catch((err) => {
-    console.log(err);
+        console.log(err);
    })
 });
 

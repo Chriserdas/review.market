@@ -7,9 +7,7 @@ const Map = ()=>{
     
     return (
         <div className="map">
-            <MapCurrentLocation>
-                
-            </MapCurrentLocation>
+            <MapCurrentLocation/>
         </div>
     );
 }

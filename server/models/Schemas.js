@@ -49,7 +49,7 @@ const SupermarketSchema = new mongoose.Schema({
         },
         geometry:{
                 "type":{
-                        type:String
+                    type:String
                 },
                 "coordinates":[mongoose.Schema.Types.Mixed]
         },
@@ -57,8 +57,8 @@ const SupermarketSchema = new mongoose.Schema({
 });
 
 const OfferSchema = new mongoose.Schema({
-                product_id:{ type: mongoose.Schema.ObjectId, ref:'products_categories'},
-                supermarket_id:{ type: mongoose.Schema.ObjectId, ref:'supermarkets'},
+                products:{type: String},
+                supermarkets:{ type: String},
                 price:{type:Number,required:true},
                 criteria:Boolean,
                 createDate:{type:Date,default:Date()},

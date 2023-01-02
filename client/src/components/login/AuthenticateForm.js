@@ -101,13 +101,24 @@ const AuthenticateForm = (props)=>{
                 try{
                     axios.post("http://localhost:5000/api/users", cred)
                 .then( res => {
-                    setInfo({
-                        page:'/'
-                    });
-                
+                    
+                    if(res.data.color ==="green"){
+                        setInfo({
+                            page:'/'
+                        });
+                    }
+                    else{
+                        setEmail("");
+                        setPassword("");
+                        setUsername("");
+                        setInfo({
+                            page:''
+                        });
+                    }
+
                     setServerResponse({
                         message : res.data.message,
-                        color:"green",
+                        color:res.data.color,
                         open:true
                     });
                 })}
@@ -117,7 +128,7 @@ const AuthenticateForm = (props)=>{
             } else {
                 setServerResponse({
                     message : "Please fill all required fields",
-                    color:"green",
+                    color:"#dd3b39",
                     open:true
                 });
             }   

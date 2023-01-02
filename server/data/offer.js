@@ -1,8 +1,8 @@
 const offer = {
     offer: [
       {
-        product_id:'63ae106ac20de432c1e916ae',
-        supermarket_id:'63b326c2f6b957bfad38e0fe',
+        products:'63ae106ac20de432c1e916ae',
+        supermarkets:'63b33678aabc92a5b4fe9a07',
         price:4.50,
         criteria:true,
         likes:10,
@@ -10,8 +10,8 @@ const offer = {
         stock:true
       },
       {
-        product_id:'63ae106ac20de432c1e916b3',
-        supermarket_id:'63b326c2f6b957bfad38e0ff',
+        products:'63ae106ac20de432c1e916b3',
+        supermarkets:'63b33678aabc92a5b4fe9a08',
         price:4.50,
         criteria:true,
         likes:10,
