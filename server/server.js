@@ -52,7 +52,7 @@ app.get('/prodCateg', async(req, res) => {
 
 //insert admins directly to database
 app.get('/user', async(req, res) => {
-    //await User.remove({});
+    await User.remove({});
     const createdUsers = await User.insertMany(users);
     res.send({ createdUsers });
   });
@@ -67,22 +67,21 @@ app.get('/supermarket', async(req, res) => {
 //insert offer
 app.get('/offer', async(req,res) => {
   await Offer.remove({});
-  const createOffer = await Offer.insertMany(offer.offer);
+  const createOffer = await Offer.insertMany(offer);
   res.send(createOffer);
 });
 
 //supermarkets with offers
 app.get('/api/getCurrentLocation', async(req,res) => {
-   Supermarket.aggregate([
+   Offer.aggregate([
     {
         $lookup:{
-            from:"offers",
-            localField:"id",
-            foreignField:"supermarket_id",
-            as:"offer"
+            from:"supermarkets",
+            localField:"supermarket_id",
+            foreignField:"id",
+            as:"supermarket"
         }
     },
-    {$project:{"properties.name":1, "geometry.coordinates":1}}
    ]).then((result)=>{
     res.send(result)
    })
