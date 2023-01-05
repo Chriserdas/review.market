@@ -1,23 +1,75 @@
-import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import React, { useEffect, useState,useRef } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip } from "react-leaflet";
+import axios from 'axios';
+import L from 'leaflet'
 
-export default function MapCurrentLocation() {
+export default function MapCurrentLocation(props) {
 
-  return (
-    <MapContainer
-      center={[38.246639, 21.734573]}
-      zoom={13}
-      scrollWheelZoom
-      animate={true}
-      style={{ width: "100%", height: "100%" }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <LocationMarker />
-    </MapContainer>
-  );
+    const [data,setData] = useState(null);
+    const markerRef = useRef();
+    const [isShowDetails,setShowDetails] = useState({
+        show:false,
+        data:null
+    });
+  
+    useEffect(() => {
+        if(props.isClicked === "Current Location"){
+            axios.get("http://localhost:5000/api/getCurrentLocation").then((response) => {
+                setData(response.data);
+            });
+        }
+    },[props.isClicked]);
+
+    
+    const offerIcon = new L.icon({
+        iconUrl: require('./../../images/offer_marker.png'),
+        iconSize: [55,55],
+    });
+
+
+    return (
+        <MapContainer
+            center={[38.246639, 21.734573]}
+            zoom={13}
+            scrollWheelZoom
+            zoomControl= {false}
+            attributionControl= {false}
+            animate={true}
+            style={{ width: "100%", height: "100%" }}
+        >
+            <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            
+            <LocationMarker />
+
+            { data === null ? "" : (
+            Object.entries(data).map(([key,value]) => (
+                
+                <Marker 
+                    key={key} 
+                    position={value.geometry.coordinates.reverse()} 
+                    icon={offerIcon}
+                    eventHandlers={{
+                        click: (e) => {
+                            setShowDetails({
+                                show:true,
+                                data:value.id
+                            })
+                        },
+                    }}
+                >
+                
+                    <Tooltip>
+                        {value.properties.name || value.properties.shop}
+                    </Tooltip>
+                    
+                </Marker>
+                
+            )))}
+        </MapContainer>
+    );
 }
 
 
@@ -35,9 +87,9 @@ function LocationMarker() {
 
   return position === null ? null : (
     <Marker position={position}>
-      <Popup>
-        You're current location. <br />
-      </Popup>
+      <Tooltip>
+        Your current location. <br />
+      </Tooltip>
     </Marker>
   );
 }

@@ -17,6 +17,7 @@ const offerRoutes = require('./routes/offer');
 
 //connect to database
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
+
 async function connect(){
     try{
         await mongoose.connect(url, {
@@ -51,9 +52,15 @@ app.get('/prodCateg', async(req, res) => {
 
 //insert supermarket
 app.get('/supermarket', async(req, res) => {
+<<<<<<< Updated upstream
   await Data.remove({});
   /*const createdSupermarket = await Supermarket.insertMany(supermarket.features);
   res.send({ createdSupermarket });*/
+=======
+  //await Supermarket.remove({});
+  const createdSupermarket = await Supermarket.insertMany(supermarket.features);
+  res.send({ createdSupermarket });
+>>>>>>> Stashed changes
 });
 
 //insert offer
@@ -63,26 +70,44 @@ app.get('/offer', async(req,res) => {
   res.send(createOffer);
 });
 
+<<<<<<< Updated upstream
 //supermarkets with offers
 app.get('/api/getCurrentLocation', async(req,res) => {
+=======
+
+//supermarkets with offers
+app.get('/api/getCurrentLocation', async(req,response) => {
+
+>>>>>>> Stashed changes
    Offer.find().populate('supermarkets').exec((error, results) => {
-    if (error) {
-        console.log(error);
-      } else {
-        for(let result of results) {
-            getId(result.supermarkets).then(result=>{
-                console.log(result);
-            })
+    
+        if (error) {
+            console.log(error);
+        } 
+        else {
+            const ids = results.map(data => data.supermarkets);
+            Supermarket.find({_id:{$in:ids}}).exec((error,supermarket)=>{
+                if (error) {
+                    console.log(error);
+                }
+                else{
+                    response.send(
+                        /*supermarket_names : supermarket.map(obj => obj.properties.name || obj.properties.shop),
+                        supermarket_coordinates : supermarket.map(obj => obj.geometry.coordinates)*/
+                        supermarket
+                    )
+                    
+                }
+            });
         }
-      }
-   });
+    });
 });
 
 //search pois
 app.get('/api/supermarket', async(req,res) => {
    await Supermarket.find()
    .then((result) => {
-        res.send(result)
+        res.send(result);
    })
    .catch((err) => {
         console.log(err);
@@ -97,26 +122,9 @@ app.get("/", (req, res) => {
 
 const port = process.env.PORT || 5000;
 
-app.listen(5000, () => {
+app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
 
-function getId(id) {
-    return new Promise((resolve, reject) => {
-        Supermarket.findById(id).exec((error,supermarket)=>{
-            if (error) {
-                console.log(error);
-            }
-            else{
 
-                resolve({name: supermarket.properties.name,
-                    coordinates:supermarket.geometry.coordinates});
-                /*console.log({
-                    name: supermarket.properties.name,
-                    coordinates:supermarket.geometry.coordinates
-                });*/
-            }
-        });
-    });
-}

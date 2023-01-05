@@ -38,7 +38,7 @@ const AuthenticateForm = (props)=>{
         }, 3000);
         return () => clearTimeout(timeout);
     }
-   },[info.page,serverResponse.open]);
+    },[info.page,serverResponse.open]);
 
     const handleSubmit = async (e) => {
 		e.preventDefault();

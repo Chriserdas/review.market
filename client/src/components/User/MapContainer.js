@@ -2,10 +2,10 @@ import {React} from "react";
 import Map from "./Map";
 
 
-const MapContainer = ()=>{
+const MapContainer = (props)=>{
     return (
         <div className="MapContainer">
-            <Map/>
+            <Map isClicked={props.isClicked}/>
         </div>
     );
 }
