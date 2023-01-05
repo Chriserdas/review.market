@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     isAdmin:{type:Boolean,default:false,require:true},
     entryDate:{type:Date,default:Date()},
     token:{type:Number, default:0}
-},{collection:"users"});
+});
 
 
 const ProdCategSchema = new mongoose.Schema({
@@ -31,7 +31,7 @@ const ProdCategSchema = new mongoose.Schema({
                         ]
                 }
         ]
-},{collection:"products_categories"});
+});
 
 
 const SupermarketSchema = new mongoose.Schema({
@@ -54,26 +54,18 @@ const SupermarketSchema = new mongoose.Schema({
                 "coordinates":[mongoose.Schema.Types.Mixed]
         },
         id:String
-},{collection:"supermarkets"});
+});
 
 const OfferSchema = new mongoose.Schema({
                 products:{type: String},
                 supermarkets:{ type: String},
                 price:{type:Number,required:true},
                 criteria:Boolean,
-<<<<<<< Updated upstream
                 likeCount: {type: Number,default: 0},
                 createdAt: {type: Date,default: new Date()},
                 dislikeCount: {type: Number,default: 0},
                 stock: {type: Number,default: 20}
 });
-=======
-                createDate:{type:Date,default:Date()},
-                likes:Number,
-                dislikes:Number,
-                stock:Boolean      
-},{collection:"offers"});
->>>>>>> Stashed changes
 
 const User = mongoose.model("users", userSchema);
 const Data = mongoose.model("products_categories", ProdCategSchema);
