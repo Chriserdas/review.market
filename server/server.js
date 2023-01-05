@@ -6,17 +6,25 @@ const cors = require("cors");
 const { User, Data, Supermarket, Offer } = require("./models/Schemas");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
-const adminData = require("./data/adminData");
+const users = require("./data/users");
 const data = require('./data/product_category.json');
 const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
+const supermarketRoutes = require('./routes/supermarket');
+const prodcategRoutes = require('./routes/prodcateg');
+const offerRoutes = require('./routes/offer');
+
 
 //connect to database
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
 async function connect(){
     try{
-        await mongoose.connect(url);
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+          });
         console.log("Connected to MongoDB");
+
     }catch(error){
         console.error(error)
     }
@@ -30,25 +38,22 @@ app.use(cors());
 // routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
-
-//insert admins directly to database
-app.get('/adminData', async(req, res) => {
-  const createdUsers = await User.insertMany(adminData.users);
-  res.send({ createdUsers });
-});
+app.use('/api/supermarket', supermarketRoutes);
+app.use('/api/prodcateg', prodcategRoutes);
+app.use('/api/offer', offerRoutes);
 
 //insert product,categories,subcategories
 app.get('/prodCateg', async(req, res) => {
-   //await Data.remove({});
+   await User.remove({});
    const createdProdCateg = await Data.insertMany(data);
    res.send({ createdProdCateg });
 });
 
 //insert supermarket
 app.get('/supermarket', async(req, res) => {
-  await Supermarket.remove({});
-  const createdSupermarket = await Supermarket.insertMany(supermarket.features);
-  res.send({ createdSupermarket });
+  await Data.remove({});
+  /*const createdSupermarket = await Supermarket.insertMany(supermarket.features);
+  res.send({ createdSupermarket });*/
 });
 
 //insert offer
@@ -60,8 +65,6 @@ app.get('/offer', async(req,res) => {
 
 //supermarkets with offers
 app.get('/api/getCurrentLocation', async(req,res) => {
-
-
    Offer.find().populate('supermarkets').exec((error, results) => {
     if (error) {
         console.log(error);

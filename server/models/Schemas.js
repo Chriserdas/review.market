@@ -61,10 +61,10 @@ const OfferSchema = new mongoose.Schema({
                 supermarkets:{ type: String},
                 price:{type:Number,required:true},
                 criteria:Boolean,
-                createDate:{type:Date,default:Date()},
-                likes:Number,
-                dislikes:Number,
-                stock:Boolean      
+                likeCount: {type: Number,default: 0},
+                createdAt: {type: Date,default: new Date()},
+                dislikeCount: {type: Number,default: 0},
+                stock: {type: Number,default: 20}
 });
 
 const User = mongoose.model("users", userSchema);

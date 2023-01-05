@@ -3,7 +3,7 @@ const { User } = require("../models/Schemas");
 const bcrypt = require("bcrypt");
 
 router.post("/", async(req, res)=> {
-    const { name, email, password} = req.body
+    const { username, email, password} = req.body
     if (!/(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}/.test(password)) {
         res.send( { message: "The password must be at least 8 characters and contain at least one capital letter on number and some symbol (eg #$*&@).", color:"#dd3b39" })
     }
