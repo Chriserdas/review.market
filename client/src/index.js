@@ -1,15 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import NavbarContext from "./components/User/NavbarContext";
-import ShopClickedContext from './components/User/ShopClickedContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+    <App />
 
-    <NavbarContext.Provider>
-        <ShopClickedContext.Provider>
-            <App />
-        </ShopClickedContext.Provider>
-    </NavbarContext.Provider>
 );

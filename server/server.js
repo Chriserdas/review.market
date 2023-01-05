@@ -59,9 +59,15 @@ app.get('/user', async(req, res) => {
 
 //insert supermarket
 app.get('/supermarket', async(req, res) => {
+<<<<<<< HEAD
     await Data.remove({});
     const createdSupermarket = await Supermarket.insertMany(supermarket.features);
     res.send({ createdSupermarket });
+=======
+  await Data.remove({});
+  /*const createdSupermarket = await Supermarket.insertMany(supermarket.features);
+  res.send({ createdSupermarket });*/
+>>>>>>> parent of 40412a9 (changes)
 });
 
 //insert offer
@@ -73,6 +79,7 @@ app.get('/offer', async(req,res) => {
 
 //supermarkets with offers
 app.get('/api/getCurrentLocation', async(req,res) => {
+<<<<<<< HEAD
    Offer.aggregate([
     {
         $lookup:{
@@ -86,6 +93,19 @@ app.get('/api/getCurrentLocation', async(req,res) => {
         res.send(result);
         console.log(result);
    })
+=======
+   Offer.find().populate('supermarkets').exec((error, results) => {
+    if (error) {
+        console.log(error);
+      } else {
+        for(let result of results) {
+            getId(result.supermarkets).then(result=>{
+                console.log(result);
+            })
+        }
+      }
+   });
+>>>>>>> parent of 40412a9 (changes)
 });
 
 //search pois
@@ -109,4 +129,28 @@ const port = process.env.PORT || 5000;
 
 app.listen(5000, () => {
     console.log(`Server running at http://localhost:${port}`);
+<<<<<<< HEAD
 });
+=======
+});
+
+
+function getId(id) {
+    return new Promise((resolve, reject) => {
+        Supermarket.findById(id).exec((error,supermarket)=>{
+            if (error) {
+                console.log(error);
+            }
+            else{
+
+                resolve({name: supermarket.properties.name,
+                    coordinates:supermarket.geometry.coordinates});
+                /*console.log({
+                    name: supermarket.properties.name,
+                    coordinates:supermarket.geometry.coordinates
+                });*/
+            }
+        });
+    });
+}
+>>>>>>> parent of 40412a9 (changes)

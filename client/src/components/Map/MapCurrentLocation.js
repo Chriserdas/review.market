@@ -1,8 +1,6 @@
 import React, { useEffect, useState,useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap, Tooltip } from "react-leaflet";
-import axios from 'axios';
-import L from 'leaflet'
-
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import axios from "axios";
 export default function MapCurrentLocation(props) {
 
     const [data,setData] = useState(null);
@@ -88,9 +86,9 @@ function LocationMarker() {
 
   return position === null ? null : (
     <Marker position={position}>
-      <Tooltip>
-        Your current location. <br />
-      </Tooltip>
+      <Popup>
+        You're current location. <br />
+      </Popup>
     </Marker>
   );
 }

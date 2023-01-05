@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useContext} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { Link } from 'react-router-dom';
 import current_location from '../../images/current_location.png';
 import categories from '../../images/categories.png';
@@ -6,18 +6,15 @@ import settings from '../../images/setting.png';
 import logo from '../../images/logo.png';
 import search from '../../images/search.png'
 import NavbarButton from './NavbarButton';
-import MapContainer from './MapContainer';
-import NavbarContext from './NavbarContext';
 
 
 const Navbar = ()=>{
 
-    const {isClicked, setIsClicked} = useContext(NavbarContext);  
-    
-    const handleClick = (name)=>{
-        setIsClicked(name);
-    }
-
+        const [isClicked, setIsClicked] = useState("Current Location");  
+        
+        const handleClick = (name)=>{
+            setIsClicked(name)
+        }
     return (
         <>
 

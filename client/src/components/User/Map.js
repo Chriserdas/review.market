@@ -2,11 +2,12 @@ import React from "react";
 import MapCurrentLocation from "../Map/MapCurrentLocation";
 
 
-const Map = (props)=>{
+const Map = ()=>{
 
+    
     return (
         <div className="map">
-            <MapCurrentLocation isClicked={props.isClicked}/>
+            <MapCurrentLocation/>
         </div>
     );
 }
