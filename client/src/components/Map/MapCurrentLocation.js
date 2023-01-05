@@ -86,9 +86,9 @@ function LocationMarker() {
 
   return position === null ? null : (
     <Marker position={position}>
-      <Popup>
-        You're current location. <br />
-      </Popup>
+      <Tooltip>
+        Your current location. <br />
+      </Tooltip>
     </Marker>
   );
 }

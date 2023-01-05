@@ -82,7 +82,6 @@
 
 .navbar_button_container:hover{
     cursor: pointer;
-    background-color: #36827F;
 }
 
 .secondNavbar{
@@ -108,7 +107,7 @@
     
     background-color:white;
     border-radius: 5px;
-    z-index: 1;
+    z-index: 0;
 }
 
 .wrapper{

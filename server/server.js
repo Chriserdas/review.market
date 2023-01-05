@@ -85,12 +85,7 @@ app.get('/api/getCurrentLocation', async(req,res) => {
                 console.log(error);
             }
             else{
-
-                console.log(supermarket);
-                /*console.log({
-                    name: supermarket.properties.name,
-                    coordinates:supermarket.geometry.coordinates
-                });*/
+                res.send(supermarket);
             }
         });
         
@@ -121,22 +116,3 @@ app.listen(5000, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
-
-function getId(id) {
-    return new Promise((resolve, reject) => {
-        Supermarket.findById(id).exec((error,supermarket)=>{
-            if (error) {
-                console.log(error);
-            }
-            else{
-
-                resolve({name: supermarket.properties.name,
-                    coordinates:supermarket.geometry.coordinates});
-                /*console.log({
-                    name: supermarket.properties.name,
-                    coordinates:supermarket.geometry.coordinates
-                });*/
-            }
-        });
-    });
-}
