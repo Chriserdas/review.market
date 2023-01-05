@@ -19,10 +19,10 @@ const offerRoutes = require('./routes/offer');
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
 async function connect(){
     try{
-        await mongoose.connect(url, {
+        mongoose.connect(url, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-          });
+        });
         console.log("Connected to MongoDB");
 
     }catch(error){
@@ -55,20 +55,20 @@ app.get('/user', async(req, res) => {
     await User.remove({});
     const createdUsers = await User.insertMany(users);
     res.send({ createdUsers });
-  });
+});
 
 //insert supermarket
 app.get('/supermarket', async(req, res) => {
-  await Data.remove({});
-  const createdSupermarket = await Supermarket.insertMany(supermarket.features);
-  res.send({ createdSupermarket });
+    await Data.remove({});
+    const createdSupermarket = await Supermarket.insertMany(supermarket.features);
+    res.send({ createdSupermarket });
 });
 
 //insert offer
 app.get('/offer', async(req,res) => {
-  await Offer.remove({});
-  const createOffer = await Offer.insertMany(offer);
-  res.send(createOffer);
+    await Offer.remove({});
+    const createOffer = await Offer.insertMany(offer);
+    res.send(createOffer);
 });
 
 //supermarkets with offers
@@ -83,7 +83,8 @@ app.get('/api/getCurrentLocation', async(req,res) => {
         }
     },
    ]).then((result)=>{
-    res.send(result)
+        res.send(result);
+        console.log(result);
    })
 });
 

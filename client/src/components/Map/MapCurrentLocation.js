@@ -16,6 +16,7 @@ export default function MapCurrentLocation(props) {
         if(props.isClicked === "Current Location"){
             axios.get("http://localhost:5000/api/getCurrentLocation").then((response) => {
                 setData(response.data);
+                console.log(response.data);
             });
         }
     },[props.isClicked]);
@@ -45,29 +46,29 @@ export default function MapCurrentLocation(props) {
             <LocationMarker />
 
             { data === null ? "" : (
-            Object.entries(data).map(([key,value]) => (
+                data.map(data => (
                 
                 <Marker 
-                    key={key} 
-                    position={value.geometry.coordinates.reverse()} 
+                    
+                    position={data.supermarket[0].geometry.coordinates.reverse()} 
                     icon={offerIcon}
                     eventHandlers={{
                         click: (e) => {
                             setShowDetails({
                                 show:true,
-                                data:value.id
+                                data:data.id
                             })
                         },
                     }}
                 >
                 
                     <Tooltip>
-                        {value.properties.name || value.properties.shop}
+                        {data.supermarket[0].properties.name || data.supermarket[0].properties.shop}
                     </Tooltip>
                     
                 </Marker>
                 
-            )))}
+                )))}
         </MapContainer>
     );
 }
