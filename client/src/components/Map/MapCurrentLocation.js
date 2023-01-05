@@ -1,5 +1,6 @@
 import React, { useEffect, useState,useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap,Tooltip } from "react-leaflet";
+import L from 'leaflet'
 import axios from "axios";
 export default function MapCurrentLocation(props) {
 
@@ -14,7 +15,6 @@ export default function MapCurrentLocation(props) {
         if(props.isClicked === "Current Location"){
             axios.get("http://localhost:5000/api/getCurrentLocation").then((response) => {
                 setData(response.data);
-                console.log(response.data);
             });
         }
     },[props.isClicked]);
@@ -44,29 +44,29 @@ export default function MapCurrentLocation(props) {
             <LocationMarker />
 
             { data === null ? "" : (
-                data.map(data => (
+            Object.entries(data).map(([key,value]) => (
                 
                 <Marker 
-                    
-                    position={data.supermarket[0].geometry.coordinates.reverse()} 
+                    key={key} 
+                    position={value.geometry.coordinates.reverse()} 
                     icon={offerIcon}
                     eventHandlers={{
                         click: (e) => {
                             setShowDetails({
                                 show:true,
-                                data:data.id
+                                data:value.id
                             })
                         },
                     }}
                 >
                 
                     <Tooltip>
-                        {data.supermarket[0].properties.name || data.supermarket[0].properties.shop}
+                        {value.properties.name || value.properties.shop}
                     </Tooltip>
                     
                 </Marker>
                 
-                )))}
+            )))}
         </MapContainer>
     );
 }

@@ -19,10 +19,10 @@ const offerRoutes = require('./routes/offer');
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
 async function connect(){
     try{
-        mongoose.connect(url, {
+        await mongoose.connect(url, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-        });
+          });
         console.log("Connected to MongoDB");
 
     }catch(error){
@@ -55,57 +55,47 @@ app.get('/user', async(req, res) => {
     await User.remove({});
     const createdUsers = await User.insertMany(users);
     res.send({ createdUsers });
-});
+  });
 
 //insert supermarket
 app.get('/supermarket', async(req, res) => {
-<<<<<<< HEAD
-    await Data.remove({});
-    const createdSupermarket = await Supermarket.insertMany(supermarket.features);
-    res.send({ createdSupermarket });
-=======
   await Data.remove({});
-  /*const createdSupermarket = await Supermarket.insertMany(supermarket.features);
-  res.send({ createdSupermarket });*/
->>>>>>> parent of 40412a9 (changes)
+  const createdSupermarket = await Supermarket.insertMany(supermarket.features);
+  res.send({ createdSupermarket });
 });
 
 //insert offer
 app.get('/offer', async(req,res) => {
-    await Offer.remove({});
-    const createOffer = await Offer.insertMany(offer);
-    res.send(createOffer);
+  await Offer.remove({});
+  const createOffer = await Offer.insertMany(offer);
+  res.send(createOffer);
 });
 
 //supermarkets with offers
 app.get('/api/getCurrentLocation', async(req,res) => {
-<<<<<<< HEAD
-   Offer.aggregate([
-    {
-        $lookup:{
-            from:"supermarkets",
-            localField:"supermarket_id",
-            foreignField:"id",
-            as:"supermarket"
-        }
-    },
-   ]).then((result)=>{
-        res.send(result);
-        console.log(result);
-   })
-=======
    Offer.find().populate('supermarkets').exec((error, results) => {
     if (error) {
         console.log(error);
       } else {
-        for(let result of results) {
-            getId(result.supermarkets).then(result=>{
-                console.log(result);
-            })
-        }
+        
+        const ids = results.map(obj=>obj.supermarkets)
+        console.log(ids);
+        Supermarket.find({_id:{$in:ids}}).exec((error,supermarket)=>{
+            if (error) {
+                console.log(error);
+            }
+            else{
+
+                console.log(supermarket);
+                /*console.log({
+                    name: supermarket.properties.name,
+                    coordinates:supermarket.geometry.coordinates
+                });*/
+            }
+        });
+        
       }
    });
->>>>>>> parent of 40412a9 (changes)
 });
 
 //search pois
@@ -129,9 +119,6 @@ const port = process.env.PORT || 5000;
 
 app.listen(5000, () => {
     console.log(`Server running at http://localhost:${port}`);
-<<<<<<< HEAD
-});
-=======
 });
 
 
@@ -153,4 +140,3 @@ function getId(id) {
         });
     });
 }
->>>>>>> parent of 40412a9 (changes)
