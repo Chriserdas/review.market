@@ -57,7 +57,7 @@ const SupermarketSchema = new mongoose.Schema({
 });
 
 const OfferSchema = new mongoose.Schema({
-                product_id:{type: String},
+                products:{type: String},
                 supermarkets:{ type: String},
                 price:{type:Number},
                 criteria:Boolean,

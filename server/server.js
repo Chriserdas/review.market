@@ -88,21 +88,29 @@ app.get('/api/getCurrentLocation', async(req,res) => {
                 res.send(supermarket);
             }
         });
-        
       }
    });
 });
 
-//search pois
-app.get('/api/supermarket', async(req,res) => {
-   await Supermarket.find()
-   .then((result) => {
-        res.send(result)
-   })
-   .catch((err) => {
-        console.log(err);
-   })
-});
+app.get('/api/offerProduct', async(req,res) => {
+    Offer.find().populate('products').exec((error, results) => {
+        if (error) {
+            console.log(error);
+          } else {
+            
+            const ids = results.map(obj=>obj.products)
+            console.log(ids);
+            Data.find({"products._id":{$in:ids}}).exec((error,product)=>{
+                if (error) {
+                    console.log(error);
+                }
+                else{
+                    res.send(product);
+                }
+            });
+          }
+       });
+ });
 
 
 app.get("/", (req, res) => {
