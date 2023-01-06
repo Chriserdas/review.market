@@ -15,6 +15,8 @@ const ProdCategSchema = new mongoose.Schema({
                 {
                         id:Number,
                         name:String,
+                        price:Number,
+                        image:String,
                         category:String,
                         subcategory:String
                 },

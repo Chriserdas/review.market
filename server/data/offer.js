@@ -1,6 +1,6 @@
 const offer = [
       {
-        products:'63b7564808a26b4e5eae1dda',
+        products:'63b87c7279810d63de20cc45',
         supermarkets:'63b7496d04b11ba2e784fee8',
         price:4.50,
         criteria:true,
@@ -9,7 +9,7 @@ const offer = [
         stock:true
       },
       {
-        products:'63b7564808a26b4e5eae1ddb',
+        products:'63b87c7279810d63de20cc42',
         supermarkets:'63b7496d04b11ba2e784fee9',
         price:4.50,
         criteria:true,

@@ -45,7 +45,7 @@ app.use('/api/offer', offerRoutes);
 
 //insert product,categories,subcategories
 app.get('/prodCateg', async(req, res) => {
-   await User.remove({});
+   //await Data.remove({});
    const createdProdCateg = await Data.insertMany(data);
    res.send({ createdProdCateg });
 });
