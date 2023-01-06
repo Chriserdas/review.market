@@ -85,7 +85,10 @@ app.get('/api/getCurrentLocation', async(req,res) => {
                 console.log(error);
             }
             else{
-                res.send(supermarket);
+                res.send({
+                    id:_id,
+                    supermarket:supermarket
+                });
             }
         });
       }

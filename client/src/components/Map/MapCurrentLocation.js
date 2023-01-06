@@ -1,15 +1,13 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState,useRef, useContext } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap,Tooltip } from "react-leaflet";
 import L from 'leaflet'
 import axios from "axios";
+import ShopClickedContext from "../User/ShopClickedContext";
 export default function MapCurrentLocation(props) {
 
     const [data,setData] = useState(null);
     const markerRef = useRef();
-    const [isShowDetails,setShowDetails] = useState({
-        show:false,
-        data:null
-    });
+    const {showProduct,setShowProduct} = useContext(ShopClickedContext);
   
     useEffect(() => {
         if(props.isClicked === "Current Location"){
@@ -27,6 +25,7 @@ export default function MapCurrentLocation(props) {
 
 
     return (
+        
         <MapContainer
             center={[38.246639, 21.734573]}
             zoom={13}
@@ -44,29 +43,32 @@ export default function MapCurrentLocation(props) {
             <LocationMarker />
 
             { data === null ? "" : (
-            Object.entries(data).map(([key,value]) => (
+            
+                    Object.entries(data)[1][1].map(result=>(
+
+                        <Marker 
+                            
+                            position={result.geometry.coordinates.reverse()} 
+                            icon={offerIcon}
+                            eventHandlers={{
+                                click: (e) => {
+                                    setShowProduct({
+                                        show:true,
+                                        data:Object.entries(data)
+                                    })
+                                },
+                            }}
+                        >
+                        
+                            <Tooltip>
+                                {result.properties.name || result.properties.shop}
+                            </Tooltip>
+                            
+                        </Marker>
+
+                    ))
                 
-                <Marker 
-                    key={key} 
-                    position={value.geometry.coordinates.reverse()} 
-                    icon={offerIcon}
-                    eventHandlers={{
-                        click: (e) => {
-                            setShowDetails({
-                                show:true,
-                                data:value.id
-                            })
-                        },
-                    }}
-                >
-                
-                    <Tooltip>
-                        {value.properties.name || value.properties.shop}
-                    </Tooltip>
-                    
-                </Marker>
-                
-            )))}
+                )}
         </MapContainer>
     );
 }
