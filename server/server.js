@@ -45,21 +45,19 @@ app.use('/api/offer', offerRoutes);
 
 //insert product,categories,subcategories
 app.get('/prodCateg', async(req, res) => {
-   //await Data.remove({});
+  await Data.remove({});
    const createdProdCateg = await Data.insertMany(data);
    res.send({ createdProdCateg });
 });
 
 //insert admins directly to database
 app.get('/user', async(req, res) => {
-    await User.remove({});
     const createdUsers = await User.insertMany(users);
     res.send({ createdUsers });
   });
 
 //insert supermarket
 app.get('/supermarket', async(req, res) => {
-  await Data.remove({});
   const createdSupermarket = await Supermarket.insertMany(supermarket.features);
   res.send({ createdSupermarket });
 });
@@ -85,10 +83,7 @@ app.get('/api/getCurrentLocation', async(req,res) => {
                 console.log(error);
             }
             else{
-                res.send({
-                    id:_id,
-                    supermarket:supermarket
-                });
+                res.send(supermarket);
             }
         });
       }
@@ -96,23 +91,23 @@ app.get('/api/getCurrentLocation', async(req,res) => {
 });
 
 app.get('/api/offerProduct', async(req,res) => {
-    Offer.find().populate('products').exec((error, results) => {
-        if (error) {
-            console.log(error);
-          } else {
-            
-            const ids = results.map(obj=>obj.products)
-            console.log(ids);
-            Data.find({"products._id":{$in:ids}}).exec((error,product)=>{
-                if (error) {
-                    console.log(error);
-                }
-                else{
-                    res.send(product);
-                }
-            });
-          }
-       });
+  Offer.find().populate('products').exec((error, results) => {
+    if (error) {
+        console.log(error);
+      } else {
+        
+        const ids = results.map(obj=>obj.products)
+        console.log(ids);
+        Data.find({"products.Object._id":{$in:ids}}).exec((error,products)=>{
+            if (error) {
+                console.log(error);
+            }
+            else{
+                res.send(products);
+            }
+        });
+      }
+   });
  });
 
 
@@ -121,7 +116,7 @@ app.get("/", (req, res) => {
 });
 
 
-const port = process.env.PORT || 5000;
+const port = 5000;
 
 app.listen(5000, () => {
     console.log(`Server running at http://localhost:${port}`);
