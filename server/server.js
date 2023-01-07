@@ -76,7 +76,7 @@ app.get('/offer', async(req,res) => {
   res.send(createOffer);
 });
 
-//supermarkets with offers
+//supermarkets and products with offers
 app.get('/api/getCurrentLocation', async(req,res) => {
   Offer.aggregate([
     {
@@ -87,7 +87,32 @@ app.get('/api/getCurrentLocation', async(req,res) => {
             as:"supermarkets"
         }
     },
-    { $project: {"offer._id":1, "supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1 } }
+    {
+      $lookup:{
+          from:"products",
+          localField:"products",
+          foreignField:"_id",
+          as:"products"
+      }
+  },
+    { $project: {"offer._id":1, "products.name":1 ,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1 } }
+   ]).then((result)=>{
+        res.send(result);
+   })
+});
+
+//products with offers
+app.get('/api/getProductOffer', async(req,res) => {
+  Offer.aggregate([
+    {
+        $lookup:{
+            from:"products",
+            localField:"products",
+            foreignField:"_id",
+            as:"products"
+        }
+    },
+    { $project: {"offer._id":1, "products.name":1} }
    ]).then((result)=>{
         res.send(result);
    })
