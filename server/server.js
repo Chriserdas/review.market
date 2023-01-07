@@ -71,44 +71,37 @@ app.get('/offer', async(req,res) => {
 
 //supermarkets with offers
 app.get('/api/getCurrentLocation', async(req,res) => {
-   Offer.find().populate('supermarkets').exec((error, results) => {
-    if (error) {
-        console.log(error);
-      } else {
-        
-        const ids = results.map(obj=>obj.supermarkets)
-        console.log(ids);
-        Supermarket.find({_id:{$in:ids}}).exec((error,supermarket)=>{
-            if (error) {
-                console.log(error);
-            }
-            else{
-                res.send(supermarket);
-            }
-        });
-      }
-   });
+  Offer.aggregate([
+    {
+        $lookup:{
+            from:"supermarkets",
+            localField:"supermarkets",
+            foreignField:"_id",
+            as:"supermarkets"
+        }
+    },
+    { $project: {"offer._id":1, "supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1 } }
+   ]).then((result)=>{
+        res.send(result);
+   })
 });
 
+
 app.get('/api/offerProduct', async(req,res) => {
-  Offer.find().populate('products').exec((error, results) => {
-    if (error) {
-        console.log(error);
-      } else {
-        
-        const ids = results.map(obj=>obj.products)
-        console.log(ids);
-        Data.find({"products.Object._id":{$in:ids}}).exec((error,products)=>{
-            if (error) {
-                console.log(error);
-            }
-            else{
-                res.send(products);
-            }
-        });
-      }
-   });
- });
+  Offer.aggregate([
+    {
+        $lookup:{
+            from:"products",
+            localField:"products",
+            foreignField:"products._id",
+            as:"products"
+        }
+    },
+    { $project: { "products.name":1 } }
+   ]).then((result)=>{
+        res.send(result);
+   })
+});
 
 
 app.get("/", (req, res) => {
