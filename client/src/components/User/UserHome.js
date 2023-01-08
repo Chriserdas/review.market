@@ -19,7 +19,8 @@ function UserHome() {
             <div className = "mainContent_container">
                 {console.log(showProduct)}
                 <Navbar/>
-                <MapContainer isClicked={isClicked} />
+                <SecondNavbar open={showProduct.show}/>
+                <MapContainer isClicked={isClicked} open={showProduct.show}/>
             </div>
         </NavbarContext.Provider>
         </ShopClickedContext.Provider>

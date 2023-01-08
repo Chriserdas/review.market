@@ -6,7 +6,6 @@ import ShopClickedContext from "../User/ShopClickedContext";
 export default function MapCurrentLocation(props) {
 
     const [data,setData] = useState(null);
-    const markerRef = useRef();
     const {showProduct,setShowProduct} = useContext(ShopClickedContext);
   
     useEffect(() => {
@@ -43,30 +42,33 @@ export default function MapCurrentLocation(props) {
             <LocationMarker />
 
             {data === null ? "" : (
-            
-                    data.map(result=>(
+                data.map(result=>(
 
-                        <Marker 
-                            key={result._id}
-                            position={result.supermarkets[0].geometry.coordinates.reverse()} 
-                            icon={offerIcon}
-                            eventHandlers={{
-                                click: (e) => {
-                                    setShowProduct({
-                                        show:true,
-                                        data:result._id
-                                    })
-                                },
-                            }}
-                        >
+                    <Marker 
+                        key={result._id}
+                        position={result.supermarkets[0].geometry.coordinates.reverse()} 
+                        icon={offerIcon}
+                        eventHandlers={{
+                            click: (e) => {
+                                setShowProduct({
+                                    show:true,
+                                    offerId:result._id,
+                                    productName:result.products[0].name,
+                                    productImage:result.products[0].image,
+                                    productPrice:result.products[0].price,
+                                    productId:result.products[0]._id
+                                })
+                            },
+                        }}
+                    >
+                    
+                        <Tooltip>
+                            {result.supermarkets[0].properties.name || result.properties.shop}
+                        </Tooltip>
                         
-                            <Tooltip>
-                                {result.supermarkets[0].properties.name || result.properties.shop}
-                            </Tooltip>
-                            
-                        </Marker>
+                    </Marker>
 
-                    ))
+                ))
                 
             )}
         </MapContainer>

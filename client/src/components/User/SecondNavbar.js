@@ -1,10 +1,26 @@
-import {React} from "react";
+import {React, useEffect} from "react";
+import {motion,useAnimation} from "framer-motion";
 
+const SecondNavbar = (props)=>{
 
-const SecondNavbar = ()=>{
+    const show = props.open;
+    const animate = useAnimation();
+
+    useEffect(()=>{
+        if(show){
+            animate.start({
+                flexGrow: 1,
+                flexShrink: "0",
+                flexBasis: "fit-content",
+            });
+        }
+    },[show]);
     return (
-        <div className="secondNavbar">
-        </div>
+        <motion.div className="secondNavbar"
+            animate={animate}
+        
+        >
+        </motion.div>
     );
 }
 

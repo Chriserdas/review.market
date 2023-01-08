@@ -145,20 +145,6 @@ body{
   font-family: Rubik;
 }
 
-/*#username{
-  display:block;
-}*/
-
-/*#email:focus,#pass:focus{
-  outline:none;
-  box-shadow: 0px 0px 20px 10px #e9e7e7;
-}
-
-.login_btn:focus{
-  outline:none;
-  box-shadow: 0px 0px 20px 10px #e9e7e7;
-}*/
-
 .login_btn{
   background-color: #dd3b39;
   padding-top:20px;

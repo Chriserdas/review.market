@@ -30,12 +30,16 @@
 
 .mainContent_container{
     display: flex;
-    position: fixed;
+    position: absolute;
     width: 100%;
     height: 100%;
+    align-items: center;
     justify-content: flex-start;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    overflow-x: hidden;
     background-color: #f7f8ff;
+    z-index: 1;
 }
 
 .navbar{
@@ -94,20 +98,18 @@
 
 .MapContainer{
     position: relative;
-    flex-grow: 2;
+    flex-grow: 3;
     top:0px;
     left: 100px;
+    width: 100%;
+
 }
 
 .map{
     position: relative;
-    
     width: 100%;
     height: 100%;
-    
-    background-color:white;
     border-radius: 5px;
-    z-index: 0;
 }
 
 .wrapper{
