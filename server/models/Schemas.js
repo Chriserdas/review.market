@@ -10,19 +10,16 @@ const userSchema = new mongoose.Schema({
 });
 
 
-const ProdCategSchema = new mongoose.Schema({
-        products:[
-                {
+const productSchema = new mongoose.Schema({
                         id:Number,
                         name:String,
                         price:Number,
                         image:String,
                         category:String,
                         subcategory:String
-                },
-        ],
-        categories:[
-                {
+});
+
+const categorySchema = new mongoose.Schema({
                         id:String,
                         name:String,
                         subcategories:[
@@ -31,8 +28,6 @@ const ProdCategSchema = new mongoose.Schema({
                                         uuid:String
                                 },
                         ]
-                }
-        ]
 });
 
 
@@ -70,8 +65,9 @@ const OfferSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("users", userSchema);
-const Data = mongoose.model("products_categories", ProdCategSchema);
+const Product = mongoose.model("products", productSchema);
+const Category = mongoose.model("categories", categorySchema);
 const Supermarket = mongoose.model("supermarkets", SupermarketSchema);
 const Offer = mongoose.model("offers", OfferSchema);
 
-module.exports= {User, Data, Supermarket, Offer}
+module.exports= {User, Product, Category, Supermarket, Offer}

@@ -3,11 +3,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
-const { User, Data, Supermarket, Offer } = require("./models/Schemas");
+const { User, Product, Category, Supermarket, Offer } = require("./models/Schemas");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const users = require("./data/users");
-const data = require('./data/product_category.json');
+const products = require('./data/products.js');
+const categories = require('./data/categories.js');
 const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
 const supermarketRoutes = require('./routes/supermarket');
@@ -44,10 +45,16 @@ app.use('/api/offer', offerRoutes);
 
 
 //insert product,categories,subcategories
-app.get('/prodCateg', async(req, res) => {
-  await Data.remove({});
-   const createdProdCateg = await Data.insertMany(data);
-   res.send({ createdProdCateg });
+app.get('/products', async(req, res) => {
+  await Product.remove({});
+   const createdProduct = await Product.insertMany(products.products);
+   res.send({ createdProduct });
+});
+
+app.get('/categories', async(req, res) => {
+  await Category.remove({});
+   const createdCategory= await Category.insertMany(categories.categories);
+   res.send({ createdCategory });
 });
 
 //insert admins directly to database
@@ -69,7 +76,7 @@ app.get('/offer', async(req,res) => {
   res.send(createOffer);
 });
 
-//supermarkets with offers
+//supermarkets and products with offers
 app.get('/api/getCurrentLocation', async(req,res) => {
   Offer.aggregate([
     {
@@ -80,24 +87,32 @@ app.get('/api/getCurrentLocation', async(req,res) => {
             as:"supermarkets"
         }
     },
-    { $project: {"offer._id":1, "supermarkets.properties.name":1, "supermarkets.properties.shop":1, "supermarkets.geometry.coordinates":1 } }
+    {
+        $lookup:{
+            from:"products",
+            localField:"products",
+            foreignField:"_id",
+            as:"products"
+        }
+    },
+    { $project: {"offer._id":1, "products._id":1, "products.name":1,"products.price":1 , "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1 } }
    ]).then((result)=>{
         res.send(result);
    })
 });
 
-
-app.get('/api/offerProduct', async(req,res) => {
+//products with offers
+app.get('/api/getProductOffer', async(req,res) => {
   Offer.aggregate([
     {
         $lookup:{
             from:"products",
             localField:"products",
-            foreignField:"products._id",
+            foreignField:"_id",
             as:"products"
         }
     },
-    { $project: { "products.name":1 } }
+    { $project: {"offer._id":1, "products.name":1} }
    ]).then((result)=>{
         res.send(result);
    })
