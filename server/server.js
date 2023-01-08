@@ -80,7 +80,7 @@ app.get('/api/getCurrentLocation', async(req,res) => {
             as:"supermarkets"
         }
     },
-    { $project: {"offer._id":1, "supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1 } }
+    { $project: {"offer._id":1, "supermarkets.properties.name":1, "supermarkets.properties.shop":1, "supermarkets.geometry.coordinates":1 } }
    ]).then((result)=>{
         res.send(result);
    })

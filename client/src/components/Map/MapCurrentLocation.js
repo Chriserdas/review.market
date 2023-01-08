@@ -42,33 +42,33 @@ export default function MapCurrentLocation(props) {
             
             <LocationMarker />
 
-            { data === null ? "" : (
+            {data === null ? "" : (
             
-                    Object.entries(data)[1][1].map(result=>(
+                    data.map(result=>(
 
                         <Marker 
-                            
-                            position={result.geometry.coordinates.reverse()} 
+                            key={result._id}
+                            position={result.supermarkets[0].geometry.coordinates.reverse()} 
                             icon={offerIcon}
                             eventHandlers={{
                                 click: (e) => {
                                     setShowProduct({
                                         show:true,
-                                        data:Object.entries(data)
+                                        data:result._id
                                     })
                                 },
                             }}
                         >
                         
                             <Tooltip>
-                                {result.properties.name || result.properties.shop}
+                                {result.supermarkets[0].properties.name || result.properties.shop}
                             </Tooltip>
                             
                         </Marker>
 
                     ))
                 
-                )}
+            )}
         </MapContainer>
     );
 }
