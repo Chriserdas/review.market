@@ -12,7 +12,8 @@ const categories = require('./data/categories.js');
 const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
 const supermarketRoutes = require('./routes/supermarket');
-const prodcategRoutes = require('./routes/prodcateg');
+const productRoutes = require('./routes/product');
+const categoryRoutes = require('./routes/category');
 const offerRoutes = require('./routes/offer');
 
 
@@ -40,7 +41,8 @@ app.use(cors());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use('/api/supermarket', supermarketRoutes);
-app.use('/api/prodcateg', prodcategRoutes);
+app.use('/api/product', productRoutes);
+app.use('/api/category', categoryRoutes);
 app.use('/api/offer', offerRoutes);
 
 
@@ -116,6 +118,31 @@ app.get('/api/getProductOffer', async(req,res) => {
    ]).then((result)=>{
         res.send(result);
    })
+});
+
+app.get('/api/userEachMonth', async(req,res) => {
+  User.aggregate([
+    {
+      '$project': {
+        'month': {
+          '$month': '$entryDate'
+        }, 
+      }
+    }, {
+      '$group': {
+        '_id': {
+          'month': '$month', 
+          'year': '$year'
+        }, 
+        'total': {
+          '$sum': 1
+        }, 
+        'month': {
+          '$first': '$month'
+        },
+      }
+    }
+  ])
 });
 
 

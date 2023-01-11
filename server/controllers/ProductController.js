@@ -1,8 +1,8 @@
-const {Data} = require("../models/Schemas");
+const {Product} = require("../models/Schemas");
 
 //show the list of products,categories
 const show = (req,res)=> {
-    Data.find()
+    Product.find()
     .then(response=>{
         res.json({
             response
@@ -17,32 +17,18 @@ const show = (req,res)=> {
 
 //add products,categories
 const store = (req,res)=>{
-    let data = new Data({
-        products:[
-            {
+    let product = new Product({
                 id:req.body.id,
                 name:req.body.name,
+                price:req.body.price,
+                image:req.body.image,
                 category:req.body.category,
                 subcategory:req.body.subcategory
-            }
-        ],
-        categories:[
-            {
-                id:req.body.id,
-                name:req.body.name,
-                subcategories:[
-                    {
-                        name:req.body.name,
-                        uuid:req.body.uuid
-                    }
-                ]
-            }
-        ]
     });
-    Data.save()
+    Product.save()
     .then(response =>{
         res.json({
-            message:"data added"
+            message:"product added"
         })
     })
     .catch(erro=>{
@@ -55,32 +41,18 @@ const store = (req,res)=>{
 
 //update product,categories
 const update = (req,res)=> {
-    let dataID = req.body.dataID
+    let productID = req.body.productID
 
-    let updatedData = {
-        products:[
-            {
+    let updatedProduct = {
                 id:req.body.id,
                 name:req.body.name,
+                price:req.body.price,
+                image:req.body.image,
                 category:req.body.category,
                 subcategory:req.body.subcategory
-            }
-        ],
-        categories:[
-            {
-                id:req.body.id,
-                name:req.body.name,
-                subcategories:[
-                    {
-                        name:req.body.name,
-                        uuid:req.body.uuid
-                    }
-                ]
-            }
-        ]
     }
 
-    Data.findByIdAndUpdate(dataID, {$set: updatedData})
+    Product.findByIdAndUpdate(productID, {$set: updatedProduct})
     .then(() => {
         res.json({
             message:'Product updated successfully!'
@@ -95,8 +67,8 @@ const update = (req,res)=> {
 
 //delete product,categorie
 const destroy = (req,res)=>{
-    let dataID = req.body.dataID
-    Data.findOneAndRemove(dataID)
+    let productID = req.body.productID
+    Product.findOneAndRemove(productID)
     .then(() => {
         req.json({
             message:'Product deleted successfully!'

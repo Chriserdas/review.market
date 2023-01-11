@@ -57,4 +57,30 @@ const destroy = (req,res)=>{
     })
 };
 
-module.exports = {show,store,destroy};
+//update like counter
+const likeOffer = async (req, res) => {
+    const { id } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No offer with id: ${id}`);
+    
+    const offer = await Offer.findById(id);
+
+    const updatedOffer = await Offer.findByIdAndUpdate(id, { likeCount: offer.likeCount + 1 }, { new: true });
+    
+    res.json(updatedOffer);
+}
+
+//update dislike counter
+const dislikeOffer = async (req, res) => {
+    const { id } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No offer with id: ${id}`);
+    
+    const offer = await Offer.findById(id);
+
+    const updatedOffer = await Offer.findByIdAndUpdate(id, { dislikeCount: offer.dislikeCount + 1 }, { new: true });
+    
+    res.json(updatedOffer);
+}
+
+module.exports = {show,store,destroy, likeOffer, dislikeOffer};
