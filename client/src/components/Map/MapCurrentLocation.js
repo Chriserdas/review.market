@@ -3,12 +3,13 @@ import { MapContainer, TileLayer, Marker, Popup, useMap,Tooltip } from "react-le
 import L from 'leaflet'
 import axios from "axios";
 import ShopClickedContext from "../User/ShopClickedContext";
+import { LatLng } from 'leaflet';
 export default function MapCurrentLocation(props) {
 
     const [data,setData] = useState(null);
-    const markerRef = useRef();
     const {showProduct,setShowProduct} = useContext(ShopClickedContext);
-  
+    const [near,setNear] = useState(null);
+    const [currentLocation,setCurrentLocation] = useState(null);
     useEffect(() => {
         if(props.isClicked === "Current Location"){
             axios.get("http://localhost:5000/api/getCurrentLocation").then((response) => {
@@ -16,6 +17,12 @@ export default function MapCurrentLocation(props) {
             });
         }
     },[props.isClicked]);
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setCurrentLocation(new LatLng(position.coords.latitude, position.coords.longitude))
+        });
+    })
 
     
     const offerIcon = new L.icon({
@@ -42,33 +49,34 @@ export default function MapCurrentLocation(props) {
             
             <LocationMarker />
 
-            { data === null ? "" : (
-            
-                    Object.entries(data)[1][1].map(result=>(
-
-                        <Marker 
-                            
-                            position={result.geometry.coordinates.reverse()} 
-                            icon={offerIcon}
-                            eventHandlers={{
-                                click: (e) => {
-                                    setShowProduct({
-                                        show:true,
-                                        data:Object.entries(data)
-                                    })
-                                },
-                            }}
-                        >
+            {data !== null ? (
+                data.map(result=>(
+                    <Marker 
+                        key={result._id}
+                        position={result.supermarkets[0].geometry.coordinates.reverse()} 
+                        icon={offerIcon}
+                        eventHandlers={{
+                            click: (e) => {
+                                
+                                setShowProduct({
+                                    show:true,
+                                    offers:data.filter(offer=> offer.supermarkets[0]._id === result.supermarkets[0]._id),
+                                    super_name:result.supermarkets[0].properties.name || result.supermarkets[0].properties.shop,
+                                    isNear:currentLocation.distanceTo(result.supermarkets[0].geometry.coordinates.reverse()) <50 ? true : false,
+                                })
+                                
+                            },
+                        }}
+                    >
+                    
+                        <Tooltip>
+                            {result.supermarkets[0].properties.name || result.properties.shop}
+                        </Tooltip>
                         
-                            <Tooltip>
-                                {result.properties.name || result.properties.shop}
-                            </Tooltip>
-                            
-                        </Marker>
+                    </Marker>
 
-                    ))
-                
-                )}
+                ))
+            ):""}
         </MapContainer>
     );
 }
