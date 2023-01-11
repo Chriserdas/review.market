@@ -31,7 +31,7 @@ const store = (req,res)=>{
             message:"product added"
         })
     })
-    .catch(erro=>{
+    .catch(error=>{
         res.json({
             message:'An error occured'
         })

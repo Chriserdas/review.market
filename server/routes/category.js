@@ -8,7 +8,7 @@ router.get('/', CategoryController.show);
 //call localhost:5000/api/category/store
 router.post('/store', CategoryController.store)
 //call localhost:5000/api/category/update
-router.post('/update', CategoryController.update);
+router.patch('/update', CategoryController.update);
 //call localhost:5000/api/category/delete
 router.post('/delete', CategoryController.destroy);
 
