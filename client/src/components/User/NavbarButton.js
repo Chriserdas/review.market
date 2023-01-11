@@ -16,7 +16,7 @@ const NavbarButton = (props)=>{
 
             animateDiv.start({
                 x:"flex-start",
-                backgroundColor: "#ED474A",    
+                backgroundColor: "#ED474A",  
                 width: "100%"            
             });
 
@@ -33,7 +33,7 @@ const NavbarButton = (props)=>{
             if(clicked === text){
                 animateDiv.start({
                     x:"flex-start",
-                    borderLeft:"2px solid white",
+                    borderLeft:"1px solid white",
                     backgroundColor: "#ED474A",
                     width: "100%"
                 });

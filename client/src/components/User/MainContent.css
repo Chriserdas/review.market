@@ -31,14 +31,14 @@
 .mainContent_container{
     display: flex;
     position: absolute;
-    width: 100%;
+    width: 100vw;
     height: 100%;
     align-items: center;
     justify-content: flex-start;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     overflow-y: auto;
-    overflow-x: hidden;
-    background-color: #f7f8ff;
+    overflow-x: auto;
+    background-color: #cecccc;
     z-index: 1;
 }
 
@@ -52,6 +52,7 @@
     height: 100%;
     width: 100px;
     background-color:#353535;
+    z-index: 1;
 }
 
 .navbar_button_container{
@@ -92,27 +93,196 @@
     position: relative;
     height: 100%;
     left: 100px;
+    background-color: #cecccc;
+    z-index: 0;
     width: 0px;
-    background-color: black;
 }
 
 .MapContainer{
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
     position: relative;
-    flex-grow: 3;
     top:0px;
     left: 100px;
-    width: 100%;
-
+    z-index: 0;
+    height: 100%;
+    width: calc(100vw - 100px);
+    min-width: 500px;
+    background-color: #EBEBEB;
 }
 
 .map{
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 5px;
 }
 
 .wrapper{
     position: relative;
     width: 100%;
+}
+
+.OfferedProducts_container{
+    z-index: 1;
+    width: 0%;
+    height: 0%;
+    display: none;
+}
+
+::-webkit-scrollbar {
+    width: 1px;
+    background-color: #F5F5F5;
+    border-radius: 30px;
+}
+  
+::-webkit-scrollbar-thumb {
+    border-radius: 30px;
+    background-color: #555;
+}
+
+.super_name_container{
+    position: relative;
+    height:40px;
+    display: flex;
+    gap:40px;
+    font-family: Toboggan;
+    font-size: 30px;
+    top:10px;
+    align-items: baseline;
+}
+
+.back{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    left:20px;
+    align-items: center;
+    font-family: Rubik;
+    padding:0px 10px 0px 10px;
+    border: 1px solid black;
+    border-radius:30px;
+    user-select: none;
+    z-index: 1;
+    background-color: transparent;
+    color: black;
+}
+
+.back:hover{
+   cursor: pointer;
+    
+}
+.back_symbol{
+    font-size: 15px;
+    margin-left: 5px;
+    display: none;
+    user-select: none;
+}
+
+
+.products{
+    display: flex;
+    position: relative;
+    top:-7%;
+    justify-content: center;
+    align-items: center;
+    height:100%;
+    width:100%;
+}
+
+.product_container{
+    height:200px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width:350px;
+    box-shadow: 2px 0px 19px 1px rgba(165, 164, 164, 0.56);
+    border-radius: 20px;
+    overflow: hidden;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.product_container:hover{
+    transform: scale(1.05);
+    /*cursor: pointer;*/
+}
+
+.first_row{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50%;;
+}
+
+.image_container{
+    width: 100px;
+    height: 100px;
+    position: relative;
+    border-radius: 20px;
+}
+
+.image_container img{
+    height: 100px;
+    width: 100px;
+    border-radius: 20px;
+    -webkit-user-drag: none;
+}
+
+.hot_logo{
+    position: relative;
+    top:-40px;
+    left:30px;
+    display: flex;
+    justify-content: center;
+    transform: rotate(41deg);
+    order:3;
+    justify-self: flex-end;
+    width:150px;
+    height:50px;
+    align-items: flex-end;
+    z-index:1;
+    background-color:red;
+}
+
+.hot_logo img{
+    position: relative;
+    height:32px;
+    width: 32px;
+    left:5px;
+    transform: rotate(41deg);
+    -webkit-user-drag: none;
+}
+
+.product_name{
+    position: relative;
+    left:10px;
+    font-family: Manrope-Bold;
+    user-select: text;
+    -webkit-user-drag: none;
+}
+
+.second_row{
+    display: flex;
+    align-items: center;
+    font-family: Manrope-Regular;
+    justify-content: center;
+    user-select: text;
+    width: 100%;
+    height: 50%;
+}
+
+.product_stock{
+    padding: 5px 5px 5px 5px;
+    font-family:Manrope-Bold;
+    color: white;
+    border-radius: 5px;
+    user-select: none;
+    margin-left: 20px;
+
+}
+
+.second_row div:hover{
+    cursor: pointer;
 }

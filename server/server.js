@@ -95,7 +95,7 @@ app.get('/api/getCurrentLocation', async(req,res) => {
             as:"products"
         }
     },
-    { $project: {"offer._id":1, "products._id":1, "products.name":1,"products.price":1 , "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1 } }
+    //{ $project: {"offer.likes":1, "offer.stock":1, "offer.dislikes":1, "offer.price":1,"offer._id":1, "products._id":1, "products.name":1,"products.price":1 , "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1 } }
    ]).then((result)=>{
         res.send(result);
    })

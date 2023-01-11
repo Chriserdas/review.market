@@ -12,6 +12,18 @@
   font-family: kanit-light;
   src: url("./fonts/Kanit/Kanit-ExtraLight.ttf");
 }
+
+@font-face {
+    font-family: Manrope-Bold;
+    src: url("./fonts/Manrope/Manrope-Bold.ttf");
+}
+
+@font-face {
+    font-family: Manrope-Regular;
+    src: url("./fonts/Manrope/Manrope-Regular.ttf");
+}
+
+
 body{
   margin: 0;
 }

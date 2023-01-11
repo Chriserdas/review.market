@@ -1,26 +1,38 @@
-import {React, useEffect} from "react";
+import {React, useEffect,useRef} from "react";
 import Map from "./Map";
 import {motion,useAnimation} from "framer-motion";
+import OfferedProducts from "./OfferedProducts";
 
 const MapContainer = (props)=>{
-    const show = props.open;
+    const show = props.productInfo.show;
+    const productInfo = props.productInfo;
+    const super_name = props.productInfo.super_name;
     const animate = useAnimation();
-
 
     useEffect(()=>{
         if(show){
             animate.start({
-                width:"70%",
-                height:"90%",
+                width:"calc(99vw - 500px)",
+                height:"95%",
+                borderRadius:"10px"
+            });
+        }
+        else{
+            animate.start({
+                width:"calc(100vw - 100px)",
+                height:"100%",
+                borderRadius:"0px"
             });
         }
     },[show]);
+
     return (
-        <div className="MapContainer"
-            
+        <motion.div className="MapContainer"
+            animate={animate}
         >
-            <Map isClicked={props.isClicked}/>
-        </div>
+            <OfferedProducts productInfo = {productInfo} setClicked={props.setClicked}/>
+            <Map isClicked={props.isClicked} productInfo={productInfo}/>
+        </motion.div>
     );
 }
 
