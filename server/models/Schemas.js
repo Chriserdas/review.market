@@ -6,7 +6,13 @@ const userSchema = new mongoose.Schema({
     password:{type:String,required:[true,'Please provide password']},
     isAdmin:{type:Boolean,default:false,require:true},
     entryDate:{type:Date,default:Date()},
-    token:{type:Number, default:0}
+    token:{type:Number, default:0},
+    /*likedOffers:[
+        {type: mongoose.Schema.Types.ObjectId}
+    ],
+    dislikedOffers:[
+        {type: mongoose.Schema.Types.ObjectId}
+    ]*/
 });
 
 
@@ -56,12 +62,16 @@ const SupermarketSchema = new mongoose.Schema({
 const OfferSchema = new mongoose.Schema({
                 products:{type: mongoose.Schema.Types.ObjectId},
                 supermarkets:{type: mongoose.Schema.Types.ObjectId},
-                criteria:Boolean,
+                criteria:{type: Boolean},
                 price:{type:Number, default:0,required:true},
-                user_id:{type:mongoose.Schema.Types.ObjectId},
-                likes: {type: Number,default: 0},
+                createdBy:{type:mongoose.Schema.Types.ObjectId},
+                likes: [
+                        {type: mongoose.Schema.Types.ObjectId}
+                ],
                 createDate: {type: Date,default: new Date()},
-                dislikes: {type: Number,default: 0},
+                dislikes: [
+                        {type: mongoose.Schema.Types.ObjectId}
+                ],
                 stock: {type: Boolean}
 });
 

@@ -1,4 +1,4 @@
-const {Offer} = require("../models/Schemas");
+const {Offer, User} = require("../models/Schemas");
 
 //show the list of offers
 const show = (req,res)=> {
@@ -22,9 +22,9 @@ const store = (req,res)=>{
         supermarkets: req.body.type,
         price: req.body.price,
         criteria: req.body.criteria,
-        likeCount:req.body.likeCount,
+        likes:req.body.likes,
         createdAt:req.body.createdAt,
-        dislikeCount: req.body.dislikeCount,
+        dislikes: req.body.dislikes,
         stock:req.body.stock
     })
     Offer.save()
@@ -59,26 +59,28 @@ const destroy = (req,res)=>{
 
 //update like counter
 const likeOffer = async (req, res) => {
-    const { id } = req.body;
+    let offerID = req.body.offerID
+    let userID = req.body.userID
 
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No offer with id: ${id}`);
+    if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send(`No offer with id: ${offerID}`);
     
-    const offer = await Offer.findById(id);
+    const offer = await Offer.findById(offerID);
 
-    const updatedOffer = await Offer.findByIdAndUpdate(id, { likeCount: offer.likeCount + 1 }, { new: true });
-    
+    const updatedOffer = await Offer.findByIdAndUpdate(offerID, { $push: { 'offer.likes': userID } }, { new: true });
+
     res.json(updatedOffer);
 }
 
 //update dislike counter
 const dislikeOffer = async (req, res) => {
-    const { id } = req.body;
+    let offerID = req.body.offerID
+    let userID = req.body.userID
 
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No offer with id: ${id}`);
+    if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send(`No offer with id: ${offerID}`);
     
-    const offer = await Offer.findById(id);
+    const offer = await Offer.findById(offerID);
 
-    const updatedOffer = await Offer.findByIdAndUpdate(id, { dislikeCount: offer.dislikeCount + 1 }, { new: true });
+    const updatedOffer = await Offer.findByIdAndUpdate(offerID, { $push: { 'offer.dislikes': userID } }, { new: true });
     
     res.json(updatedOffer);
 }

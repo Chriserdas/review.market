@@ -8,7 +8,7 @@ router.get('/', SupermarketController.show);
 //call localhost:5000/api/supermarket/store
 router.post('/store', SupermarketController.store);
 //call localhost:5000/api/supermarket/update
-router.post('/update', SupermarketController.update);
+router.patch('/update', SupermarketController.update);
 //call localhost:5000/api/supermarket/delete
 router.post('/delete', SupermarketController.destroy);
 

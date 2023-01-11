@@ -61,6 +61,7 @@ app.get('/categories', async(req, res) => {
 
 //insert admins directly to database
 app.get('/user', async(req, res) => {
+  await User.remove({});
     const createdUsers = await User.insertMany(users);
     res.send({ createdUsers });
   });
@@ -115,6 +116,31 @@ app.get('/api/getProductOffer', async(req,res) => {
         }
     },
     { $project: {"offer._id":1, "products.name":1} }
+   ]).then((result)=>{
+        res.send(result);
+   })
+});
+
+//for user history
+app.get('/api/history', async(req,res) => {
+  Offer.aggregate([
+    {
+        $lookup:{
+            from:"users",
+            localField:"likes",
+            foreignField:"_id",
+            as:"userlikes"
+        }
+    },
+    {
+      $lookup:{
+          from:"users",
+          localField:"dislikes",
+          foreignField:"_id",
+          as:"userdislikes"
+      }
+  },
+    { $project: {"offer._id":1, "userlikes._id":1, "userdislikes._id": 1} }
    ]).then((result)=>{
         res.send(result);
    })

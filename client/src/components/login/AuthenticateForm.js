@@ -4,8 +4,6 @@ import NotificationPopup from "../NotificationPopup";
 
 
 const AuthenticateForm = (props)=>{
-    
-    localStorage.clear();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
