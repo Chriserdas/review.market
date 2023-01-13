@@ -1,4 +1,5 @@
 const {Offer, User} = require("../models/Schemas");
+const mongoose = require("mongoose");
 
 //show the list of offers
 const show = (req,res)=> {
@@ -62,13 +63,25 @@ const likeOffer = async (req, res) => {
     let offerID = req.body.offerID
     let userID = req.body.userID
 
+    
     if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send(`No offer with id: ${offerID}`);
     
-    const offer = await Offer.findById(offerID);
+    //const offer = await Offer.findById(offerID);
 
-    const updatedOffer = await Offer.findByIdAndUpdate(offerID, { $push: { 'offer.likes': userID } }, { new: true });
+    //await Offer.findByIdAndUpdate({_id:offerID}, { $push: { likes: userID } }, { new: true });
 
-    res.json(updatedOffer);
+    /*Offer.findById({_id:offerID},{likes:{$in:[userID]}},{new:true},(err,result)=>{
+        console.log(result);
+        if(result.length === 0){
+            console.log("entered");
+            Offer.findByIdAndUpdate({_id:offerID}, { $push: { 'Offer.likes': userID}}).then((err,offer)=>{
+                console.log(offer);
+                //res.json(offer)
+            });
+        }
+    })*/
+
+    //res.json(updatedOffer);
 }
 
 //update dislike counter

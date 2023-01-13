@@ -69,7 +69,6 @@ const OfferSchema = new mongoose.Schema({
                 likes: [
                     {type: mongoose.Schema.Types.ObjectId}
                 ],
-                createDate: {type: Date,default: new Date()},
                 dislikes: [
                     {type: mongoose.Schema.Types.ObjectId}
                 ],

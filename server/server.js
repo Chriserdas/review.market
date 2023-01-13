@@ -48,21 +48,18 @@ app.use('/api/offer', offerRoutes);
 
 //insert product
 app.get('/products', async(req, res) => {
-  await Product.remove({});
    const createdProduct = await Product.insertMany(products.products);
    res.send({ createdProduct });
 });
 
 //insert categories,subcategories
 app.get('/categories', async(req, res) => {
-  await Category.remove({});
    const createdCategory= await Category.insertMany(categories.categories);
    res.send({ createdCategory });
 });
 
 //insert users
 app.get('/user', async(req, res) => {
-  await User.remove({});
     const createdUsers = await User.insertMany(users);
     res.send({ createdUsers });
   });
@@ -75,7 +72,6 @@ app.get('/supermarket', async(req, res) => {
 
 //insert offer
 app.get('/offer', async(req,res) => {
-  await Offer.remove({});
   const createOffer = await Offer.insertMany(offer);
   res.send(createOffer);
 });

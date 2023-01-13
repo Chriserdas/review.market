@@ -77,7 +77,7 @@ const OfferedProducts = (props) => {
     },[isHover]);
 
     const handleLikeClick = (offerId) => {
-        axios.post("http://localhost:5000/api/offer/likeOffer",{userID:userId,offerID:offerId}).then(response => {
+        axios.patch("http://localhost:5000/api/offer/likeOffer",{userID:userId,offerID:offerId}).then(response => {
             console.log(response);
         })        
     }
@@ -147,7 +147,7 @@ const OfferedProducts = (props) => {
 
                                 <div className="product_like">
 
-                                    <img src={offer.likes.includes(userId) ? likeFilledImage : likeImage}  onClick={handleLikeClick(offer._id)} alt=""/>
+                                    <img src={offer.likes.includes(userId) ? likeFilledImage : likeImage}  onClick={()=>handleLikeClick(offer._id)} alt=""/>
                                     <p>{offer.likes.length}</p>
                                     <img src={offer.dislikes.includes(userId) ? likeFilledImage : likeImage} alt="" className="dislike"/>
                                     <p>{offer.dislikes.length}</p>
