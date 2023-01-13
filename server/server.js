@@ -72,6 +72,7 @@ app.get('/supermarket', async(req, res) => {
 
 //insert offer
 app.get('/offer', async(req,res) => {
+    await Offer.remove({});
   const createOffer = await Offer.insertMany(offer);
   res.send(createOffer);
 });

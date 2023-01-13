@@ -24,13 +24,21 @@ const MapContainer = (props)=>{
                 borderRadius:"0px"
             });
         }
-    },[show]);
+
+        if(props.isClicked ==="Search"){
+            animate.start({
+                width:"calc(99vw - 500px)",
+                height:"95%",
+                borderRadius:"10px"
+            });
+        }
+    },[show,props.isClicked]);
 
     return (
         <motion.div className="MapContainer"
             animate={animate}
         >
-            <OfferedProducts productInfo = {productInfo} setClicked={props.setClicked}/>
+            <OfferedProducts productInfo = {productInfo} setClicked={props.setClicked} isClicked={props.isClicked}/>
             <Map isClicked={props.isClicked} productInfo={productInfo}/>
         </motion.div>
     );

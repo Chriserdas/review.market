@@ -21,7 +21,7 @@ function UserHome() {
             <div className = "mainContent_container">
                 {console.log(showProduct)}
                 <Navbar/>
-                <SecondNavbar open={showProduct.show}/>
+                <SecondNavbar productInfo={showProduct} isClicked={isClicked}/>
                 <MapContainer isClicked={isClicked} setClicked={setIsClicked} productInfo={showProduct}/>
             </div>
             

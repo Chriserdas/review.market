@@ -5,6 +5,7 @@ import {motion,useAnimation} from "framer-motion"
 
 const Map = (props)=>{
     const show = props.productInfo.show;
+    const isClicked = props.isClicked;
     const animate = useAnimation();
     useEffect(() => {
         if(show){
@@ -21,7 +22,15 @@ const Map = (props)=>{
                 justifyContent: "center"
             });
         }
-    },[show]);
+
+        if(isClicked === 'Search' && !show){
+            animate.start({
+                width: "100%",
+                height:"100%",
+                
+            });
+        }
+    },[show,isClicked]);
 
     return (
         <motion.div className="map"

@@ -16,10 +16,6 @@ export default function MapCurrentLocation(props) {
                 setData(response.data);
             });
         }
-
-        if(props.isClicked === "Search"){
-            setShowProduct({show:false})
-        }
     },[props.isClicked]);
 
     useEffect(() => {

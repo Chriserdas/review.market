@@ -18,6 +18,7 @@ const OfferedProducts = (props) => {
     const animateColor = useAnimation();
     const [color,setColor] = useState("");
     const containerRef = useRef(null);
+    const isClicked = props.isClicked;
     /*const [leftDisabled, setLeftDisabled] = useState(false);
     const [rightDisabled, setRightDisabled] = useState(false);*/
     //const [priceValue,setPriceValue] = useState()
@@ -49,7 +50,13 @@ const OfferedProducts = (props) => {
                 height:"0%"  
             });
         }
-    },[show]);
+
+        if(isClicked === 'Search' && !show) {
+            animate.start({
+                display: 'none',
+            })
+        }
+    },[show,isClicked]);
 
     useEffect(() => {
 
@@ -77,6 +84,7 @@ const OfferedProducts = (props) => {
     },[isHover]);
 
     const handleLikeClick = (offerId) => {
+        console.log(userId);
         axios.patch("http://localhost:5000/api/offer/likeOffer",{userID:userId,offerID:offerId}).then(response => {
             console.log(response);
         })        
