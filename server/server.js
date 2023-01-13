@@ -46,20 +46,21 @@ app.use('/api/category', categoryRoutes);
 app.use('/api/offer', offerRoutes);
 
 
-//insert product,categories,subcategories
+//insert product
 app.get('/products', async(req, res) => {
   await Product.remove({});
    const createdProduct = await Product.insertMany(products.products);
    res.send({ createdProduct });
 });
 
+//insert categories,subcategories
 app.get('/categories', async(req, res) => {
   await Category.remove({});
    const createdCategory= await Category.insertMany(categories.categories);
    res.send({ createdCategory });
 });
 
-//insert admins directly to database
+//insert users
 app.get('/user', async(req, res) => {
   await User.remove({});
     const createdUsers = await User.insertMany(users);
@@ -121,56 +122,39 @@ app.get('/api/getProductOffer', async(req,res) => {
    })
 });
 
-//for user history
+//for user history of likes,dislikes,offers
 app.get('/api/history', async(req,res) => {
-  Offer.aggregate([
+  User.aggregate([
     {
         $lookup:{
-            from:"users",
-            localField:"likes",
-            foreignField:"_id",
-            as:"userlikes"
+            from:"offers",
+            localField:"_id",
+            foreignField:"likes",
+            as:"offerLiked"
         }
     },
     {
       $lookup:{
-          from:"users",
-          localField:"dislikes",
-          foreignField:"_id",
-          as:"userdislikes"
+          from:"offers",
+          localField:"_id",
+          foreignField:"dislikes",
+          as:"offerDisliked"
       }
-  },
-    { $project: {"offer._id":1, "userlikes._id":1, "userdislikes._id": 1} }
+    },
+    {
+      $lookup:{
+          from:"offers",
+          localField:"_id",
+          foreignField:"createdBy",
+          as:"uploadedOffers"
+      }
+    },
+  
+    { $project: {"_id":1, "username":1 ,"offerLiked._id":1, "offerDisliked._id":1, "uploadedOffers._id":1} }
    ]).then((result)=>{
         res.send(result);
    })
 });
-
-app.get('/api/userEachMonth', async(req,res) => {
-  User.aggregate([
-    {
-      '$project': {
-        'month': {
-          '$month': '$entryDate'
-        }, 
-      }
-    }, {
-      '$group': {
-        '_id': {
-          'month': '$month', 
-          'year': '$year'
-        }, 
-        'total': {
-          '$sum': 1
-        }, 
-        'month': {
-          '$first': '$month'
-        },
-      }
-    }
-  ])
-});
-
 
 app.get("/", (req, res) => {
     res.send("Server is ready");

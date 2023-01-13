@@ -65,6 +65,7 @@ const OfferSchema = new mongoose.Schema({
                 criteria:{type: Boolean},
                 price:{type:Number, default:0,required:true},
                 createdBy:{type:mongoose.Schema.Types.ObjectId},
+                createdDate:{type:Date,default:Date()},
                 likes: [
                     {type: mongoose.Schema.Types.ObjectId}
                 ],

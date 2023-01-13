@@ -15,7 +15,7 @@ const show = (req,res)=> {
     })
 };
 
-//add products,categories
+//add categories,subcategories
 const store = (req,res)=>{
     let Category = new Category({
 
@@ -42,7 +42,7 @@ const store = (req,res)=>{
     })
 };
 
-//update product,categories
+//update categories, subcategories
 const update = (req,res)=> {
     let categoryID = req.body.categoryID
 
@@ -70,7 +70,7 @@ const update = (req,res)=> {
     })
 };
 
-//delete product,categorie
+//delete categories,subcategories
 const destroy = (req,res)=>{
     let categoryID = req.body.categoryID
     Category.findOneAndRemove(categoryID)
