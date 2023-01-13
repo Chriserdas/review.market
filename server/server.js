@@ -72,6 +72,7 @@ app.get('/supermarket', async(req, res) => {
 
 //insert offer
 app.get('/offer', async(req,res) => {
+  await Offer.remove({})
   const createOffer = await Offer.insertMany(offer);
   res.send(createOffer);
 });
@@ -101,6 +102,29 @@ app.get('/api/getCurrentLocation', async(req,res) => {
    })
 });
 
+//supermarket without offers
+app.get('/api/getSupermarket', async(req,res) => {
+  Supermarket.aggregate([
+    {
+      $lookup: {
+          from: "offers",
+          localField: "_id",
+          foreignField: "supermarkets",
+          as: "supermarkets"
+      }
+    },
+    {
+      $match: {
+          $expr: {
+              $eq: [ { "$size": "$supermarkets" }, 0 ]
+          }
+      }
+    },
+    { $project: {"properties.name":1, "geometry.coordinates":1 } }
+   ]).then((result)=>{
+        res.send(result);
+   })
+});
 //products with offers
 app.get('/api/getProductOffer', async(req,res) => {
   Offer.aggregate([
