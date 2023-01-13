@@ -85,4 +85,18 @@ const dislikeOffer = async (req, res) => {
     res.json(updatedOffer);
 }
 
-module.exports = {show,store,destroy, likeOffer, dislikeOffer};
+//update dislike counter
+const stock = async (req, res) => {
+    let offerID = req.body.offerID
+    let userID = req.body.userID
+
+    if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send(`No offer with id: ${offerID}`);
+    
+    const offer = await Offer.findById(offerID);
+
+    const updatedStock = await Offer.findByIdAndUpdate(offerID, { $set: { 'offer.stock': !offer.stock } }, { new: true });
+    
+    res.json(updatedStock);
+}
+
+module.exports = {show,store,destroy, likeOffer, dislikeOffer, stock};

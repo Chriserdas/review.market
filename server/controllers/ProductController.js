@@ -1,6 +1,6 @@
 const {Product} = require("../models/Schemas");
 
-//show the list of products,categories
+//show the list of products
 const show = (req,res)=> {
     Product.find()
     .then(response=>{
@@ -15,7 +15,7 @@ const show = (req,res)=> {
     })
 };
 
-//add products,categories
+//add products
 const store = (req,res)=>{
     let product = new Product({
                 id:req.body.id,
@@ -39,7 +39,7 @@ const store = (req,res)=>{
     })
 };
 
-//update product,categories
+//update product
 const update = (req,res)=> {
     let productID = req.body.productID
 
@@ -65,7 +65,7 @@ const update = (req,res)=> {
     })
 };
 
-//delete product,categorie
+//delete product
 const destroy = (req,res)=>{
     let productID = req.body.productID
     Product.findOneAndRemove(productID)
