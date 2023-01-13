@@ -30,7 +30,8 @@ const AuthenticateForm = (props)=>{
 
             if(info.isAuth){
                 localStorage.setItem("isAuthenticated", "true");
-                localStorage.setItem('token',info.data);
+                /*localStorage.setItem("username", "true");*/
+                localStorage.setItem('token',JSON.stringify(info.data));
             }
             window.location = info.page;
         }, 3000);
@@ -62,7 +63,7 @@ const AuthenticateForm = (props)=>{
                         }else{
                             setInfo({
                                 isAuth:true,
-                                data:res.data.user,
+                                data:res.data,
                                 page:'/UserHome'
                             });
                         

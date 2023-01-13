@@ -66,11 +66,11 @@ const OfferSchema = new mongoose.Schema({
                 price:{type:Number, default:0,required:true},
                 createdBy:{type:mongoose.Schema.Types.ObjectId},
                 likes: [
-                        {type: mongoose.Schema.Types.ObjectId}
+                    {type: mongoose.Schema.Types.ObjectId}
                 ],
                 createDate: {type: Date,default: new Date()},
                 dislikes: [
-                        {type: mongoose.Schema.Types.ObjectId}
+                    {type: mongoose.Schema.Types.ObjectId}
                 ],
                 stock: {type: Boolean}
 });

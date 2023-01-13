@@ -8,13 +8,17 @@ export default function MapCurrentLocation(props) {
 
     const [data,setData] = useState(null);
     const {showProduct,setShowProduct} = useContext(ShopClickedContext);
-    const [near,setNear] = useState(null);
     const [currentLocation,setCurrentLocation] = useState(null);
     useEffect(() => {
         if(props.isClicked === "Current Location"){
+            setShowProduct({show:false})
             axios.get("http://localhost:5000/api/getCurrentLocation").then((response) => {
                 setData(response.data);
             });
+        }
+
+        if(props.isClicked === "Search"){
+            setShowProduct({show:false})
         }
     },[props.isClicked]);
 
