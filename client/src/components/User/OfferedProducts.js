@@ -4,6 +4,7 @@ import sale_logo from "../../images/sale_logo.png"
 import likeImage from "../../images/like.png"
 import likeFilledImage from "../../images/like_filled.png"
 import axios from "axios";
+import Offers from "./Offers";
 
 const OfferedProducts = (props) => {
     const show = props.productInfo.show;
@@ -91,21 +92,72 @@ const OfferedProducts = (props) => {
         }
     },[isHover]);
 
-    const handleLikeClick = (offerId) => {
+    /*const handleLikeClick = (offerId,index) => {
         axios.patch("http://localhost:5000/api/offer/likeOffer",{userID:userId,offerID:offerId}).then(response => {
-            console.log(response);
+            const newOffers = [...offers];
+            newOffers[index] = response.data;
+            setOffers(newOffers);
         })        
-    }
+    }*/
 
-    useEffect(() => {
+    /*useEffect(() => {
 
         if(updateOffer !== null){
-            console.log(updateOffer);
+            
             axios.patch("http://localhost:5000/api/offer/likeOffer",{userID:userId,offerID:updateOffer._id}).then(response => {
-                console.log(response);
+                setUpdateOffer(response.data);
             })
         }
-    },[updateOffer,userId])
+    },[updateOffer,userId])*/
+
+    /*useEffect(() => {
+
+        if(updateOffer !== null){
+            return(
+                <>
+                    <img 
+                        src={
+                            updateOffer.likes.includes(userId) ? likeFilledImage : likeImage
+                        }  
+                        onClick={()=>
+                            /*handleLikeClick(offer)
+                            handleLikeClick(updateOffer._id)
+                        } 
+                        alt=""
+                    />
+                    <p>{updateOffer.likes.length}</p>
+                    <img src={updateOffer.dislikes.includes(userId) ? likeFilledImage : likeImage} alt="" className="dislike"/>
+                    <p>{updateOffer.dislikes.length}</p>
+                </> 
+            )
+        }
+    },[updateOffer])*/
+
+    /*function handleLikeOffer(offer){
+        setUpdateOffer(offer);
+
+        if(updateOffer!==null){
+            return(
+                <>
+                    <img 
+                        src={
+                            updateOffer.likes.includes(userId) ? likeFilledImage : likeImage
+                        }  
+                        onClick={()=>
+                            /*handleLikeClick(offer)
+                            handleLikeClick(updateOffer._id)
+                        } 
+                        alt=""
+                    />
+                    <p>{updateOffer.likes.length}</p>
+                    <img src={updateOffer.dislikes.includes(userId) ? likeFilledImage : likeImage} alt="" className="dislike"/>
+                    <p>{updateOffer.dislikes.length}</p>
+                </> 
+            )
+        }
+        
+    }*/
+    
 
     return (
         <motion.div className="OfferedProducts_container"
@@ -138,59 +190,7 @@ const OfferedProducts = (props) => {
 
             
             <div className="products" ref={containerRef}>
-                
-                {offers ===  undefined ? "" : ( 
-                    offers.map(offer =>(
-                        //product.stock === 1 ? setColor("green") : setColor("red")
-                        <div key = {offer._id} className="product_container">
-                            <div className="first_row">
-                                <div className="image_container"> 
-                                    <img src ={offer.products[0].image} alt=""/>
-                                </div>
-                                <div className="hot_logo"> 
-                                    <img src={sale_logo} alt=""/>
-                                </div>
-
-                                <div className="product_name">{offer.products[0].name}</div>
-                            </div>
-
-                            <div className="second_row">
-                                <div className="price">Price: 
-                                    <input
-                                        key={offer._id}
-                                        readOnly={!isNear}
-                                        defaultValue={offer.price}
-                                        onChange={event => handlePriceChange(event,offer.price)}
-                                    />        
-                                </div>
-
-                                <div className="product_stock" style={{ backgroundColor: offer.stock === true ? "green" : "red" }}>
-                    
-                                    {offer.stock=== true ? "in stock" : "out of stock"}
-                                    
-                                </div>
-
-                                <div className="product_like">
-
-                                    <img 
-                                        src={
-                                            offer.likes.includes(userId) ? likeFilledImage : likeImage
-                                        }  
-                                        onClick={()=>
-                                            /*handleLikeClick(offer)*/
-                                            setUpdateOffer(offer)
-                                        } 
-                                            alt=""
-                                    />
-                                    <p>{offer.likes.length}</p>
-                                    <img src={offer.dislikes.includes(userId) ? likeFilledImage : likeImage} alt="" className="dislike"/>
-                                    <p>{offer.dislikes.length}</p>
-                                </div>
-
-                            </div>
-                        </div>
-                    )
-                ))}
+                {offers===undefined ? "" : <Offers offers={offers} isNear={isNear}/>}
             </div>
             <div className="scrollArrowsContainer">
                     <button onClick={handleScrollLeft} className="left_scroll">&lt;</button>

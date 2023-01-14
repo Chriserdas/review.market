@@ -88,6 +88,7 @@ const likeOffer = async (req, res) => {
             { new: true }
         );
     }
+
     res.send(offer);
 
 }
@@ -119,19 +120,11 @@ const dislikeOffer = async (req, res) => {
     }else{
         offer = await Offer.findOneAndUpdate(
             { _id: offerID },
-            { $addToSet: { likes: userID } },
+            { $addToSet: { dislikes: userID } },
             { new: true }
         );
     }
     res.send(offer);
-
-    
-    /*const offer = await Offer.findOneAndUpdate(
-        { _id: offerID },
-        { $pull: {likes: userID}, $addToSet: { dislikes: userID } },
-        { new: true }
-    );*/
-
 
 }
 
