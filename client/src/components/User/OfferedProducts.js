@@ -84,7 +84,6 @@ const OfferedProducts = (props) => {
     },[isHover]);
 
     const handleLikeClick = (offerId) => {
-        console.log(userId);
         axios.patch("http://localhost:5000/api/offer/likeOffer",{userID:userId,offerID:offerId}).then(response => {
             console.log(response);
         })        
