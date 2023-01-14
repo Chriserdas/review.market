@@ -63,19 +63,17 @@ const likeOffer = async (req, res) => {
     let offerID = req.body.offerID
     let userID = req.body.userID
 
-    if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send('No offer with id: ${offerID}');
+
+    if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send(`No offer with id: ${offerID}`);
     
-    const offer = await Offer.findById(offerID);
-    
-    Offer.findOne({'offer.likes': req.body.userID}, async(error, user)=>{
-        if(user){
-            res.send({message: "User already liked this offer"})
-        }else{
-            console.log("hello");
-            const updatedOffer = await Offer.findByIdAndUpdate(offerID, { $push: { 'offer.likes': userID } }, { new: true });
-            res.json(updatedOffer);
-        }
-    })
+    const offer = await Offer.findOneAndUpdate(
+        { _id: offerID, likes: { $nin: [userID] } },
+        { $addToSet: { likes: userID } },
+        { new: true }
+    );
+
+    res.send(offer);
+
 }
 
 //update dislike counter
@@ -85,11 +83,15 @@ const dislikeOffer = async (req, res) => {
 
     if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send(`No offer with id: ${offerID}`);
     
-    const offer = await Offer.findById(offerID);
+    Offer.findOne({dislikes: userID}, async(error, user)=>{
+        if(user){
+            res.send({message: `User already disliked this offer`})
+        }else{
+            const updatedOffer = await Offer.findByIdAndUpdate(offerID, { $push: { dislikes: userID } }, { new: true });
+            res.json(updatedOffer);
+        }
 
-    const updatedOffer = await Offer.findByIdAndUpdate(offerID, { $push: { 'offer.dislikes': userID } }, { new: true });
-    
-    res.json(updatedOffer);
+    })
 }
 
 //update dislike counter
