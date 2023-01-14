@@ -14,6 +14,12 @@ function UserHome() {
         data:null
     });
 
+    useEffect(()=>{
+        if(showProduct.show === true) {
+            setIsClicked("Current Location");
+        }
+    },[showProduct.show])
+
 
     return (
         <ShopClickedContext.Provider value = {{showProduct,setShowProduct}}>
@@ -21,8 +27,8 @@ function UserHome() {
             <div className = "mainContent_container">
                 {console.log(showProduct)}
                 <Navbar/>
-                <SecondNavbar productInfo={showProduct} isClicked={isClicked}/>
-                <MapContainer isClicked={isClicked} setClicked={setIsClicked} productInfo={showProduct}/>
+                <SecondNavbar productInfo={showProduct} isClicked={isClicked} setClicked={setIsClicked}/>
+                <MapContainer isClicked={isClicked} setClicked={setIsClicked} productInfo={showProduct} setShowProduct={setShowProduct}/>
             </div>
             
         </NavbarContext.Provider>

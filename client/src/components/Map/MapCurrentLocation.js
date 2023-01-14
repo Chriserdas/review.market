@@ -11,10 +11,15 @@ export default function MapCurrentLocation(props) {
     const [currentLocation,setCurrentLocation] = useState(null);
     useEffect(() => {
         if(props.isClicked === "Current Location"){
-            setShowProduct({show:false})
+            //setShowProduct({show:false})
             axios.get("http://localhost:5000/api/getCurrentLocation").then((response) => {
                 setData(response.data);
             });
+        }
+
+        if(props.isClicked === "Search"){
+            setShowProduct({show:false})
+            axios.get()
         }
     },[props.isClicked]);
 

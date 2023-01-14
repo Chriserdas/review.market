@@ -38,7 +38,7 @@ const MapContainer = (props)=>{
         <motion.div className="MapContainer"
             animate={animate}
         >
-            <OfferedProducts productInfo = {productInfo} setClicked={props.setClicked} isClicked={props.isClicked}/>
+            <OfferedProducts productInfo = {productInfo} setClicked={props.setClicked} isClicked={props.isClicked} setShowProduct = {props.setShowProduct}/>
             <Map isClicked={props.isClicked} productInfo={productInfo}/>
         </motion.div>
     );

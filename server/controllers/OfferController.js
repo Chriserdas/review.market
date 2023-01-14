@@ -63,15 +63,31 @@ const likeOffer = async (req, res) => {
     let offerID = req.body.offerID
     let userID = req.body.userID
 
+    const check = await Offer.findOne({ _id: offerID, likes: { $in: [userID] } });
+    const dislike = await Offer.findOne({ _id: offerID, dislikes: { $in: [userID] }});
 
     if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send(`No offer with id: ${offerID}`);
     
-    const offer = await Offer.findOneAndUpdate(
-        { _id: offerID, likes: { $nin: [userID] } },
-        { $addToSet: { likes: userID } },
-        { new: true }
-    );
-
+    let offer;
+    if(check){
+        offer = await Offer.findOneAndUpdate(
+            { _id: offerID, likes: { $in: [userID] } },
+            { $pull: { likes: userID } },
+            { new: true }
+        );
+    }else if(dislike){
+        offer = await Offer.findOneAndUpdate(
+            { _id: offerID },
+            { $pull: {dislikes: userID}, $addToSet: { likes: userID } },
+            { new: true }
+        );
+    }else{
+        offer = await Offer.findOneAndUpdate(
+            { _id: offerID },
+            { $addToSet: { likes: userID } },
+            { new: true }
+        );
+    }
     res.send(offer);
 
 }
@@ -82,15 +98,40 @@ const dislikeOffer = async (req, res) => {
     let userID = req.body.userID
 
 
+    const check = await Offer.findOne({ _id: offerID, dislikes: { $in: [userID] } });
+    const like = await Offer.findOne({ _id: offerID, likes: { $in: [userID] }});
+
     if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send(`No offer with id: ${offerID}`);
     
-    const offer = await Offer.findOneAndUpdate(
-        { _id: offerID, dislikes: { $nin: [userID] } },
-        { $addToSet: { dislikes: userID } },
-        { new: true }
-    );
-
+    let offer;
+    if(check){
+        offer = await Offer.findOneAndUpdate(
+            { _id: offerID, dislikes: { $in: [userID] } },
+            { $pull: { dislikes: userID } },
+            { new: true }
+        );
+    }else if(like){
+        offer = await Offer.findOneAndUpdate(
+            { _id: offerID },
+            { $pull: {likes: userID}, $addToSet: { dislikes: userID } },
+            { new: true }
+        );
+    }else{
+        offer = await Offer.findOneAndUpdate(
+            { _id: offerID },
+            { $addToSet: { likes: userID } },
+            { new: true }
+        );
+    }
     res.send(offer);
+
+    
+    /*const offer = await Offer.findOneAndUpdate(
+        { _id: offerID },
+        { $pull: {likes: userID}, $addToSet: { dislikes: userID } },
+        { new: true }
+    );*/
+
 
 }
 

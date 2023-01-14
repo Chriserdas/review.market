@@ -19,6 +19,7 @@ const OfferedProducts = (props) => {
     const [color,setColor] = useState("");
     const containerRef = useRef(null);
     const isClicked = props.isClicked;
+    const [updateOffer,setUpdateOffer] = useState(null)
     /*const [leftDisabled, setLeftDisabled] = useState(false);
     const [rightDisabled, setRightDisabled] = useState(false);*/
     //const [priceValue,setPriceValue] = useState()
@@ -33,6 +34,13 @@ const OfferedProducts = (props) => {
 
     const handlePriceChange = (event,previousPrice)=>{
         
+    }
+
+    const handleBack = ()=>{
+        if(props.isClicked === "Current Location"){
+            props.setShowProduct({show:false})
+        }
+        props.setClicked("Current Location");
     }
 
     useEffect(() => {
@@ -89,6 +97,16 @@ const OfferedProducts = (props) => {
         })        
     }
 
+    useEffect(() => {
+
+        if(updateOffer !== null){
+            console.log(updateOffer);
+            axios.patch("http://localhost:5000/api/offer/likeOffer",{userID:userId,offerID:updateOffer._id}).then(response => {
+                console.log(response);
+            })
+        }
+    },[updateOffer,userId])
+
     return (
         <motion.div className="OfferedProducts_container"
             animate={animate}
@@ -104,7 +122,7 @@ const OfferedProducts = (props) => {
                     }}
                     animate={animateColor}
 
-                    onClick={()=>window.location='/UserHome'}
+                    onClick={()=> handleBack()}
                 > 
                     <div>&lt; </div>
                     <motion.div
@@ -154,7 +172,16 @@ const OfferedProducts = (props) => {
 
                                 <div className="product_like">
 
-                                    <img src={offer.likes.includes(userId) ? likeFilledImage : likeImage}  onClick={()=>handleLikeClick(offer._id)} alt=""/>
+                                    <img 
+                                        src={
+                                            offer.likes.includes(userId) ? likeFilledImage : likeImage
+                                        }  
+                                        onClick={()=>
+                                            /*handleLikeClick(offer)*/
+                                            setUpdateOffer(offer)
+                                        } 
+                                            alt=""
+                                    />
                                     <p>{offer.likes.length}</p>
                                     <img src={offer.dislikes.includes(userId) ? likeFilledImage : likeImage} alt="" className="dislike"/>
                                     <p>{offer.dislikes.length}</p>

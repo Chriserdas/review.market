@@ -28,6 +28,7 @@ const SecondNavbar = (props)=>{
     },[show,isClicked]);
 
     let showDiv
+    
     if(show){
         showDiv = 
             <div>
