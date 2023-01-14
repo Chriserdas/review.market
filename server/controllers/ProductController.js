@@ -17,26 +17,30 @@ const show = (req,res)=> {
 
 //add products
 const store = (req,res)=>{
-    let product = new Product({
-                id:req.body.id,
-                name:req.body.name,
-                price:req.body.price,
-                image:req.body.image,
-                category:req.body.category,
-                subcategory:req.body.subcategory
-    });
-    Product.save()
-    .then(response =>{
-        res.json({
-            message:"product added"
+    let productID = req.body.productID
+    if (mongoose.Types.ObjectId.isValid(productID)) {return res.status(404).send(`Product exist with id: ${productID}`)}
+    else{
+        let product = new Product({
+            id:req.body.id,
+            name:req.body.name,
+            price:req.body.price,
+            image:req.body.image,
+            category:req.body.category,
+            subcategory:req.body.subcategory
+        });
+        Product.save()
+        .then(response =>{
+            res.json({
+                message:"product added"
+            })
         })
-    })
-    .catch(error=>{
-        res.json({
-            message:'An error occured'
-        })
+        .catch(error=>{
+            res.json({
+                message:'An error occured'
+            })
 
-    })
+        })
+    }
 };
 
 //update product

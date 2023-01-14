@@ -17,8 +17,10 @@ const show = (req,res)=> {
 
 //add categories,subcategories
 const store = (req,res)=>{
-    let Category = new Category({
-
+    let categoryID = req.body.categoryID
+    if (mongoose.Types.ObjectId.isValid(categoryID)){return res.status(404).send(`Category exist with id: ${categoryID}`);}
+    else{
+        let Category = new Category({
                 id:req.body.id,
                 name:req.body.name,
                 subcategories:[
@@ -27,19 +29,20 @@ const store = (req,res)=>{
                         uuid:req.body.uuid
                     }
                 ]
-    });
-    Category.save()
-    .then(response =>{
-        res.json({
-            message:"Category added"
+        });
+        Category.save()
+        .then(response =>{
+            res.json({
+                message:"Category added"
+            })
         })
-    })
-    .catch(erro=>{
-        res.json({
-            message:'An error occured'
-        })
+        .catch(error=>{
+            res.json({
+                message:'An error occured'
+            })
 
-    })
+        })
+    }
 };
 
 //update categories, subcategories

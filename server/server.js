@@ -3,18 +3,22 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
+let schedule = require('node-schedule');
 const { User, Product, Category, Supermarket, Offer } = require("./models/Schemas");
+
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
+const supermarketRoutes = require('./routes/supermarket');
+const productRoutes = require('./routes/product');
+const categoryRoutes = require('./routes/category');
+const offerRoutes = require('./routes/offer');
+
 const users = require("./data/users");
 const products = require('./data/products.js');
 const categories = require('./data/categories.js');
 const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
-const supermarketRoutes = require('./routes/supermarket');
-const productRoutes = require('./routes/product');
-const categoryRoutes = require('./routes/category');
-const offerRoutes = require('./routes/offer');
+
 
 
 //connect to database
@@ -141,6 +145,97 @@ app.get('/api/getProductOffer', async(req,res) => {
         res.send(result);
    })
 });
+
+
+//offer created by 
+app.get('/api/userOffer', async(req,res) => {
+  Offer.aggregate([
+    {
+        $lookup:{
+            from:"users",
+            localField:"createdBy",
+            foreignField:"_id",
+            as:"user"
+        }
+    },
+    { $project: {"offer._id":1, "user.username":1, "user._id":1} }
+   ]).then((result)=>{
+        res.send(result);
+   })
+});
+
+
+//get categories,subcategories,products
+app.get('/api/productCategory', async(req,res) => {
+  Product.aggregate([
+    {
+       $lookup:
+          {
+            from: "categories",
+            let: { category: "$category", subcategory: "$subcategory" },
+            pipeline: [
+               {
+                 $unwind: "$categories.subcategories"
+               },
+               {
+                 $match: {
+                     $expr: {
+                         $and: [
+                             { $eq: [ "$id",  "$$category" ] },
+                             { $eq: [ "$subcategories.uuid", "$$subcategory" ] }
+                         ]
+                     }
+                 }
+               }
+            ],
+            as: "moreInfo"
+          }
+    }
+ ]).then((result)=>{
+  res.send(result);
+})
+});
+
+//tokens
+app.post('/tokens', (req, res) => {
+  //Find all users in the database
+  User.find({}, (err, users) => {
+    if(err) {
+      res.status(500).send(err);
+    } else {
+       let firstDay = new Date();
+       if(firstDay.getDate() === 1) {
+        //For each user, create a fixed number of tokens (100)
+        users.forEach((user) => {
+          user.token += 100;
+          user.save();
+        });
+       }
+       let date = new Date();
+       let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+          if(date.getDate() === lastDay.getDate()) {
+            //Calculate the total number of tokens to be distributed
+            let totalTokens = users.length * 100 * 0.8;
+            //Calculate the proportion of tokens to be distributed to each user based on their evaluation score
+            users.forEach((user) => {
+              let proportion = user.evaluationScore / totalEvaluationScore;
+              user.token += totalTokens * proportion;
+              user.token = Math.round(user.token);
+              user.save();
+            });
+            res.status(200).send("Tokens distributed successfully");
+          }
+      }
+  })
+});
+
+//let job = schedule.scheduleJob('* */24 * * *', function(){
+ /* axios.post('/tokens').then(() => {
+    console.log('Token distributed successfully')
+  }).catch((err) => {
+    console.log(err);
+  });
+});*/
 
 //for user history of likes,dislikes,offers
 app.get('/api/history', async(req,res) => {

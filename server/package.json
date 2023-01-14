@@ -20,6 +20,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.8.1",
     "moongoose": "^0.0.5",
+    "node-schedule": "^2.1.1",
     "nodemon": "^2.0.20"
   }
 }

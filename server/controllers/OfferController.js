@@ -18,28 +18,33 @@ const show = (req,res)=> {
 
 //add offer
 const store = (req,res)=>{
-    let offer = new Offer({
-        products: req.body.type,
-        supermarkets: req.body.type,
-        price: req.body.price,
-        criteria: req.body.criteria,
-        likes:req.body.likes,
-        createdAt:req.body.createdAt,
-        dislikes: req.body.dislikes,
-        stock:req.body.stock
-    })
-    Offer.save()
-    .then(response =>{
-        res.json({
-            message:"Offer added"
+    let offerID = req.body.offerID
+    if (mongoose.Types.ObjectId.isValid(offerID)){return res.status(404).send(`Offer exist with id: ${offerID}`);}
+    else{
+        let offer = new Offer({
+            products: req.body.type,
+            supermarkets: req.body.type,
+            criteria: req.body.criteria,
+            price: req.body.price,
+            createdBy: req.body.createdBy,
+            createdDate: req.body.createdDate,
+            likes:req.body.likes,
+            createdAt:req.body.createdAt,
+            dislikes: req.body.dislikes,
+            stock:req.body.stock
         })
-    })
-    .catch(erro=>{
-        res.json({
-            message:'An error occured'
+        Offer.save()
+        .then(response =>{
+            res.json({
+                message:"Offer added"
+            })
         })
-
-    })
+        .catch(erro=>{
+            res.json({
+                message:'An error occured'
+            })
+        })
+    }
 };
 
 //delete offer
