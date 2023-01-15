@@ -12,6 +12,6 @@ router.patch('/update', ProductController.update);
 //call localhost:5000/api/product/delete
 router.post('/delete', ProductController.destroy);
 //call localhost:5000/api/product/product
-router.get('/product', ProductController.destroy);
+router.get('/product', ProductController.product);
 
 module.exports = router;
