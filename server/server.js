@@ -59,7 +59,7 @@ app.get('/products', async(req, res) => {
 //insert categories,subcategories
 app.get('/categories', async(req, res) => {
    const createdCategory= await Category.insertMany(categories.categories);
-   res.send({ createdCategory });
+   res.send(createdCategory);
 });
 
 //insert users
@@ -156,25 +156,24 @@ app.get('/api/getProductOffer', async(req,res) => {
 
 
 //get categories,subcategories,products
-app.get('/api/productInfo', async(req,res) => {
-  Category.aggregate([
-    { $unwind: "$subcategories" },
-    {
-      $lookup:
-         {
-           from: "products",
-           localField: "subcategories.uuid",
-           foreignField: "subcategory",
-           as: "products"
-         }
-    },
-    { $match: { "products": { $ne: [] } } },
-    { $project: {"name":1, "_id":1 } }
+/*app.get('/api/productInfo', async(req,res) => {
+    Category.aggregate([
+        /*{
+        $lookup:
+            {
+            from: "products",
+            localField: "id",
+            foreignField: "category",
+            as: "products"
+            }
+        },
+        //{ $project: {"name":1, "id":1}}
 
-]).then((result)=>{
-  res.send(result);
-})
-});
+    ]).then((result)=>{
+        res.send(result);
+    })
+});*/
+
 
 //tokens
 app.post('/tokens', (req, res) => {
