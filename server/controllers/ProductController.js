@@ -85,5 +85,24 @@ const destroy = (req,res)=>{
     })
 };
 
+//find product by category and subcategory
+const product = (req,res)=> {
+    let categoryID = req.body.categoryID
+    let subcategoryID = req.body.subcategoryID
+    Product.find({
+        "category": categoryID,
+        "subcategory": subcategoryID
+      })
+    .then(response=>{
+        res.json({
+            response
+        })
+    })
+    .catch(error => {
+        res.json({
+            message:'An error occured!'
+        })
+    })
+};
 
-module.exports = {show,store,update,destroy};
+module.exports = {show,store,update,destroy,product};
