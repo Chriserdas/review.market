@@ -158,18 +158,16 @@ app.get('/api/getProductOffer', async(req,res) => {
 //get categories,subcategories,products
 app.get('/api/productInfo', async(req,res) => {
   Category.aggregate([
-    { $unwind: "$subcategories" },
     {
       $lookup:
          {
            from: "products",
-           localField: "subcategories.uuid",
-           foreignField: "subcategory",
+           localField: "id",
+           foreignField: "category",
            as: "products"
          }
     },
-    { $match: { "products": { $ne: [] } } },
-    { $project: {"name":1, "subcategories.name":1,"products.name":1 } }
+    { $project: {"name":1 } }
 
 ]).then((result)=>{
   res.send(result);
