@@ -108,7 +108,7 @@ app.get('/api/getCurrentLocation', async(req,res) => {
           as:"user"
       }
     },
-    { $project: {"offer.likes":1, "offer.stock":1, "offer.dislikes":1, "offer.price":1,"offer._id":1, "products._id":1, "products.name":1,"products.price":1 , "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1,"user.username":1, "user._id":1 } }
+    //{ $project: {"offer.likes":1, "offer.stock":1, "offer.dislikes":1, "offer.price":1,"offer._id":1, "products._id":1, "products.name":1,"products.price":1 , "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1,"user.username":1, "user._id":1 } }
    ]).then((result)=>{
         res.send(result);
    })
@@ -156,32 +156,22 @@ app.get('/api/getProductOffer', async(req,res) => {
 
 
 //get categories,subcategories,products
-app.get('/api/productCategory', async(req,res) => {
-  Product.aggregate([
+app.get('/api/productInfo', async(req,res) => {
+  Category.aggregate([
+    { $unwind: "$subcategories" },
     {
-       $lookup:
-          {
-            from: "categories",
-            let: { category: "$category", subcategory: "$subcategory" },
-            pipeline: [
-               {
-                 $unwind: "$categories.subcategories"
-               },
-               {
-                 $match: {
-                     $expr: {
-                         $and: [
-                             { $eq: [ "$id",  "$$category" ] },
-                             { $eq: [ "$subcategories.uuid", "$$subcategory" ] }
-                         ]
-                     }
-                 }
-               }
-            ],
-            as: "moreInfo"
-          }
-    }
- ]).then((result)=>{
+      $lookup:
+         {
+           from: "products",
+           localField: "subcategories.uuid",
+           foreignField: "subcategory",
+           as: "products"
+         }
+    },
+    { $match: { "products": { $ne: [] } } },
+    { $project: {"name":1, "subcategories.name":1,"products.name":1 } }
+
+]).then((result)=>{
   res.send(result);
 })
 });
