@@ -23,6 +23,11 @@
     src: url("./fonts/Manrope/Manrope-Regular.ttf");
 }
 
+@font-face {
+    font-family: Manrope-Light;
+    src: url("./fonts/Manrope/Manrope-Light.ttf");
+}
+
 
 body{
   margin: 0;
