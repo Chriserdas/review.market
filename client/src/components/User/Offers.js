@@ -16,9 +16,9 @@ const Offers = (props)=>{
     const [isHovered,setIsHovered] = useState(false)
     const animate = useAnimation();
 
-    const handleLikeClick = (offerId,index,url) => {
+    const handleLikeClick = (offerId,index,url,offerStock) => {
 
-        if(isNear) {
+        if(isNear && offerStock) {
             axios.patch(url,{userID:userId,offerID:offerId}).then(response => {
                 const newOffers = [...offers];
                 newOffers[index].likes = response.data.likes;
@@ -42,8 +42,8 @@ const Offers = (props)=>{
         }
     }
 
-    function handleLikeImage(likes){
-        if(!isNear) {
+    function handleLikeImage(likes,offerStock){
+        if(!isNear || !offerStock) {
             return notNearLike;
         }
         if(likes.includes(userId)) {
@@ -87,19 +87,19 @@ const Offers = (props)=>{
                     <div className="product_like">
 
                         <img 
-                            src={handleLikeImage(offer.likes)}  
+                            src={handleLikeImage(offer.likes,offer.stock)}  
                             onClick={()=>
-                                handleLikeClick(offer._id,index,"http://localhost:5000/api/offer/likeOffer")
+                                handleLikeClick(offer._id,index,"http://localhost:5000/api/offer/likeOffer",offer.stock)
                             } 
                             alt=""
                         />
                         <p>{offer.likes.length}</p>
                         <img 
-                            src={handleLikeImage(offer.dislikes)} 
+                            src={handleLikeImage(offer.dislikes,offer.stock)} 
                             alt="" 
                             className="dislike"
                             onClick={()=>
-                                handleLikeClick(offer._id,index,"http://localhost:5000/api/offer/dislikeOffer")      
+                                handleLikeClick(offer._id,index,"http://localhost:5000/api/offer/dislikeOffer",offer.stock)      
                             } 
                         />
                         <p>{offer.dislikes.length}</p>

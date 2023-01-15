@@ -8,9 +8,32 @@ const SecondNavbar = (props)=>{
     const isClicked = props.isClicked
     const animate = useAnimation();
     const isNear = props.productInfo.isNear;
-    const [category,setCategory] = useState("Choose category");
+    const super_name = props.productInfo.super_name;
+    
+    const [category,setCategory] = useState({
+                                    name:"Choose category",
+                                    id:""
+                                });
     const animateCategories = useAnimation();
-    const [clickCategory,setClickCategory] = useState(false)
+    const [clickCategory,setClickCategory] = useState(false);
+    const [categories,setCategories] = useState(null);
+    
+    const [clickSubCategory,setClickSubCategory] = useState(false);
+    const [subCategory,setSubCategory] = useState({
+                                        name:"Choose Subcategory",
+                                        uuid:""
+                                    });
+    const [subCategories,setSubCategories] = useState(null);
+    const animateSubCategories = useAnimation();
+    
+    const [showproducts,setShowproducts] = useState(false);
+    const [product,setProduct] = useState({
+                                    name:"Choose Product",
+                                    id:""
+                                });
+    const animateProducts = useAnimation();
+    const [products,setProducts] = useState(null);
+    const [clickProduct,setProductClick] = useState(false);
     useEffect(()=>{
         if(show){
             
@@ -31,19 +54,43 @@ const SecondNavbar = (props)=>{
         }
     },[show,isClicked]);
 
-    /*const handleCategoryClick = ()=>{
-        animateCategories.start({
-            display:"flex",
-        })
-    }*/
+    useEffect(()=>{
+        setCategory({name:"Choose Category"});
+        setSubCategory({name:"Choose Subcategory"})
+        setSubCategories(null);
+    },[super_name])
 
+    const handleCategoryClick = (result) => {
+        setClickCategory(false);
+        setCategory({
+            name:result.name,
+            id:result.id,
+        })
+        setSubCategories(result.subcategories)
+    }
+
+
+    const handleSubCategoryClick = (result) => {
+        setClickSubCategory(false);
+        
+        setSubCategory({
+            name:result.name,
+            uuid:result.uuid,
+        })
+    }
     useEffect(()=>{
         if(clickCategory){
+            setClickSubCategory(false);
+            
             animateCategories.start({
                 display:"flex",
+                flexDirection:"column",
+                alignItems: "center",
+                justifyContent: "flex-start",
             })
-            axios.get("http://localhost:5000/api/productInfo").then((response)=>{
-                console.log(response);
+            axios.get("http://localhost:5000/categories").then((response)=>{
+                setCategories(response.data);
+                //setSubCategories(response.data[0].subcategories);
             })
         }
         else{
@@ -52,7 +99,44 @@ const SecondNavbar = (props)=>{
             })
         }
 
-    },[clickCategory])
+        if(clickSubCategory){
+            //setClickCategory(false);
+            animateSubCategories.start({
+                display:"flex",
+                flexDirection:"column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+            })
+        }
+        else{
+            animateSubCategories.start({
+                display:"none",
+            })
+        }
+
+        if(clickProduct){
+            animateProducts.start({
+                display:"flex",
+                flexDirection:"column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+            })
+        }
+        else{
+            animateProducts.start({
+                display:"none",
+            })
+        }
+
+    },[clickCategory,clickSubCategory,clickProduct])
+
+
+    useEffect(()=>{
+        if(category.name !== "Choose Category" && subCategory.name!=="Choose Subcategory"){
+            setShowproducts(true);
+        }
+        else setShowproducts(false);
+    },[category,subCategory])
 
     let showDiv
     
@@ -63,22 +147,57 @@ const SecondNavbar = (props)=>{
                     (
                         <div className="secondNavbar_near">
                             <div className="choose_container">
-                                <div className="createOffer_txt">Create an Offer</div>
                                 <div className="choose_name">Choose by category</div>
                                 <div className="choose_category">
-                                    <div className="choose_category_title" onClick={()=>setClickCategory(!clickCategory)}>{category} <div>&gt;</div></div>
-                                    <motion.div className="categories" animate={animateCategories}></motion.div>
+                                    <div className="choose_category_title" onClick={()=>setClickCategory(!clickCategory)}>{category.name} <div>&gt;</div></div>
+                                    <motion.div className="categories" animate={animateCategories}>
+                                        {categories !== null ? 
+                                            (
+                                                categories.map(result => (
+                                                    <div key={result._id} className="category" onClick={()=>handleCategoryClick(result)}>{result.name}</div>
+                                                ))
+                                            )
+                                            : ""
+                                        }
+                                    </motion.div>
                                 </div>
+
+                                <div className="choose_subcategory">
+                                    <div className="choose_category_title" onClick={()=>setClickSubCategory(!clickSubCategory)}>{subCategory.name} <div>&gt;</div></div>
+                                    <motion.div className="categories" animate={animateSubCategories}>
+                                        {subCategories !== null ? 
+                                            (
+                                                subCategories.map(result => (
+                                                    <div key={result.uuid} className="category" onClick={()=>handleSubCategoryClick(result)}>{result.name}</div>
+                                                ))
+                                            )
+                                            : <div style={{fontFamily:"Manrope-Regular"}}>Choose Category first!</div>
+                                        }
+                                    </motion.div>
+                                </div> 
+
+                                {showproducts ===true ? 
+                                    (
+                                        <div className="chooseProduct">
+                                            <div className="product_title" onClick={()=>setProductClick(!clickProduct)}> {product.name}<div>&gt;</div></div>
+
+                                            <motion.div className="all_products" animate={animateProducts}>
+
+                                            </motion.div>
+                                        </div>
+                                    ) 
+                                    :""
+                                }
                             </div>
                             <div className="search_product">
-
+                                <div className="createOffer_txt">Create an Offer</div>
                             </div>
                         </div>
                     )
                     :
                     (
                         <div className="secondNavbar_not_near">
-                                You should be less than 50 meters away from the supermarket to create an offer
+                            You should be less than 50 meters away from the supermarket to create an offer
                         </div>
                     )
                 }
