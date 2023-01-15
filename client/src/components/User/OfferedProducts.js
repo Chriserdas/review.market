@@ -17,13 +17,8 @@ const OfferedProducts = (props) => {
     const [isHover,setIsHover] = useState(false);
     const animateBack = useAnimation();
     const animateColor = useAnimation();
-    const [color,setColor] = useState("");
     const containerRef = useRef(null);
     const isClicked = props.isClicked;
-    const [updateOffer,setUpdateOffer] = useState(null)
-    /*const [leftDisabled, setLeftDisabled] = useState(false);
-    const [rightDisabled, setRightDisabled] = useState(false);*/
-    //const [priceValue,setPriceValue] = useState()
 
     function handleScrollLeft() {
         containerRef.current.scrollLeft -= 100;
@@ -31,10 +26,6 @@ const OfferedProducts = (props) => {
 
     function handleScrollRight() {
         containerRef.current.scrollLeft += 100;
-    }
-
-    const handlePriceChange = (event,previousPrice)=>{
-        
     }
 
     const handleBack = ()=>{
@@ -91,73 +82,6 @@ const OfferedProducts = (props) => {
             })
         }
     },[isHover]);
-
-    /*const handleLikeClick = (offerId,index) => {
-        axios.patch("http://localhost:5000/api/offer/likeOffer",{userID:userId,offerID:offerId}).then(response => {
-            const newOffers = [...offers];
-            newOffers[index] = response.data;
-            setOffers(newOffers);
-        })        
-    }*/
-
-    /*useEffect(() => {
-
-        if(updateOffer !== null){
-            
-            axios.patch("http://localhost:5000/api/offer/likeOffer",{userID:userId,offerID:updateOffer._id}).then(response => {
-                setUpdateOffer(response.data);
-            })
-        }
-    },[updateOffer,userId])*/
-
-    /*useEffect(() => {
-
-        if(updateOffer !== null){
-            return(
-                <>
-                    <img 
-                        src={
-                            updateOffer.likes.includes(userId) ? likeFilledImage : likeImage
-                        }  
-                        onClick={()=>
-                            /*handleLikeClick(offer)
-                            handleLikeClick(updateOffer._id)
-                        } 
-                        alt=""
-                    />
-                    <p>{updateOffer.likes.length}</p>
-                    <img src={updateOffer.dislikes.includes(userId) ? likeFilledImage : likeImage} alt="" className="dislike"/>
-                    <p>{updateOffer.dislikes.length}</p>
-                </> 
-            )
-        }
-    },[updateOffer])*/
-
-    /*function handleLikeOffer(offer){
-        setUpdateOffer(offer);
-
-        if(updateOffer!==null){
-            return(
-                <>
-                    <img 
-                        src={
-                            updateOffer.likes.includes(userId) ? likeFilledImage : likeImage
-                        }  
-                        onClick={()=>
-                            /*handleLikeClick(offer)
-                            handleLikeClick(updateOffer._id)
-                        } 
-                        alt=""
-                    />
-                    <p>{updateOffer.likes.length}</p>
-                    <img src={updateOffer.dislikes.includes(userId) ? likeFilledImage : likeImage} alt="" className="dislike"/>
-                    <p>{updateOffer.dislikes.length}</p>
-                </> 
-            )
-        }
-        
-    }*/
-    
 
     return (
         <motion.div className="OfferedProducts_container"

@@ -67,7 +67,7 @@ export default function MapCurrentLocation(props) {
                                     show:true,
                                     offers:data.filter(offer=> offer.supermarkets[0]._id === result.supermarkets[0]._id),
                                     super_name:result.supermarkets[0].properties.name || result.supermarkets[0].properties.shop,
-                                    isNear:currentLocation.distanceTo(result.supermarkets[0].geometry.coordinates.reverse()) <50 ? true : false,
+                                    isNear:true//currentLocation.distanceTo(result.supermarkets[0].geometry.coordinates.reverse()) <50 ? true : false,
                                 })
                                 
                             },

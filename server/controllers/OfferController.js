@@ -63,7 +63,7 @@ const destroy = (req,res)=>{
     })
 };
 
-//update like counter
+//update likes
 const likeOffer = async (req, res) => {
     let offerID = req.body.offerID
     let userID = req.body.userID
@@ -93,12 +93,10 @@ const likeOffer = async (req, res) => {
             { new: true }
         );
     }
-
     res.send(offer);
-
 }
 
-//update dislike counter
+//update dislikes
 const dislikeOffer = async (req, res) => {
     let offerID = req.body.offerID
     let userID = req.body.userID
@@ -136,13 +134,14 @@ const dislikeOffer = async (req, res) => {
 //update stock
 const stock = async (req, res) => {
     let offerID = req.body.offerID
-    let userID = req.body.userID
+    let offerStock = req.body.offerStock;
 
     if (!mongoose.Types.ObjectId.isValid(offerID)) return res.status(404).send(`No offer with id: ${offerID}`);
     
-    const offer = await Offer.findById(offerID);
 
-    const updatedStock = await Offer.findByIdAndUpdate(offerID, { $set: { 'offer.stock': !offer.stock } }, { new: true });
+    const updatedStock = await Offer.findOneAndUpdate(
+        {_id:offerID}, 
+        { $set: { stock: !offerStock } }, { new: true });
     
     res.json(updatedStock);
 }

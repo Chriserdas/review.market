@@ -34,7 +34,19 @@ const SecondNavbar = (props)=>{
             <div>
                 {isNear===true ? 
                     (
-                        <div></div>
+                        <div className="secondNavbar_near">
+                            <div className="choose_container">
+                                <div className="createOffer_txt">Create an Offer</div>
+                                <div className="choose_name">Choose by category</div>
+                                <div className="choose_category">
+                                    <div className="choose_category_title">Choose category <div>&gt;</div></div>
+                                    
+                                </div>
+                            </div>
+                            <div className="search_product">
+
+                            </div>
+                        </div>
                     )
                     :
                     (
