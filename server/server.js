@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
-let schedule = require('node-schedule');
+/*const schedule = require('node-schedule');*/
 const { User, Product, Category, Supermarket, Offer } = require("./models/Schemas");
 
 const userRoutes = require("./routes/users");
@@ -169,7 +169,7 @@ app.get('/api/productInfo', async(req,res) => {
          }
     },
     { $match: { "products": { $ne: [] } } },
-    { $project: {"name":1, "subcategories.name":1,"products.name":1 } }
+    { $project: {"name":1, "_id":1 } }
 
 ]).then((result)=>{
   res.send(result);

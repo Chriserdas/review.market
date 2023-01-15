@@ -1,5 +1,6 @@
-import {React, useEffect,useRef} from "react";
+import {React, useEffect,useState} from "react";
 import {motion,useAnimation} from "framer-motion";
+import axios from "axios";
 
 const SecondNavbar = (props)=>{
 
@@ -7,6 +8,9 @@ const SecondNavbar = (props)=>{
     const isClicked = props.isClicked
     const animate = useAnimation();
     const isNear = props.productInfo.isNear;
+    const [category,setCategory] = useState("Choose category");
+    const animateCategories = useAnimation();
+    const [clickCategory,setClickCategory] = useState(false)
     useEffect(()=>{
         if(show){
             
@@ -27,6 +31,29 @@ const SecondNavbar = (props)=>{
         }
     },[show,isClicked]);
 
+    /*const handleCategoryClick = ()=>{
+        animateCategories.start({
+            display:"flex",
+        })
+    }*/
+
+    useEffect(()=>{
+        if(clickCategory){
+            animateCategories.start({
+                display:"flex",
+            })
+            axios.get("http://localhost:5000/api/productInfo").then((response)=>{
+                console.log(response);
+            })
+        }
+        else{
+            animateCategories.start({
+                display:"none",
+            })
+        }
+
+    },[clickCategory])
+
     let showDiv
     
     if(show){
@@ -39,8 +66,8 @@ const SecondNavbar = (props)=>{
                                 <div className="createOffer_txt">Create an Offer</div>
                                 <div className="choose_name">Choose by category</div>
                                 <div className="choose_category">
-                                    <div className="choose_category_title">Choose category <div>&gt;</div></div>
-                                    
+                                    <div className="choose_category_title" onClick={()=>setClickCategory(!clickCategory)}>{category} <div>&gt;</div></div>
+                                    <motion.div className="categories" animate={animateCategories}></motion.div>
                                 </div>
                             </div>
                             <div className="search_product">
