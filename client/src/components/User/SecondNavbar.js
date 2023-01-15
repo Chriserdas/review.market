@@ -9,7 +9,9 @@ const SecondNavbar = (props)=>{
     const animate = useAnimation();
     const isNear = props.productInfo.isNear;
     const super_name = props.productInfo.super_name;
-    
+    const userId = JSON.parse(localStorage.getItem("token")).user._id;
+    let [priceValue,setPriceValue] = useState("");
+    const [stock,setStock] = useState(true)
     const [category,setCategory] = useState({
                                     name:"Choose category",
                                     id:""
@@ -25,7 +27,8 @@ const SecondNavbar = (props)=>{
                                     });
     const [subCategories,setSubCategories] = useState(null);
     const animateSubCategories = useAnimation();
-    
+
+
     const [showproducts,setShowproducts] = useState(false);
     const [product,setProduct] = useState({
                                     name:"Choose Product",
@@ -34,6 +37,8 @@ const SecondNavbar = (props)=>{
     const animateProducts = useAnimation();
     const [products,setProducts] = useState(null);
     const [clickProduct,setProductClick] = useState(false);
+    
+    
     useEffect(()=>{
         if(show){
             
@@ -56,12 +61,14 @@ const SecondNavbar = (props)=>{
 
     useEffect(()=>{
         setCategory({name:"Choose Category"});
+        setProductClick(false);
         setSubCategory({name:"Choose Subcategory"})
         setSubCategories(null);
     },[super_name])
 
     const handleCategoryClick = (result) => {
         setClickCategory(false);
+        setSubCategory({name:"Choose Subcategory", uuid:""})
         setCategory({
             name:result.name,
             id:result.id,
@@ -78,10 +85,16 @@ const SecondNavbar = (props)=>{
             uuid:result.uuid,
         })
     }
+
+    const handleProductClick = (name,id) => {
+        setProductClick(false);
+        setProduct({name,id})
+    }
     useEffect(()=>{
         if(clickCategory){
+            setProduct({name:"Choose Product"})
             setClickSubCategory(false);
-            
+            setProductClick(false);
             animateCategories.start({
                 display:"flex",
                 flexDirection:"column",
@@ -100,7 +113,8 @@ const SecondNavbar = (props)=>{
         }
 
         if(clickSubCategory){
-            //setClickCategory(false);
+            setProductClick(false);
+            setProduct({name:"Choose Product"})
             animateSubCategories.start({
                 display:"flex",
                 flexDirection:"column",
@@ -120,7 +134,16 @@ const SecondNavbar = (props)=>{
                 flexDirection:"column",
                 alignItems: "center",
                 justifyContent: "flex-start",
-            })
+                
+            });
+
+            axios.post('http://localhost:5000/api/product/product',{
+                                                            categoryID:category.id,
+                                                            subcategoryID: subCategory.uuid
+                                                        })
+            .then(response=>{
+                setProducts(response.data);
+            });
         }
         else{
             animateProducts.start({
@@ -136,7 +159,32 @@ const SecondNavbar = (props)=>{
             setShowproducts(true);
         }
         else setShowproducts(false);
-    },[category,subCategory])
+    },[category,subCategory]);
+
+    const handleOnChange = (event) => {
+        const input = event.target.value;
+
+        if (/^\d*\.?\d*$/.test(input)) {
+            setPriceValue(input);
+        }  
+    }
+
+
+    const handleSubmitOffer = ()=>{
+        if(priceValue !=="" && category.id !=="" && subCategory.uuid !=="" && product.id !==""){
+            axios.post("localhost:5000/api/offer/store",{
+                                                            userId:userId,
+                                                            stock:stock,
+                                                            price:priceValue,
+                                                            productId:product.id,
+                                                            supermarketId:props.supermarket_id
+                                                        })
+            .then(response=>{
+                window.location = "/UserHome";
+            });
+            
+        }
+    }
 
     let showDiv
     
@@ -182,11 +230,46 @@ const SecondNavbar = (props)=>{
                                             <div className="product_title" onClick={()=>setProductClick(!clickProduct)}> {product.name}<div>&gt;</div></div>
 
                                             <motion.div className="all_products" animate={animateProducts}>
-
+                                                {products !== null ? 
+                                                    (
+                                                        products.map(product => (
+                                                            <div key ={product._id} className="category" onClick={()=>handleProductClick(product.name,product._id)}>{product.name}</div>
+                                                        ))
+                                                    )
+                                                    :""
+                                                }
                                             </motion.div>
                                         </div>
                                     ) 
                                     :""
+                                }
+
+                                {category.name !== "Choose Category" 
+                                    && subCategory.name!=="Choose Subcategory" 
+                                    && product.name !=="Choose Product" ?
+                                        
+                                        (
+                                            <div className="submit_offer_container">
+                                                <div className="set_price">Price:
+                                                    <input
+                                                        value={priceValue}
+                                                        onChange={handleOnChange}
+                                                    />
+                                                </div>
+                                                <div className="set_stock"> 
+                                                    Stock:
+                                                    <div 
+                                                    style={{backgroundColor: stock===true ? "green" : "red"}} 
+                                                    onClick={()=>{
+                                                        setStock(!stock);
+                                                    }}
+                                                    > {stock.toString()}</div>
+                                                </div>
+                                                <div className="submit_offer" onClick={()=>handleSubmitOffer()}>Submit Offer</div>
+                                            </div>
+                                            
+                                        )
+                                        :""
                                 }
                             </div>
                             <div className="search_product">

@@ -89,14 +89,16 @@ const destroy = (req,res)=>{
 const product = (req,res)=> {
     let categoryID = req.body.categoryID
     let subcategoryID = req.body.subcategoryID
+
+    console.log(req.body.categoryID);
+    console.log(subcategoryID);
+    
     Product.find({
         "category": categoryID,
         "subcategory": subcategoryID
-      })
+    })
     .then(response=>{
-        res.json({
-            response
-        })
+        res.json(response)
     })
     .catch(error => {
         res.json({
