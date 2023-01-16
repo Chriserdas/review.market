@@ -137,22 +137,7 @@ app.get('/api/getSupermarket', async(req,res) => {
         res.send(result);
    })
 });
-//products with offers
-app.get('/api/getProductOffer', async(req,res) => {
-  Offer.aggregate([
-    {
-        $lookup:{
-            from:"products",
-            localField:"products",
-            foreignField:"_id",
-            as:"products"
-        }
-    },
-    { $project: {"offer._id":1, "products.name":1} }
-   ]).then((result)=>{
-        res.send(result);
-   })
-});
+
 
 
 //get categories,subcategories,products

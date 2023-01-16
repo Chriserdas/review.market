@@ -107,4 +107,18 @@ const product = (req,res)=> {
     })
 };
 
-module.exports = {show,store,update,destroy,product};
+//search products for control search
+const search= (req,res)=> {
+    let productString = req.body.productString
+    Product.find(
+        {"name" : {$regex : "productString"}}
+    ).then(response=>{
+        res.json(response)
+    }).catch(error => {
+        res.json({
+            message:'An error occured!'
+        })
+    })
+};
+
+module.exports = {show,store,update,destroy,product,search};

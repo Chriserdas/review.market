@@ -23,7 +23,7 @@ const store = async(req,res)=>{
     let price = req.body.price
     let productId = req.body.productId
     let supermarketId = req.body.supermarketId
-    
+
     if(is_bool(stock) && !isNaN(price)){
         const existingOffer = await Offer.findOne({
             products: productId,
@@ -32,7 +32,7 @@ const store = async(req,res)=>{
 
         if(existingOffer){
             if(price < existingOffer.price * 0.2) {
-                Offer.findOneAndRemove(existingOffer)
+                await Offer.findOneAndRemove(existingOffer)
                 let offer = new Offer({
                     products: productId,
                     supermarkets: supermarketId,
@@ -44,7 +44,7 @@ const store = async(req,res)=>{
                     dislikes: req.body.dislikes,
                     stock:stock
                 })
-                Offer.save()
+                await Offer.save()
                 .then(response =>{
                     res.json({
                         message:"Offer added"
@@ -70,7 +70,7 @@ const store = async(req,res)=>{
                 dislikes: req.body.dislikes,
                 stock:stock
             })
-            Offer.save()
+            await Offer.save()
             .then(response =>{
                 res.json({
                     message:"Offer added"
