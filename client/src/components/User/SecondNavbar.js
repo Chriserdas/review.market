@@ -106,7 +106,6 @@ const SecondNavbar = (props)=>{
             })
             axios.get("http://localhost:5000/categories").then((response)=>{
                 setCategories(response.data);
-                //setSubCategories(response.data[0].subcategories);
             })
         }
         else{
@@ -176,7 +175,7 @@ const SecondNavbar = (props)=>{
 
     const handleSubmitOffer = ()=>{
         if(priceValue !=="" && category.id !=="" && subCategory.uuid !=="" && product.id !==""){
-            axios.post("localhost:5000/api/offer/store",{
+            axios.post("http://localhost:5000/api/offer/store",{
                                                             userId:userId,
                                                             stock:stock,
                                                             price:priceValue,
