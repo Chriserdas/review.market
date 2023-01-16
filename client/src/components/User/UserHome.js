@@ -27,7 +27,7 @@ function UserHome() {
                                     id:showProduct.supermarket_id
                                 })
         }
-    },[showProduct.show])
+    },[showProduct])
 
 
     return (
@@ -36,6 +36,7 @@ function UserHome() {
         <NavbarContext.Provider  value ={{isClicked,setIsClicked}}>
             <div className = "mainContent_container">
                 {console.log(showProduct)}
+                {console.log(clickedSupermarket.name) }
                 <Navbar/>
                 <SecondNavbar productInfo={showProduct} isClicked={isClicked} setClicked={setIsClicked} supermarket_id={clickedSupermarket.id} supermarket_name={clickedSupermarket.name}/>
                 <MapContainer isClicked={isClicked} setClicked={setIsClicked} productInfo={showProduct} setShowProduct={setShowProduct} />

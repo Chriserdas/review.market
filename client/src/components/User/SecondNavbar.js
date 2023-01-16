@@ -67,7 +67,7 @@ const SecondNavbar = (props)=>{
         setProductClick(false);
         setSubCategory({name:"Choose Subcategory"})
         setSubCategories(null);
-    },[super_name])
+    },[props.supermarket_name])
 
     const handleCategoryClick = (result) => {
         setClickCategory(false);
