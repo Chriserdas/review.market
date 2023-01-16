@@ -192,6 +192,10 @@ const SecondNavbar = (props)=>{
 
     const handleSearch = (event) => {
         setSearchValue(event.target.value);
+        axios.post('http://localhost:5000/api/product/search',{productString:event.target.value})
+        .then(response=>{
+            console.log(response.data);
+        });
     }
 
     let showDiv

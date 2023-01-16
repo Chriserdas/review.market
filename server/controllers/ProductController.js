@@ -107,9 +107,30 @@ const product = (req,res)=> {
 //search products for control search
 const search= (req,res)=> {
     let productString = req.body.productString
-    Product.find(
-        {"name" : {$regex : "productString"}}
-    ).then(response=>{
+    Product.aggregate([
+
+        {
+            $lookup:
+            {
+                from: "categories",
+                localField: "category",
+                foreignField: "id",
+                as: "category"
+            }
+        },
+        {
+            $lookup:
+            {
+                from: "categories",
+                localField: "subcategory",
+                foreignField: "uuid",
+                as: "subcategory"
+            }
+        },
+        {
+            $match: { name: { $regex: `^${productString}`, $options: 'i' } }
+        }
+    ]).then(response=>{
         res.json(response)
     }).catch(error => {
         res.json({
