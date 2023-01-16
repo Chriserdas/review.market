@@ -23,12 +23,12 @@ const store = async(req,res)=>{
     let price = req.body.price
     let productId = req.body.productId
     let supermarketId = req.body.supermarketId
-
-    if(is_bool(stock) && !isNaN(price)){
+    
+    if(typeof stock ==='boolean' && !isNaN(price)){
         const existingOffer = await Offer.findOne({
             products: productId,
             supermarkets: supermarketId,
-          });
+        });
 
         if(existingOffer){
             if(price < existingOffer.price * 0.2) {
@@ -44,21 +44,22 @@ const store = async(req,res)=>{
                     dislikes: req.body.dislikes,
                     stock:stock
                 })
-                await Offer.save()
-                .then(response =>{
+                await offer.save().then(response =>{
+                    
                     res.json({
                         message:"Offer added"
                     })
-                })
-                .catch(erro=>{
+                }).catch(erro=>{
                     res.json({
                         message:'An error occured'
                     })
                 })
-            } else {
-            res.status(400).send("Cannot submit offer, offer for the same product and store already exists");
+            } 
+            else {
+                res.status(400).send("Cannot submit offer, offer for the same product and store already exists");
             }
-        }else {
+        }
+        else {
             let offer = new Offer({
                 products: productId,
                 supermarkets: supermarketId,
@@ -70,7 +71,7 @@ const store = async(req,res)=>{
                 dislikes: req.body.dislikes,
                 stock:stock
             })
-            await Offer.save()
+            await offer.save()
             .then(response =>{
                 res.json({
                     message:"Offer added"

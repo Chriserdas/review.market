@@ -10,7 +10,6 @@ const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const supermarketRoutes = require('./routes/supermarket');
 const productRoutes = require('./routes/product');
-const categoryRoutes = require('./routes/category');
 const offerRoutes = require('./routes/offer');
 
 const users = require("./data/users");
@@ -46,7 +45,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use('/api/supermarket', supermarketRoutes);
 app.use('/api/product', productRoutes);
-app.use('/api/category', categoryRoutes);
 app.use('/api/offer', offerRoutes);
 
 
