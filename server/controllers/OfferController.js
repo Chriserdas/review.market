@@ -17,33 +17,73 @@ const show = (req,res)=> {
 };
 
 //add offer
-const store = (req,res)=>{
-    let offerID = req.body.offerID
-    if (mongoose.Types.ObjectId.isValid(offerID)){return res.status(404).send(`Offer exist with id: ${offerID}`);}
-    else{
-        let offer = new Offer({
-            products: req.body.type,
-            supermarkets: req.body.type,
-            criteria: req.body.criteria,
-            price: req.body.price,
-            createdBy: req.body.createdBy,
-            createdDate: req.body.createdDate,
-            likes:req.body.likes,
-            createdAt:req.body.createdAt,
-            dislikes: req.body.dislikes,
-            stock:req.body.stock
-        })
-        Offer.save()
-        .then(response =>{
-            res.json({
-                message:"Offer added"
+const store = async(req,res)=>{
+    let userId = req.body.userId
+    let stock = req.body.stock
+    let price = req.body.price
+    let productId = req.body.productId
+    let supermarketId = req.body.supermarketId
+    
+    if(is_bool(stock) && !isNaN(price)){
+        const existingOffer = await Offer.findOne({
+            products: productId,
+            supermarkets: supermarketId,
+          });
+
+        if(existingOffer){
+            if(price < existingOffer.price * 0.2) {
+                Offer.findOneAndRemove(existingOffer)
+                let offer = new Offer({
+                    products: productId,
+                    supermarkets: supermarketId,
+                    criteria: req.body.criteria,
+                    price: price,
+                    createdBy: userId,
+                    createdDate: req.body.createdDate,
+                    likes:req.body.likes,
+                    dislikes: req.body.dislikes,
+                    stock:stock
+                })
+                Offer.save()
+                .then(response =>{
+                    res.json({
+                        message:"Offer added"
+                    })
+                })
+                .catch(erro=>{
+                    res.json({
+                        message:'An error occured'
+                    })
+                })
+            } else {
+            res.status(400).send("Cannot submit offer, offer for the same product and store already exists");
+            }
+        }else {
+            let offer = new Offer({
+                products: productId,
+                supermarkets: supermarketId,
+                criteria: req.body.criteria,
+                price: price,
+                createdBy: userId,
+                createdDate: req.body.createdDate,
+                likes:req.body.likes,
+                dislikes: req.body.dislikes,
+                stock:stock
             })
-        })
-        .catch(erro=>{
-            res.json({
-                message:'An error occured'
+            Offer.save()
+            .then(response =>{
+                res.json({
+                    message:"Offer added"
+                })
             })
-        })
+            .catch(erro=>{
+                res.json({
+                    message:'An error occured'
+                })
+            })
+        }
+    }else{
+        res.send("invalid values")
     }
 };
 
