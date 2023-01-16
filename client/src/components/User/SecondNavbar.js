@@ -10,6 +10,9 @@ const SecondNavbar = (props)=>{
     const isNear = props.productInfo.isNear;
     const super_name = props.productInfo.super_name;
     const userId = JSON.parse(localStorage.getItem("token")).user._id;
+
+    const [searchValue,setSearchValue] = useState("");
+
     let [priceValue,setPriceValue] = useState("");
     const [stock,setStock] = useState(true)
     const [category,setCategory] = useState({
@@ -129,6 +132,7 @@ const SecondNavbar = (props)=>{
         }
 
         if(clickProduct){
+            setPriceValue("");
             animateProducts.start({
                 display:"flex",
                 flexDirection:"column",
@@ -186,6 +190,11 @@ const SecondNavbar = (props)=>{
         }
     }
 
+
+    const handleSearch = (event) => {
+        setSearchValue(event.target.value);
+    }
+
     let showDiv
     
     if(show){
@@ -236,7 +245,7 @@ const SecondNavbar = (props)=>{
                                                             <div key ={product._id} className="category" onClick={()=>handleProductClick(product.name,product._id)}>{product.name}</div>
                                                         ))
                                                     )
-                                                    :""
+                                                    : <div style={{fontFamily:"Manrope-Regular"}}>No products to show!</div>
                                                 }
                                             </motion.div>
                                         </div>
@@ -274,6 +283,15 @@ const SecondNavbar = (props)=>{
                             </div>
                             <div className="search_product">
                                 <div className="createOffer_txt">Create an Offer</div>
+                                <div className="supermarketClicked">{props.supermarket_name}</div>
+                                <div className="createOffer_search">
+                                    <input
+                                        value={searchValue}
+                                        placeholder="Search for products..."
+                                        onChange={handleSearch}
+                                    
+                                    />
+                                </div>
                             </div>
                         </div>
                     )
