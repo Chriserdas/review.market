@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     isAdmin:{type:Boolean,default:false,require:true},
     entryDate:{type:Date,default:Date()},
     token:{type:Number, default:0},
+    totalScore: {type:Number, default:0},
 });
 
 

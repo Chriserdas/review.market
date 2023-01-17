@@ -121,17 +121,32 @@ const likeOffer = async (req, res) => {
             { $pull: { likes: userID } },
             { new: true }
         );
+        await User.findOneAndUpdate(
+            {_id: offer.createdBy},
+            {$inc: {totalScore: -5}},
+            {new: true}
+        );
     }else if(dislike){
         offer = await Offer.findOneAndUpdate(
             { _id: offerID },
             { $pull: {dislikes: userID}, $addToSet: { likes: userID } },
             { new: true }
         );
+        await User.findOneAndUpdate(
+            {_id: offer.createdBy},
+            { $inc: {totalScore: 5}},
+            {new: true}
+        );
     }else{
         offer = await Offer.findOneAndUpdate(
             { _id: offerID },
-            { $addToSet: { likes: userID } },
+            { $addToSet: { likes: userID }},
             { new: true }
+        );
+        await User.findOneAndUpdate(
+            {_id: offer.createdBy},
+            { $inc: {totalScore: 5}},
+            {new: true}
         );
     }
     res.send(offer);
@@ -155,17 +170,32 @@ const dislikeOffer = async (req, res) => {
             { $pull: { dislikes: userID } },
             { new: true }
         );
+        await User.findOneAndUpdate(
+            {_id: offer.createdBy},
+            {$inc: {totalScore: 1}},
+            {new: true}
+        );
     }else if(like){
         offer = await Offer.findOneAndUpdate(
             { _id: offerID },
             { $pull: {likes: userID}, $addToSet: { dislikes: userID } },
             { new: true }
         );
+        await User.findOneAndUpdate(
+            {_id: offer.createdBy},
+            {$inc: {totalScore: -1}},
+            {new: true}
+        );
     }else{
         offer = await Offer.findOneAndUpdate(
             { _id: offerID },
             { $addToSet: { dislikes: userID } },
             { new: true }
+        );
+        await User.findOneAndUpdate(
+            {_id: offer.createdBy},
+            {$inc: {totalScore: -1}},
+            {new: true}
         );
     }
     res.send(offer);

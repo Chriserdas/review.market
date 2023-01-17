@@ -62,6 +62,7 @@ app.get('/categories', async(req, res) => {
 
 //insert users
 app.get('/user', async(req, res) => {
+    await User.remove({})
     const createdUsers = await User.insertMany(users);
     res.send({ createdUsers });
   });
