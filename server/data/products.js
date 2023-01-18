@@ -3347,7 +3347,7 @@ const product = {
         {
           "id": "443",
           "name": "Babylino Πάνες Μωρού Sensitive No 5+ Εως 27 κιλ 16τεμ",
-          "price":"",
+          "price":"3.40",
           "image":"https://superpanes.gr/media/catalog/product/cache/a40ce56cf1316e6dad27bb49aff56682/5/2/5201263082504_1.png",
           "category": "8016e637b54241f8ad242ed1699bf2da",
           "subcategory": "e0efaa1776714351a4c17a3a9d412602"
