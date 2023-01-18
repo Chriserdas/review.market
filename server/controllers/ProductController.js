@@ -108,27 +108,14 @@ const product = (req,res)=> {
 const search= (req,res)=> {
     let productString = req.body.productString
     Product.aggregate([
-
-        {
-            $lookup:
-            {
-                from: "categories",
-                localField: "category",
-                foreignField: "id",
-                as: "category"
-            }
-        },
-        {
-            $lookup:
-            {
-                from: "categories",
-                localField: "subcategory",
-                foreignField: "uuid",
-                as: "subcategory"
-            }
-        },
         {
             $match: { name: { $regex: `^${productString}`, $options: 'i' } }
+        },
+        {
+            $project: { 
+                name:1,
+                _id:1
+            }
         }
     ]).then(response=>{
         res.json(response)

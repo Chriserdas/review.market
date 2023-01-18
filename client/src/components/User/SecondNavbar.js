@@ -8,7 +8,6 @@ const SecondNavbar = (props)=>{
     const isClicked = props.isClicked
     const animate = useAnimation();
     const isNear = props.productInfo.isNear;
-    const super_name = props.productInfo.super_name;
     const userId = JSON.parse(localStorage.getItem("token")).user._id;
 
     const [searchValue,setSearchValue] = useState("");
@@ -41,7 +40,8 @@ const SecondNavbar = (props)=>{
     const [products,setProducts] = useState(null);
     const [clickProduct,setProductClick] = useState(false);
     
-    
+    const [createOffer,setCreateOffer] = useState(false);
+    const [showSearchResult,setShowSearchResult] = useState(false);
     useEffect(()=>{
         if(show){
             
@@ -91,11 +91,14 @@ const SecondNavbar = (props)=>{
 
     const handleProductClick = (name,id) => {
         setProductClick(false);
-        setProduct({name,id})
+        setProduct({name,id});
     }
     useEffect(()=>{
         if(clickCategory){
-            setProduct({name:"Choose Product"})
+            setShowSearchResult(false);
+            setProduct({name:"Choose Product"});
+            setCreateOffer(false);
+            setSearchValue("");
             setClickSubCategory(false);
             setProductClick(false);
             animateCategories.start({
@@ -115,6 +118,8 @@ const SecondNavbar = (props)=>{
         }
 
         if(clickSubCategory){
+            setShowSearchResult(false);
+            setCreateOffer(false);
             setProductClick(false);
             setProduct({name:"Choose Product"})
             animateSubCategories.start({
@@ -131,6 +136,8 @@ const SecondNavbar = (props)=>{
         }
 
         if(clickProduct){
+            setCreateOffer(false);
+            setShowSearchResult(false);
             setPriceValue("");
             animateProducts.start({
                 display:"flex",
@@ -174,7 +181,7 @@ const SecondNavbar = (props)=>{
 
 
     const handleSubmitOffer = ()=>{
-        if(priceValue !=="" && category.id !=="" && subCategory.uuid !=="" && product.id !==""){
+        if(priceValue !=="" && product.id !==""){
             axios.post("http://localhost:5000/api/offer/store",{
                                                             userId:userId,
                                                             stock:stock,
@@ -192,10 +199,20 @@ const SecondNavbar = (props)=>{
 
     const handleSearch = (event) => {
         setSearchValue(event.target.value);
-        axios.post('http://localhost:5000/api/product/search',{productString:event.target.value})
-        .then(response=>{
-            console.log(response.data);
-        });
+        setCategory({name:"Choose Category",id:"",});
+        setSubCategory({name:"Choose SubCategory",uuid:"",});
+        
+        if(event.target.value !==""){
+            setShowSearchResult(true)
+            axios.post('http://localhost:5000/api/product/search',{productString:event.target.value})
+            .then(response=>{
+                setProducts(response.data);
+            });
+        }
+        else{
+            setCreateOffer(false);
+            setShowSearchResult(false);
+        }
     }
 
     let showDiv
@@ -256,30 +273,33 @@ const SecondNavbar = (props)=>{
                                     :""
                                 }
 
-                                {category.name !== "Choose Category" 
+                                {(category.name !== "Choose Category" 
                                     && subCategory.name!=="Choose Subcategory" 
-                                    && product.name !=="Choose Product" ?
+                                    && product.name !=="Choose Product") || createOffer ===true ?
                                         
                                         (
                                             <div className="submit_offer_container">
-                                                <div className="set_price">Price:
-                                                    <input
-                                                        value={priceValue}
-                                                        onChange={handleOnChange}
-                                                    />
-                                                </div>
-                                                <div className="set_stock"> 
-                                                    Stock:
-                                                    <div 
-                                                    style={{backgroundColor: stock===true ? "green" : "red"}} 
-                                                    onClick={()=>{
-                                                        setStock(!stock);
-                                                    }}
-                                                    > {stock.toString()}</div>
+                                                <div className="productTitle">{product.name}</div>
+                                                <div className="submitOfferWrapper">
+                                                    <div className="set_price">Price:
+                                                        <input
+                                                            value={priceValue}
+                                                            onChange={handleOnChange}
+                                                        />
+                                                    </div>
+                                                    <div className="set_stock"> 
+                                                        Stock:
+                                                        <div 
+                                                        style={{backgroundColor: stock===true ? "green" : "red"}} 
+                                                        onClick={()=>{
+                                                            setStock(!stock);
+                                                        }}
+                                                        > {stock.toString()}</div>
+                                                    </div>
+                                                    
                                                 </div>
                                                 <div className="submit_offer" onClick={()=>handleSubmitOffer()}>Submit Offer</div>
                                             </div>
-                                            
                                         )
                                         :""
                                 }
@@ -287,13 +307,35 @@ const SecondNavbar = (props)=>{
                             <div className="search_product">
                                 <div className="createOffer_txt">Create an Offer</div>
                                 <div className="supermarketClicked">{props.supermarket_name}</div>
-                                <div className="createOffer_search">
-                                    <input
-                                        value={searchValue}
-                                        placeholder="Search for products..."
-                                        onChange={handleSearch}
-                                    
-                                    />
+                                <div className="createOffer_search_container">
+                                    <div className="createOffer_search">
+                                        <input
+                                            value={searchValue}
+                                            placeholder="Search for products..."
+                                            onChange={handleSearch}
+                                        
+                                        />
+                    
+                                    </div>
+                                    <div className="search_results" style={{display:showSearchResult===true ? 'flex' : 'none'}}>
+                                        {showSearchResult===true && products!==null ?
+                                            
+                                            (
+                                                products.map(product=>(
+
+                                                <div key={product._id} className="category" onClick={()=>{
+                                                    setProduct({name:product.name, id:product._id})
+                                                    setCreateOffer(true);
+                                                }}>
+                                                    {product.name} 
+                                                </div>
+                                            
+                                                ))
+                                            ) 
+                                            :""
+                                            
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
