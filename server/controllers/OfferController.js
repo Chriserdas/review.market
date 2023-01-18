@@ -1,6 +1,42 @@
 const {Offer, User} = require("../models/Schemas");
 const mongoose = require("mongoose");
 
+// Function to calculate average offer price for previous day
+const calculateAvgPrice = async (productID) => {
+    const currentDate = new Date();
+    const previousDay = new Date(currentDate);
+    previousDay.setDate(currentDate.getDate() - 1);
+    // offers from previous day
+    const offers = await Offer.find({ products: productID, createdDate: { $gte: previousDay } });
+    let sum = 0;
+    offers.forEach(offer => {
+        sum += offer.price;
+    });
+    let avgPrice = sum / offers.length;
+    if (isNaN(avgPrice)) {
+        avgPrice = 0;
+    }
+    return avgPrice;
+}
+
+const calculateAvgPriceWeek = async (productId) => {
+    const currentDate = new Date();
+    const previousWeek = new Date(currentDate);
+    previousWeek.setDate(currentDate.getDate() - 7);
+    // offer from previous week
+    const offers = await Offer.find({ products: productId, createdDate: { $gte: previousWeek } });
+    let sum = 0;
+    offers.forEach(offer => {
+        sum += offer.price;
+    });
+    let avgPriceWeek = sum / offers.length;
+    if (isNaN(avgPriceWeek)) {
+        avgPriceWeek = 0;
+    }
+    return avgPriceWeek;
+}
+
+
 //show the list of offers
 const show = (req,res)=> {
     Offer.find()
@@ -23,7 +59,9 @@ const store = async(req,res)=>{
     let price = req.body.price
     let productId = req.body.productId
     let supermarketId = req.body.supermarketId
-    
+
+    const avgPrice = await calculateAvgPrice(productId);
+    const avgPriceWeek = await calculateAvgPriceWeek(productId);
     if(typeof stock ==='boolean' && !isNaN(price)){
         const existingOffer = await Offer.findOne({
             products: productId,
@@ -32,12 +70,129 @@ const store = async(req,res)=>{
 
         if(existingOffer){
             if(price < existingOffer.price * 0.2) {
-                await Offer.findOneAndRemove(existingOffer)
+                await Offer.deleteOne(existingOffer)
+                if(price < avgPrice * 0.2){
+                    let offer = new Offer({
+                        products: productId,
+                        supermarkets: supermarketId,
+                        criteria: true,
+                        price: price,
+                        criteria:true,
+                        createdBy: userId,
+                        createdDate: req.body.createdDate,
+                        likes:req.body.likes,
+                        dislikes: req.body.dislikes,
+                        stock:stock
+                    })
+                    await offer.save().then(response =>{
+                        
+                        res.json({
+                            message:"Offer added"
+                        })
+                    }).catch(erro=>{
+                        res.json({
+                            message:'An error occured'
+                        })
+                    })
+                    await User.findOneAndUpdate(
+                        {_id: userId},
+                        {$inc: {totalScore: 50}},
+                        {new: true}
+                    );
+                }else if(price < avgPriceWeek * 0.2){
+                    let offer = new Offer({
+                        products: productId,
+                        supermarkets: supermarketId,
+                        criteria: true,
+                        price: price,
+                        criteria:true,
+                        createdBy: userId,
+                        createdDate: req.body.createdDate,
+                        likes:req.body.likes,
+                        dislikes: req.body.dislikes,
+                        stock:stock
+                    })
+                    await offer.save().then(response =>{
+                        
+                        res.json({
+                            message:"Offer added"
+                        })
+                    }).catch(erro=>{
+                        res.json({
+                            message:'An error occured'
+                        })
+                    })
+                    await User.findOneAndUpdate(
+                        {_id: userId},
+                        {$inc: {totalScore: 20}},
+                        {new: true}
+                    );
+                }
+                else{
+                    let offer = new Offer({
+                        products: productId,
+                        supermarkets: supermarketId,
+                        criteria: req.body.criteria,
+                        price: price,
+                        criteria: false,
+                        createdBy: userId,
+                        createdDate: req.body.createdDate,
+                        likes:req.body.likes,
+                        dislikes: req.body.dislikes,
+                        stock:stock
+                    })
+                    await offer.save().then(response =>{
+                        res.json({
+                            message:"Offer added"
+                        })
+                    })
+                    .catch(erro=>{
+                        res.json({
+                            message:'An error occured'
+                        })
+                    })
+                }
+            } 
+            else {
+                res.json({message: "Offer for the same product and store already exists"}) 
+            }
+        }
+        else {
+            if(price < avgPrice * 0.2){
+                console.log("price day")
                 let offer = new Offer({
                     products: productId,
                     supermarkets: supermarketId,
-                    criteria: req.body.criteria,
+                    criteria: true,
                     price: price,
+                    createdBy: userId,
+                    createdDate: req.body.createdDate,
+                    likes:req.body.likes,
+                    dislikes: req.body.dislikes,
+                    stock:stock
+                })
+                await offer.save().then(response =>{
+                    res.json({
+                        message:"Offer added"
+                    })
+                })
+                .catch(erro=>{
+                    res.json({
+                        message:'An error occured'
+                    })
+                })
+                await User.findOneAndUpdate(
+                    {_id: userId},
+                    {$inc: {totalScore: 50}},
+                    {new: true}
+                );
+            }else if(price < avgPriceWeek * 0.2){
+                let offer = new Offer({
+                    products: productId,
+                    supermarkets: supermarketId,
+                    criteria: true,
+                    price: price,
+                    criteria:true,
                     createdBy: userId,
                     createdDate: req.body.createdDate,
                     likes:req.body.likes,
@@ -54,34 +209,36 @@ const store = async(req,res)=>{
                         message:'An error occured'
                     })
                 })
-            } 
-            else {
-                res.status(400).send("Cannot submit offer, offer for the same product and store already exists");
+                await User.findOneAndUpdate(
+                    {_id: userId},
+                    {$inc: {totalScore: 20}},
+                    {new: true}
+                );
             }
-        }
-        else {
-            let offer = new Offer({
-                products: productId,
-                supermarkets: supermarketId,
-                criteria: req.body.criteria,
-                price: price,
-                createdBy: userId,
-                createdDate: req.body.createdDate,
-                likes:req.body.likes,
-                dislikes: req.body.dislikes,
-                stock:stock
-            })
-            await offer.save()
-            .then(response =>{
-                res.json({
-                    message:"Offer added"
+            else{
+                let offer = new Offer({
+                    products: productId,
+                    supermarkets: supermarketId,
+                    criteria: req.body.criteria,
+                    price: price,
+                    criteria: false,
+                    createdBy: userId,
+                    createdDate: req.body.createdDate,
+                    likes:req.body.likes,
+                    dislikes: req.body.dislikes,
+                    stock:stock
                 })
-            })
-            .catch(erro=>{
-                res.json({
-                    message:'An error occured'
+                await offer.save().then(response =>{
+                    res.json({
+                        message:"Offer added"
+                    })
                 })
-            })
+                .catch(erro=>{
+                    res.json({
+                        message:'An error occured'
+                    })
+                })
+            }
         }
     }else{
         res.send("invalid values")
