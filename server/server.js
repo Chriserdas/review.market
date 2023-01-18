@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
-/*const schedule = require('node-schedule');*/
+const cron = require('cron');
 const { User, Product, Category, Supermarket, Offer } = require("./models/Schemas");
 
 const userRoutes = require("./routes/users");
@@ -137,8 +137,6 @@ app.get('/api/getSupermarket', async(req,res) => {
    })
 });
 
-
-
 //get categories,subcategories,products
 /*app.get('/api/productInfo', async(req,res) => {
     Category.aggregate([
@@ -161,7 +159,6 @@ app.get('/api/getSupermarket', async(req,res) => {
 
 //tokens
 app.post('/tokens', (req, res) => {
-  //Find all users in the database
   User.find({}, (err, users) => {
     if(err) {
       res.status(500).send(err);
@@ -191,14 +188,47 @@ app.post('/tokens', (req, res) => {
       }
   })
 });
-
-//let job = schedule.scheduleJob('* */24 * * *', function(){
- /* axios.post('/tokens').then(() => {
+const job1 = new cron.CronJob('* */24 * * *', function() {
+  axios.post('/tokens').then(() => {
     console.log('Token distributed successfully')
   }).catch((err) => {
     console.log(err);
   });
-});*/
+}, null, true);
+job1.start();
+
+//reset user score every month
+const resetScore = async () => {
+  await User.updateMany({}, { $set: { totalScore: 0 } });
+}
+// Schedule task to run at the beginning of every month
+const job2 = new cron.CronJob('0 0 1 * *', resetScore, null, true);
+job2.start();
+
+// delete offer after one week or renew for another week
+const handleExpiredOffers = async () => {
+  const currentDate = new Date();
+  const oneWeekAgo = new Date(currentDate);
+  oneWeekAgo.setDate(currentDate.getDate() - 7);
+
+  // Retrieve all offers that were created one week ago or earlier
+  const expiredOffers = await Offer.find({ createdDate: { $lte: oneWeekAgo } });
+
+  //iterate over the expired offers
+  expiredOffers.forEach(async offer => {
+      //if the criteria is true, renew the offer for another week
+      if(offer.criteria) {
+          await Offer.findByIdAndUpdate(offer._id, { $set: {createdDate: currentDate}});
+      } else {
+          //otherwise, delete the offer
+          await Offer.findByIdAndDelete(offer._id);
+      }
+  });
+}
+
+// Schedule task to run at specific interval
+const job3 = new cron.CronJob('0 0 * * *', handleExpiredOffers, null, true);
+job3.start();
 
 //for user history of likes,dislikes,offers
 app.get('/api/history', async(req,res) => {

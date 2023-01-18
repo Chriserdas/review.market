@@ -96,7 +96,7 @@ const store = async(req,res)=>{
                     })
                     await User.findOneAndUpdate(
                         {_id: userId},
-                        {$inc: {totalScore: 50}},
+                        {$inc: {score: 50}},
                         {new: true}
                     );
                 }else if(price < avgPriceWeek * 0.2){
@@ -124,7 +124,7 @@ const store = async(req,res)=>{
                     })
                     await User.findOneAndUpdate(
                         {_id: userId},
-                        {$inc: {totalScore: 20}},
+                        {$inc: {score: 20}},
                         {new: true}
                     );
                 }
@@ -183,7 +183,7 @@ const store = async(req,res)=>{
                 })
                 await User.findOneAndUpdate(
                     {_id: userId},
-                    {$inc: {totalScore: 50}},
+                    {$inc: {score: 50}},
                     {new: true}
                 );
             }else if(price < avgPriceWeek * 0.2){
@@ -211,7 +211,7 @@ const store = async(req,res)=>{
                 })
                 await User.findOneAndUpdate(
                     {_id: userId},
-                    {$inc: {totalScore: 20}},
+                    {$inc: {score: 20}},
                     {new: true}
                 );
             }
@@ -280,7 +280,7 @@ const likeOffer = async (req, res) => {
         );
         await User.findOneAndUpdate(
             {_id: offer.createdBy},
-            {$inc: {totalScore: -5}},
+            {$inc: {score: -5}},
             {new: true}
         );
     }else if(dislike){
@@ -291,7 +291,7 @@ const likeOffer = async (req, res) => {
         );
         await User.findOneAndUpdate(
             {_id: offer.createdBy},
-            { $inc: {totalScore: 5}},
+            { $inc: {score: 5}},
             {new: true}
         );
     }else{
@@ -302,7 +302,7 @@ const likeOffer = async (req, res) => {
         );
         await User.findOneAndUpdate(
             {_id: offer.createdBy},
-            { $inc: {totalScore: 5}},
+            { $inc: {score: 5}},
             {new: true}
         );
     }
@@ -329,7 +329,7 @@ const dislikeOffer = async (req, res) => {
         );
         await User.findOneAndUpdate(
             {_id: offer.createdBy},
-            {$inc: {totalScore: 1}},
+            {$inc: {score: 1}},
             {new: true}
         );
     }else if(like){
@@ -340,7 +340,7 @@ const dislikeOffer = async (req, res) => {
         );
         await User.findOneAndUpdate(
             {_id: offer.createdBy},
-            {$inc: {totalScore: -1}},
+            {$inc: {score: -1}},
             {new: true}
         );
     }else{
@@ -351,7 +351,7 @@ const dislikeOffer = async (req, res) => {
         );
         await User.findOneAndUpdate(
             {_id: offer.createdBy},
-            {$inc: {totalScore: -1}},
+            {$inc: {score: -1}},
             {new: true}
         );
     }

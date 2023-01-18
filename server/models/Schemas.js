@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     entryDate:{type:Date,default:Date()},
     token:{type:Number, default:0},
     totalScore: {type:Number, default:0},
+    score:{type:Number, default:0},
 });
 
 
