@@ -197,9 +197,9 @@ const job1 = new cron.CronJob('* */24 * * *', function() {
 }, null, true);
 job1.start();
 
-//reset user score every month
+
 const resetScore = async () => {
-  await User.updateMany({}, { $set: { totalScore: 0 } });
+  await User.updateMany({}, { $set: {totalScore: totalScore + score}, $set:{ score: 0 } });
 }
 // Schedule task to run at the beginning of every month
 const job2 = new cron.CronJob('0 0 1 * *', resetScore, null, true);
