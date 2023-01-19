@@ -1,6 +1,7 @@
 import {React, useEffect,useState} from "react";
 import {motion,useAnimation} from "framer-motion";
 import axios from "axios";
+import SupermarketSearch from "./SupermarketSearch";
 
 const SecondNavbar = (props)=>{
 
@@ -218,10 +219,7 @@ const SecondNavbar = (props)=>{
         }
     }
 
-    let showDiv
-    
-    if(show){
-        showDiv = 
+    let showDiv = 
             <div>
                 {isNear===true ? 
                     (
@@ -351,14 +349,14 @@ const SecondNavbar = (props)=>{
                     )
                 }
             </div>
-    }
+    
 
     return (
         <motion.div className="secondNavbar"
             animate={animate}
         >
 
-            {showDiv}
+            {show===true ? showDiv : <SupermarketSearch title="Search Supermarkets"/>}
         </motion.div>
     );
 }

@@ -6,6 +6,7 @@ import MapContainer from './MapContainer';
 import NavbarContext from './NavbarContext';
 import ShopClickedContext from './ShopClickedContext';
 import SupermarketContext from './SupermarketContext';
+import SupermarketsCon from './SupermarketsCon';
 
 
 function UserHome() {
@@ -14,6 +15,8 @@ function UserHome() {
         show:false,
         data:null
     });
+
+    const [supermarkets,setSupermarkets] = useState(null);
 
     const [clickedSupermarket,setClickedSupermarket] = useState({
                                                                     name:"",
@@ -31,6 +34,7 @@ function UserHome() {
 
 
     return (
+        <SupermarketsCon.Provider value={{supermarkets,setSupermarkets}}>
         <SupermarketContext.Provider value={{clickedSupermarket,setClickedSupermarket}}>
         <ShopClickedContext.Provider value = {{showProduct,setShowProduct}}>
         <NavbarContext.Provider  value ={{isClicked,setIsClicked}}>
@@ -45,6 +49,7 @@ function UserHome() {
         </NavbarContext.Provider>
         </ShopClickedContext.Provider>
         </SupermarketContext.Provider>
+        </SupermarketsCon.Provider>
     );
 }
 
