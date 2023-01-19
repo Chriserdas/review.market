@@ -138,28 +138,24 @@ app.get('/api/getSupermarket', async(req,res) => {
 });
 
 //get categories,subcategories,products
-/*app.get('/api/productInfo', async(req,res) => {
+/*
+app.get('/api/productInfo', async(req,res) => {
     Category.aggregate([
-        /*{
+        {
         $lookup:
             {
             from: "products",
-            localField: "id",
-            foreignField: "category",
+            localField: "subcategories.uuid",
+            foreignField: "subcategory",
             as: "products"
             }
         },
-        //{ $project: {"name":1, "id":1}}
+        { $project: {"name":1, "subcategories.name":1, "products.name":1}}
 
     ]).then((result)=>{
         res.send(result);
     })
 });*/
-
-
-const resetScore = async () => {
-  await User.updateMany({}, { $set: {totalScore: totalScore + score}, $set:{ score: 0 } });
-}
 
 
 //for user history of likes,dislikes,offers

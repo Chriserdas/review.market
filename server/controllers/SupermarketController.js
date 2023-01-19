@@ -103,7 +103,29 @@ const destroy = (req,res)=>{
     })
 };
 
+//search supermarkets for control search
+const search= (req,res)=> {
+    let supermarketString = req.body.supermarketString
+    Supermarket.aggregate([
+        {
+            $match: { name: { $regex: `^${supermarketString}`, $options: 'i' } }
+        },
+        {
+            $project: { 
+                name:1,
+                _id:1
+            }
+        }
+    ]).then(response=>{
+        res.json(response)
+    }).catch(error => {
+        res.json({
+            message:'An error occured!'
+        })
+    })
+};
 
 
 
-module.exports = {show,store, update, destroy};
+
+module.exports = {show,store, update, destroy, search};
