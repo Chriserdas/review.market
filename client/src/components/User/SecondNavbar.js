@@ -1,4 +1,4 @@
-import {React, useEffect,useState} from "react";
+import {React, useContext, useEffect,useState} from "react";
 import {motion,useAnimation} from "framer-motion";
 import axios from "axios";
 import SupermarketSearch from "./SupermarketSearch";
@@ -43,6 +43,7 @@ const SecondNavbar = (props)=>{
     
     const [createOffer,setCreateOffer] = useState(false);
     const [showSearchResult,setShowSearchResult] = useState(false);
+    const clickedSupermarket = props.getSupermarket;
     useEffect(()=>{
         if(show){
             
@@ -71,7 +72,7 @@ const SecondNavbar = (props)=>{
         setShowSearchResult(false);
         setSearchValue("");
         setCreateOffer(false);
-    },[props.supermarket_name])
+    },[clickedSupermarket.name])
 
     const handleCategoryClick = (result) => {
         setClickCategory(false);
@@ -191,7 +192,7 @@ const SecondNavbar = (props)=>{
                                                             stock:stock,
                                                             price:priceValue,
                                                             productId:product.id,
-                                                            supermarketId:props.supermarket_id
+                                                            supermarketId:clickedSupermarket.id
                                                         })
             .then(response=>{
                 window.location = "/UserHome";
@@ -307,7 +308,7 @@ const SecondNavbar = (props)=>{
                             </div>
                             <div className="search_product">
                                 <div className="createOffer_txt">Create an Offer</div>
-                                <div className="supermarketClicked">{props.supermarket_name}</div>
+                                <div className="supermarketClicked">{clickedSupermarket.name}</div>
                                 <div className="createOffer_search_container">
                                     <div className="createOffer_search">
                                         <input
