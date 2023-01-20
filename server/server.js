@@ -157,7 +157,6 @@ app.get('/api/productInfo', async(req,res) => {
     })
 });*/
 
-
 //for user history of likes,dislikes,offers
 app.get('/api/history', async(req,res) => {
   User.aggregate([
@@ -186,11 +185,64 @@ app.get('/api/history', async(req,res) => {
       }
     },
   
-    { $project: {"_id":1, "username":1 ,"offerLiked._id":1, "offerDisliked._id":1, "uploadedOffers._id":1} }
+    { $project: {"_id":1, "username":1 , "totalScore":1, "score":1 ,"token":1, "offerLiked._id":1, "offerDisliked._id":1, "uploadedOffers._id":1} }
    ]).then((result)=>{
         res.send(result);
    })
 });
+
+
+//tokens
+const userTokens = async () => {
+    User.find({}, (err, users) => {
+        if(err) {
+          res.status(500).send(err);
+        } else {
+           let firstDay = new Date();
+           if(firstDay.getDate() === 1) {
+            //for each user give 100 tokens
+            users.forEach((user) => {
+                if(!user.isAdmin){
+                    user.token += 100;
+                    user.save();
+                }
+            });
+           }
+           let date = new Date();
+           let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+              if(date.getDate() === lastDay.getDate()) {
+                if(!users.isAdmin){
+                    let totalTokens = 0; //users.length*100
+                    let totalscore = 0; //the sum of all users score
+                    let tokens = 0; //tokens are the 80% of totalTokens
+                    User.find({}, (err, documents) => {
+                        if (err) throw err;
+                        documents.forEach((doc) => {
+                            if(!doc.isAdmin){
+                                totalTokens += 100 
+                                totalscore += doc.score;
+                            }
+                          });
+                        documents.forEach((user) => {
+                        let userScore = user.score //the score of each user
+                        let tokens = totalTokens * 0.8;
+                        user.token += (tokens * userScore) / totalscore;
+                        user.token = Math.round(user.token);
+                        user.save();
+                        });
+                    });
+                }
+                }
+          }
+      })
+  }
+
+// Schedule task to run every 24hours
+const job3 = new cron.CronJob('* */24 * * *', userTokens, null, true);
+job3.start();
+
+
+
 
 app.get("/", (req, res) => {
     res.send("Server is ready");
