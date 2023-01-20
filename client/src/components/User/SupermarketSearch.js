@@ -13,7 +13,8 @@ const SupermarketSearch = (props) => {
         setSearchValue(event.target.value);
         if(event.target.value !== ""){
             setShowSearchResult(true);
-            axios.post('http://localhost:5000/api/supermarket/search')
+            console.log(event.target.value);
+            axios.post('http://localhost:5000/api/supermarket/search',{supermarketString: event.target.value})
             .then(response=>{
                 console.log(response);
             })

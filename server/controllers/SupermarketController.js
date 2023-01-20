@@ -91,16 +91,17 @@ const destroy = (req,res)=>{
 //search supermarkets for control search
 const search= (req,res)=> {
     let supermarketString = req.body.supermarketString
+    console.log(supermarketString);
     Supermarket.aggregate([
         {
-            $match: { name: { $regex: `^${supermarketString}`, $options: 'i' } }
+            $match: { properties.name: { $regex: `^${supermarketString}`, $options: 'i' } }
         },
-        {
+        /*{
             $project: { 
                 name:1,
                 _id:1
             }
-        }
+        }*/
     ]).then(response=>{
         res.json(response)
     }).catch(error => {
