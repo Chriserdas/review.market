@@ -192,7 +192,6 @@ app.get('/api/history', async(req,res) => {
    })
 });
 
-
 //tokens
 const userTokens = async () => {
     User.find({}, (err, users) => {

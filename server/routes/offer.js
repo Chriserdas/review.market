@@ -3,8 +3,8 @@ const router = express.Router();
 
 const OfferController = require('../controllers/OfferController');
 
-//call localhost:5000/api/offer
-router.get('/', OfferController.show);
+//call localhost:5000/api/offer //this is to get supermarkets by category selected
+router.post('/', OfferController.show);
 //call localhost:5000/api/offer/store
 router.post('/store', OfferController.store)
 //call localhost:5000/api/offer/delete
