@@ -81,7 +81,7 @@ export default function MapCurrentLocation(props) {
                                     super_name:result.supermarkets[0].properties.name || result.supermarkets[0].properties.shop,
                                     isNear:true,//currentLocation.distanceTo(result.supermarkets[0].geometry.coordinates.reverse()) <50 ? true : false,
                                     supermarket_id:result.supermarkets[0]._id
-                                })
+                                });
                                 
                             },
                         }}
@@ -100,10 +100,20 @@ export default function MapCurrentLocation(props) {
                 (
                     supermarkets.map(supermarket=>(
                         <Marker
-                            key = {supermarkets._id}
+                            key={supermarket._id}
                             position={supermarket.geometry.coordinates.reverse()}
                             icon={supermarketIcon}
+                            eventHandlers={{
+                                click:(e)=>{
 
+                                    setClickedSupermarket({
+                                        clicked:true,
+                                        name:supermarket.properties.name || supermarket.properties.shop,
+                                        id:supermarket._id
+                                    });
+                                }
+                            }}
+                                
                         >
                             <Tooltip>
                                 {supermarket.properties.name || supermarket.properties.shop} 
