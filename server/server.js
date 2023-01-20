@@ -192,7 +192,7 @@ app.get('/api/history', async(req,res) => {
    })
 });
 
-//tokens
+//tokens and reset score
 const userTokens = async () => {
     User.find({}, (err, users) => {
         if(err) {
@@ -203,6 +203,8 @@ const userTokens = async () => {
             //for each user give 100 tokens
             users.forEach((user) => {
                     user.token += 100;
+                    user.totalScore += user.score //keep track of totalScore
+                    user.score = 0; //reset score
                     user.save();
             });
            }
@@ -230,10 +232,35 @@ const userTokens = async () => {
       }
   })
 }
-// Schedule task to run every 24hours
-const job3 = new cron.CronJob('* */24 * * *', userTokens, null, true);
-job3.start();
+// Schedule to run every 24hours
+const job1 = new cron.CronJob('* */24 * * *', userTokens, null, true);
+job1.start();
 
+
+// delete offer after one week or renew for another week
+const handleExpiredOffers = async () => {
+  const currentDate = new Date();
+  const oneWeekAgo = new Date(currentDate);
+  oneWeekAgo.setDate(currentDate.getDate() - 7);
+
+  // Retrieve all offers that were created one week ago or earlier
+  const expiredOffers = await Offer.find({ createdDate: { $lte: oneWeekAgo } });
+
+  //iterate over the expired offers
+  expiredOffers.forEach(async offer => {
+      //if the criteria is true, renew the offer for another week
+      if(offer.criteria) {
+          await Offer.findByIdAndUpdate(offer._id, { $set: {createdDate: currentDate}});
+      } else {
+          //otherwise, delete the offer
+          await Offer.findByIdAndDelete(offer._id);
+      }
+  });
+}
+
+// Schedule to run every 7 days
+const job3 = new cron.CronJob('* * */7 * *', handleExpiredOffers, null, true);
+job3.start();
 
 app.get("/", (req, res) => {
     res.send("Server is ready");
