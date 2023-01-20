@@ -17,6 +17,7 @@ const products = require('./data/products.js');
 const categories = require('./data/categories.js');
 const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
+const { use } = require("./routes/users");
 
 
 
@@ -202,46 +203,37 @@ const userTokens = async () => {
            if(firstDay.getDate() === 1) {
             //for each user give 100 tokens
             users.forEach((user) => {
-                if(!user.isAdmin){
                     user.token += 100;
                     user.save();
-                }
             });
            }
            let date = new Date();
            let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-              if(date.getDate() === lastDay.getDate()) {
-                if(!users.isAdmin){
-                    let totalTokens = 0; //users.length*100
-                    let totalscore = 0; //the sum of all users score
-                    let tokens = 0; //tokens are the 80% of totalTokens
-                    User.find({}, (err, documents) => {
-                        if (err) throw err;
-                        documents.forEach((doc) => {
-                            if(!doc.isAdmin){
-                                totalTokens += 100 
-                                totalscore += doc.score;
-                            }
-                          });
-                        documents.forEach((user) => {
-                        let userScore = user.score //the score of each user
-                        let tokens = totalTokens * 0.8;
-                        user.token += (tokens * userScore) / totalscore;
-                        user.token = Math.round(user.token);
-                        user.save();
-                        });
-                    });
-                }
-                }
-          }
-      })
-  }
-
+           if(date.getDate() === lastDay.getDate()) {
+                let totalTokens = 0; //users.length*100
+                let totalscore = 0; //the sum of all users score
+                let tokens = 0; //tokens are the 80% of totalTokens
+                users.forEach((user)=> {
+                  totalTokens += 100;
+                  totalscore+= user.score
+                })
+                users.forEach((user)=> {
+                  let userScore = user.score
+                  tokens = totalTokens * 0.8;
+                  user.token += (tokens * userScore) / totalscore;
+                  user.token = Math.round(user.token);
+                  user.save();
+                })
+                //console.log(totalTokens)
+                //console.log(totalscore)
+                //console.log(tokens)
+            }
+      }
+  })
+}
 // Schedule task to run every 24hours
 const job3 = new cron.CronJob('* */24 * * *', userTokens, null, true);
 job3.start();
-
-
 
 
 app.get("/", (req, res) => {
