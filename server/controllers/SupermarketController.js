@@ -94,7 +94,7 @@ const search= (req,res)=> {
     console.log(supermarketString);
     Supermarket.aggregate([
         {
-            $match: { properties.name: { $regex: `^${supermarketString}`, $options: 'i' } }
+            $match: { "properties.name": { $regex: `^${supermarketString}`, $options: 'i' }  }
         },
         /*{
             $project: { 
