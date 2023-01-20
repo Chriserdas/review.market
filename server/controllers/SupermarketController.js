@@ -93,7 +93,7 @@ const search= (req,res)=> {
     let supermarketString = req.body.supermarketString
     Supermarket.aggregate([
         {
-            $match: { name: { $regex: `^${supermarketString}`, $options: 'i' } }
+            $match: { "properties.name": { $regex: `^${supermarketString}`, $options: 'i' }  }
         },
         {
             $project: { 
