@@ -36,22 +36,6 @@ const calculateAvgPriceWeek = async (productId) => {
     return avgPriceWeek;
 }
 
-
-//show the list of offers
-const show = (req,res)=> {
-    Offer.find()
-    .then(response=>{
-        res.json({
-            response
-        })
-    })
-    .catch(error => {
-        res.json({
-            message:'An error occured!'
-        })
-    })
-};
-
 //add offer
 const store = async(req,res)=>{
     let userId = req.body.userId
@@ -372,6 +356,40 @@ const stock = async (req, res) => {
         { $set: { stock: !offerStock } }, { new: true });
     
     res.json(updatedStock);
+}
+
+//match supermarket which has at least one offer for the selected category
+const show = async (req, res) => {
+    let categoryId = req.body.categoryId
+
+    Offer.aggregate([
+        {
+            $lookup: {
+                from: "products",
+                localField: "products",
+                foreignField: "_id",
+                as: "products"
+            }
+        },
+        {
+            $match: { "products.category": categoryId }
+        },
+        {
+            $lookup: {
+                from: "supermarkets",
+                localField: "supermarkets",
+                foreignField: "_id",
+                as: "supermarkets"
+            }   
+        },
+        {$project: {"price":1, "stock":1, "createdBy":1, "createdDate":1, "likes":1, "dislikes":1, "supermarkets._id":1,"supermarkets.properties.name":1, "supermarkets.properties.shop":1, "supermarkets.geometry.coordinates":1, "products._id":1 ,"products.name":1 } },
+    ]).then(response=>{
+        res.json(response)
+    }).catch(error => {
+        res.json({
+            message:'An error occured!'
+        })
+    })
 }
 
 module.exports = {show,store,destroy, likeOffer, dislikeOffer, stock};

@@ -17,6 +17,7 @@ const products = require('./data/products.js');
 const categories = require('./data/categories.js');
 const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
+const { use } = require("./routes/users");
 
 
 
@@ -157,7 +158,6 @@ app.get('/api/productInfo', async(req,res) => {
     })
 });*/
 
-
 //for user history of likes,dislikes,offers
 app.get('/api/history', async(req,res) => {
   User.aggregate([
@@ -186,11 +186,81 @@ app.get('/api/history', async(req,res) => {
       }
     },
   
-    { $project: {"_id":1, "username":1 ,"offerLiked._id":1, "offerDisliked._id":1, "uploadedOffers._id":1} }
+    { $project: {"_id":1, "username":1 , "totalScore":1, "score":1 ,"token":1, "offerLiked._id":1, "offerDisliked._id":1, "uploadedOffers._id":1} }
    ]).then((result)=>{
         res.send(result);
    })
 });
+
+//tokens and reset score
+const userTokens = async () => {
+    User.find({}, (err, users) => {
+        if(err) {
+          res.status(500).send(err);
+        } else {
+           let firstDay = new Date();
+           if(firstDay.getDate() === 1) {
+            //for each user give 100 tokens
+            users.forEach((user) => {
+                    user.token += 100;
+                    user.totalScore += user.score //keep track of totalScore
+                    user.score = 0; //reset score
+                    user.save();
+            });
+           }
+           let date = new Date();
+           let lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+           if(date.getDate() === lastDay.getDate()) {
+                let totalTokens = 0; //users.length*100
+                let totalscore = 0; //the sum of all users score
+                let tokens = 0; //tokens are the 80% of totalTokens
+                users.forEach((user)=> {
+                  totalTokens += 100;
+                  totalscore+= user.score
+                })
+                users.forEach((user)=> {
+                  let userScore = user.score
+                  tokens = totalTokens * 0.8;
+                  user.token += (tokens * userScore) / totalscore;
+                  user.token = Math.round(user.token);
+                  user.save();
+                })
+                //console.log(totalTokens)
+                //console.log(totalscore)
+                //console.log(tokens)
+            }
+      }
+  })
+}
+// Schedule to run every 24hours
+const job1 = new cron.CronJob('* */24 * * *', userTokens, null, true);
+job1.start();
+
+
+// delete offer after one week or renew for another week
+const handleExpiredOffers = async () => {
+  const currentDate = new Date();
+  const oneWeekAgo = new Date(currentDate);
+  oneWeekAgo.setDate(currentDate.getDate() - 7);
+
+  // Retrieve all offers that were created one week ago or earlier
+  const expiredOffers = await Offer.find({ createdDate: { $lte: oneWeekAgo } });
+
+  //iterate over the expired offers
+  expiredOffers.forEach(async offer => {
+      //if the criteria is true, renew the offer for another week
+      if(offer.criteria) {
+          await Offer.findByIdAndUpdate(offer._id, { $set: {createdDate: currentDate}});
+      } else {
+          //otherwise, delete the offer
+          await Offer.findByIdAndDelete(offer._id);
+      }
+  });
+}
+
+// Schedule to run every 7 days
+const job3 = new cron.CronJob('* * */7 * *', handleExpiredOffers, null, true);
+job3.start();
 
 app.get("/", (req, res) => {
     res.send("Server is ready");

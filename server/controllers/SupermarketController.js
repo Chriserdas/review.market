@@ -1,20 +1,5 @@
 const {Supermarket} = require("../models/Schemas");
 
-//show the list of supermarkerts
-const show = (req,res)=> {
-    Supermarket.find()
-    .then(response=>{
-        res.json({
-            response
-        })
-    })
-    .catch(error => {
-        res.json({
-            message:'An error occured!'
-        })
-    })
-};
-
 //add supermarket
 const store = (req,res)=>{
     let supermarketID = req.body.supermarketID
@@ -125,7 +110,4 @@ const search= (req,res)=> {
     })
 };
 
-
-
-
-module.exports = {show,store, update, destroy, search};
+module.exports = {store, update, destroy, search};

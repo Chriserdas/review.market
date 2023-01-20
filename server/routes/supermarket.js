@@ -3,8 +3,6 @@ const router = express.Router();
 
 const SupermarketController = require('../controllers/SupermarketController');
 
-//call localhost:5000/api/supermarket
-router.get('/', SupermarketController.show);
 //call localhost:5000/api/supermarket/store
 router.post('/store', SupermarketController.store);
 //call localhost:5000/api/supermarket/update
