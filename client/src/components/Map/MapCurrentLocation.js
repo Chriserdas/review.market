@@ -4,11 +4,16 @@ import L from 'leaflet'
 import axios from "axios";
 import ShopClickedContext from "../User/ShopClickedContext";
 import { LatLng } from 'leaflet';
+import SupermarketContext from "../User/SupermarketContext";
+import SupermarketsCon from "../User/SupermarketsCon";
 export default function MapCurrentLocation(props) {
 
     const [data,setData] = useState(null);
     const {showProduct,setShowProduct} = useContext(ShopClickedContext);
     const [currentLocation,setCurrentLocation] = useState(null);
+
+    const {clickedSupermarket,setClickedSupermarket} = useContext(SupermarketContext);
+    const {supermarkets,setSupermarkets} = useContext(SupermarketsCon);
     useEffect(() => {
         if(props.isClicked === "Current Location"){
             //setShowProduct({show:false})
@@ -19,7 +24,10 @@ export default function MapCurrentLocation(props) {
 
         if(props.isClicked === "Search"){
             setShowProduct({show:false})
-            axios.get()
+            axios.get('http://localhost:5000/api/getSupermarket')
+            .then((response) => {
+                setSupermarkets(response.data);
+            })
         }
     },[props.isClicked]);
 
@@ -35,7 +43,11 @@ export default function MapCurrentLocation(props) {
         iconSize: [55,55],
     });
 
-
+    const supermarketIcon = new L.icon({
+        iconUrl: require('./../../images/default_marker.png'),
+        iconSize: [40,40],
+    })
+    
     return (
         
         <MapContainer
@@ -52,7 +64,7 @@ export default function MapCurrentLocation(props) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             
-            <LocationMarker />
+            <LocationMarker/>
 
             {data !== null ? (
                 data.map(result=>(
@@ -83,16 +95,38 @@ export default function MapCurrentLocation(props) {
 
                 ))
             ):""}
+
+            {supermarkets!==null && props.isClicked === "Search" ?
+                (
+                    supermarkets.map(supermarket=>(
+                        <Marker
+                            key = {supermarkets._id}
+                            position={supermarket.geometry.coordinates.reverse()}
+                            icon={supermarketIcon}
+
+                        >
+                            <Tooltip>
+                                {supermarket.properties.name || supermarket.properties.shop} 
+                            </Tooltip>
+                        </Marker>
+                    ))
+                )
+                :""
+            }
         </MapContainer>
     );
 }
 
 
-function LocationMarker() {
+function LocationMarker(props) {
   const [position, setPosition] = useState(null);
 
   const map = useMap();
 
+    const currentLocationIcon = new L.icon({
+        iconUrl:require('./../../images/current_location_marker.png'),
+        iconSize: [40,40],
+    })
   useEffect(() => {
     map.locate().on("locationfound", function (e) {
       setPosition(e.latlng);
@@ -101,7 +135,7 @@ function LocationMarker() {
   }, [map]);
 
   return position === null ? null : (
-    <Marker position={position}>
+    <Marker icon={currentLocationIcon} position={position}>
       <Tooltip>
         Your current location. <br />
       </Tooltip>

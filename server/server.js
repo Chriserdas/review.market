@@ -131,7 +131,7 @@ app.get('/api/getSupermarket', async(req,res) => {
           }
       }
     },
-    { $project: {"properties.name":1, "geometry.coordinates":1 } }
+    {$project: {"properties.name":1, "properties.shop":1, "geometry.coordinates":1 } }
    ]).then((result)=>{
         res.send(result);
    })
