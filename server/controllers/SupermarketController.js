@@ -96,8 +96,12 @@ const search= (req,res)=> {
             $match: { "properties.name": { $regex: `^${supermarketString}`, $options: 'i' }  }
         },
         {
+            $match: { "properties.shop": { $regex: `^${supermarketString}`, $options: 'i' }  }
+        },
+        {
             $project: { 
-                name:1,
+                "properties.name":1,
+                "properties.shop":1,
                 _id:1
             }
         }
