@@ -325,12 +325,12 @@ const SecondNavbar = (props)=>{
                                             (
                                                 products.map(product=>(
 
-                                                <div key={product._id} className="category" onClick={()=>{
-                                                    setProduct({name:product.name, id:product._id})
-                                                    setCreateOffer(true);
-                                                }}>
-                                                    {product.name} 
-                                                </div>
+                                                    <div key={product._id} className="category" onClick={()=>{
+                                                        setProduct({name:product.name, id:product._id})
+                                                        setCreateOffer(true);
+                                                    }}>
+                                                        {product.name} 
+                                                    </div>
                                             
                                                 ))
                                             ) 
@@ -357,7 +357,7 @@ const SecondNavbar = (props)=>{
             animate={animate}
         >
 
-            {show===true ? showDiv : <SupermarketSearch title="Search Supermarkets"/>}
+            {show===true ? showDiv : <SupermarketSearch title="Search Supermarkets" setSupermarkets = {props.setSupermarkets} getOffers={props.getOffers} setOffers={props.setOffers}/>}
         </motion.div>
     );
 }

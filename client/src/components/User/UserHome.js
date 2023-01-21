@@ -16,6 +16,7 @@ function UserHome() {
         data:null
     });
 
+    const [offers,setOffers] = useState(null);
     const [supermarkets,setSupermarkets] = useState(null);
 
     const [clickedSupermarket,setClickedSupermarket] = useState({
@@ -32,6 +33,7 @@ function UserHome() {
                                     id:showProduct.supermarket_id
                                 })
         }
+        console.log(showProduct)
     },[showProduct])
 
 
@@ -42,8 +44,8 @@ function UserHome() {
         <NavbarContext.Provider  value ={{isClicked,setIsClicked}}>
             <div className = "mainContent_container">
                 <Navbar/>
-                <SecondNavbar productInfo={showProduct} isClicked={isClicked} setClicked={setIsClicked}  getSupermarket={clickedSupermarket} setSupermarkets={setSupermarkets}/>
-                <MapContainer isClicked={isClicked} setClicked={setIsClicked} productInfo={showProduct} setShowProduct={setShowProduct} />
+                <SecondNavbar productInfo={showProduct} isClicked={isClicked} setClicked={setIsClicked}  getSupermarket={clickedSupermarket} setSupermarkets={setSupermarkets} getOffers ={offers} setOffers={setOffers}/>
+                <MapContainer isClicked={isClicked} setClicked={setIsClicked} productInfo={showProduct} setShowProduct={setShowProduct} getOffers={offers} setOffers={setOffers}/>
             </div>
             
         </NavbarContext.Provider>

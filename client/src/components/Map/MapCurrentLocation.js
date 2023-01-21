@@ -8,7 +8,8 @@ import SupermarketContext from "../User/SupermarketContext";
 import SupermarketsCon from "../User/SupermarketsCon";
 export default function MapCurrentLocation(props) {
 
-    const [data,setData] = useState(null);
+    const setOffers = props.setOffers;
+    const getOffers = props.getOffers;
     const {showProduct,setShowProduct} = useContext(ShopClickedContext);
     const [currentLocation,setCurrentLocation] = useState(null);
 
@@ -18,7 +19,8 @@ export default function MapCurrentLocation(props) {
         if(props.isClicked === "Current Location"){
             //setShowProduct({show:false})
             axios.get("http://localhost:5000/api/getCurrentLocation").then((response) => {
-                setData(response.data);
+                setOffers(response.data);
+                console.log(response.data);
             });
         }
 
@@ -47,6 +49,19 @@ export default function MapCurrentLocation(props) {
         iconUrl: require('./../../images/default_marker.png'),
         iconSize: [40,40],
     })
+
+    const handleOfferSupermarketClick = (supermarket_id) => {
+        axios.post('http://localhost:5000/api/getOffers',{supermarket_id:supermarket_id})
+        .then(response=>{
+            setShowProduct({
+                show:true,
+                offers:response.data,
+                super_name:response.data[0].supermarkets[0].properties.name || response.data[0].supermarkets[0].properties.shop,
+                isNear:true,//currentLocation.distanceTo(response.data.supermarkets[0].geometry.coordinates.reverse()) <50 ? true : false,
+                supermarket_id:supermarket_id
+            });
+        });
+    }
     
     return (
         
@@ -66,29 +81,21 @@ export default function MapCurrentLocation(props) {
             
             <LocationMarker/>
 
-            {data !== null ? (
-                data.map(result=>(
+            {getOffers !== null ? (
+                getOffers.map(result=>(
                     <Marker 
                         key={result._id}
-                        position={result.supermarkets[0].geometry.coordinates.reverse()} 
+                        position={result.geometry.coordinates.reverse()} 
                         icon={offerIcon}
                         eventHandlers={{
                             click: (e) => {
-                                
-                                setShowProduct({
-                                    show:true,
-                                    offers:data.filter(offer=> offer.supermarkets[0]._id === result.supermarkets[0]._id),
-                                    super_name:result.supermarkets[0].properties.name || result.supermarkets[0].properties.shop,
-                                    isNear:true,//currentLocation.distanceTo(result.supermarkets[0].geometry.coordinates.reverse()) <50 ? true : false,
-                                    supermarket_id:result.supermarkets[0]._id
-                                });
-                                
+                                handleOfferSupermarketClick(result._id)
                             },
                         }}
                     >
                     
                         <Tooltip>
-                            {result.supermarkets[0].properties.name || result.properties.shop}
+                            {result.properties.name || result.properties.shop}
                         </Tooltip>
                         
                     </Marker>

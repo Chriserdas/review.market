@@ -82,8 +82,14 @@ app.get('/offer', async(req,res) => {
 });
 
 //supermarkets and products with offers
-app.get('/api/getCurrentLocation', async(req,res) => {
-  Offer.aggregate([
+app.post('/api/getOffers', async(req,res) => {
+    const supermarket_id = req.body.supermarket_id;
+    Offer.aggregate([
+    {
+        $match: {
+            "supermarkets": mongoose.Types.ObjectId(supermarket_id)
+        }
+    },
     {
         $lookup:{
             from:"supermarkets",
@@ -92,6 +98,7 @@ app.get('/api/getCurrentLocation', async(req,res) => {
             as:"supermarkets"
         }
     },
+    
     {
         $lookup:{
             from:"products",
@@ -108,10 +115,41 @@ app.get('/api/getCurrentLocation', async(req,res) => {
           as:"user"
       }
     },
-    //{ $project: {"offer.likes":1, "offer.stock":1, "offer.dislikes":1, "offer.price":1,"offer._id":1, "products._id":1, "products.name":1,"products.price":1 , "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1,"user.username":1, "user._id":1 } }
+    //{ $project: {"offers.likes":1, "offers.stock":1, "offers.dislikes":1, "offers.price":1,"offers._id":1, "products._id":1, "products.name":1,"products.price":1 , "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1,"user.username":1, "user._id":1 } }
    ]).then((result)=>{
         res.send(result);
    })
+});
+
+app.get('/api/getCurrentLocation', async(req, res) => {
+    Offer.aggregate([
+        {
+            "$lookup": {
+                "from": "supermarkets",
+                "localField": "supermarkets",
+                "foreignField": "_id",
+                "as": "supermarkets"
+            }
+        },
+        {
+            "$unwind": "$supermarkets"
+        },
+        {
+            "$group": {
+                "_id": "$supermarkets._id",
+                "supermarkets": { "$first": "$supermarkets" }
+            }
+        },
+        {
+            "$replaceRoot": {
+                "newRoot": "$supermarkets"
+            }
+        }
+    ])
+    .then(result => {
+        res.json(result)
+    });
+    
 });
 
 //supermarket without offers

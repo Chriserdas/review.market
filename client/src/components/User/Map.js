@@ -36,7 +36,7 @@ const Map = (props)=>{
         <motion.div className="map"
             animate={animate}
         >
-            {<MapCurrentLocation isClicked={props.isClicked}/>}
+            {<MapCurrentLocation isClicked={props.isClicked} getOffers={props.getOffers} setOffers={props.setOffers} />}
         </motion.div>
     );
 }
