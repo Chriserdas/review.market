@@ -91,17 +91,24 @@ const destroy = (req,res)=>{
 //search supermarkets for control search
 const search= (req,res)=> {
     let supermarketString = req.body.supermarketString
-    console.log(supermarketString);
     Supermarket.aggregate([
         {
-            $match: { "properties.name": { $regex: `^${supermarketString}`, $options: 'i' }  }
-        },
-        /*{
-            $project: { 
-                name:1,
-                _id:1
+            $match: { 
+                'properties.name': { $regex: `^${supermarketString}`, $options: 'i' }
             }
-        }*/
+        },
+        {
+            $group: {
+                _id: null,
+                uniqueName: { $addToSet: "$properties.name" },
+            }
+        },
+        {
+            $project:{
+                _id:0
+            }
+        }
+       
     ]).then(response=>{
         res.json(response)
     }).catch(error => {
@@ -111,4 +118,38 @@ const search= (req,res)=> {
     })
 };
 
-module.exports = {store, update, destroy, search};
+const getWithName = (request,response) => {
+    let super_name = request.body.super_name;
+
+    Supermarket.aggregate([
+        {
+            "$lookup": {
+                "from": "offers",
+                "localField": "_id",
+                "foreignField": "supermarkets",
+                "as": "supermarket_offers"
+            }
+        },
+        {
+            "$match": {
+                "properties.name": super_name
+            }
+        },
+        {
+            "$group": {
+                "_id": {
+                    "hasOffers": { "$cond": [{ "$ne": [{ "$size": "$supermarket_offers" }, 0] }, true, false] },
+                },
+                "supermarkets": { "$push": "$$ROOT" }
+            }
+        }
+    ])
+    .then(result => {
+        let supermarkets_offers = result.filter(el => el._id.hasOffers === true)
+        let supermarkets_no_offers = result.filter(el => el._id.hasOffers === false)
+        response.json({offers:supermarkets_offers, no_offers:supermarkets_no_offers})
+    });
+    
+}
+
+module.exports = {store, update, destroy, search,getWithName};
