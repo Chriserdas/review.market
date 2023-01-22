@@ -740,9 +740,41 @@
     font-family: Manrope-Bold;
     position: relative;
     top:40px;
-    left: 10px;
-    font-size: 20px;;
+    display:flex;
+    justify-content: flex-start;
+    left: 0px;
+    font-size: 20px;
+    align-items: center;
     color:#949494;
+}
+
+.superName{
+    font-family: Manrope-Bold;
+    color:#949494;
+    flex-grow:2;
+}
+
+.goBackToSearch{
+    position: relative;
+    font-size:15px;
+    color: white;
+    background-color: #0A0A0A;
+    padding:7px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-family: Manrope-Light;
+    transition: all 0.1s ease;
+    overflow: hidden;
+    height:25px;
+    width: 120px;
+}
+
+.goBackToSearch:hover{
+    background-color: #161616;
+    cursor: pointer;
 }
 
 .createOffer_search{
@@ -789,7 +821,7 @@
     flex-direction:column;
     align-items: center;
     justify-content: flex-start;
-    left: 20px;;
+    left: 20px;
     background-color: #141414;
     width: 90%;
     max-height: 200px;
@@ -813,4 +845,28 @@
 .search_container{
     height:100%;
     width:100%;
+}
+
+.categories_container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top:10%;
+    box-shadow: 0px 1px 15px 2px rgba(80, 79, 79, 0.75) inset;
+}
+
+.categories_container div{
+    color:white;
+    padding:10px;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-family: Manrope-Bold;
+    transition: all 0.2s ease;
+}
+
+.cat:hover{
+    cursor: pointer;
 }

@@ -30,10 +30,10 @@ function UserHome() {
             setClickedSupermarket({
                                     clicked:false,
                                     name:showProduct.super_name,
-                                    id:showProduct.supermarket_id
+                                    id:showProduct.supermarket_id,
+                                    isNear:showProduct.isNear
                                 })
         }
-        console.log(showProduct)
     },[showProduct])
 
 
@@ -44,7 +44,7 @@ function UserHome() {
         <NavbarContext.Provider  value ={{isClicked,setIsClicked}}>
             <div className = "mainContent_container">
                 <Navbar/>
-                <SecondNavbar productInfo={showProduct} isClicked={isClicked} setClicked={setIsClicked}  getSupermarket={clickedSupermarket} setSupermarkets={setSupermarkets} getOffers ={offers} setOffers={setOffers}/>
+                <SecondNavbar productInfo={showProduct} isClicked={isClicked}  setClicked={setIsClicked}  getSupermarket={clickedSupermarket} setClickedSupermarket={setClickedSupermarket} setSupermarkets={setSupermarkets} getOffers ={offers} setOffers={setOffers}/>
                 <MapContainer isClicked={isClicked} setClicked={setIsClicked} productInfo={showProduct} setShowProduct={setShowProduct} getOffers={offers} setOffers={setOffers}/>
             </div>
             

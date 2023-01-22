@@ -17,20 +17,28 @@ export default function MapCurrentLocation(props) {
     const {supermarkets,setSupermarkets} = useContext(SupermarketsCon);
     useEffect(() => {
         if(props.isClicked === "Current Location"){
-            //setShowProduct({show:false})
             axios.get("http://localhost:5000/api/getCurrentLocation").then((response) => {
                 setOffers(response.data);
-                console.log(response.data);
             });
         }
 
         if(props.isClicked === "Search"){
+            setClickedSupermarket({clicked:false})
             setShowProduct({show:false})
             axios.get('http://localhost:5000/api/getSupermarket')
             .then((response) => {
                 setSupermarkets(response.data);
             })
         }
+
+        if( props.isClicked === "Categories"){
+            setClickedSupermarket({clicked:false})
+            setShowProduct({show:false});
+            axios.get("http://localhost:5000/api/getCurrentLocation").then((response) => {
+                setOffers(response.data);
+            });
+        }
+
     },[props.isClicked]);
 
     useEffect(() => {
@@ -50,14 +58,14 @@ export default function MapCurrentLocation(props) {
         iconSize: [40,40],
     })
 
-    const handleOfferSupermarketClick = (supermarket_id) => {
+    const handleOfferSupermarketClick = (supermarket_id,coordinates) => {
         axios.post('http://localhost:5000/api/getOffers',{supermarket_id:supermarket_id})
         .then(response=>{
             setShowProduct({
                 show:true,
                 offers:response.data,
                 super_name:response.data[0].supermarkets[0].properties.name || response.data[0].supermarkets[0].properties.shop,
-                isNear:true,//currentLocation.distanceTo(response.data.supermarkets[0].geometry.coordinates.reverse()) <50 ? true : false,
+                isNear:true,//currentLocation.distanceTo(coordinates) <50 ? true : false,
                 supermarket_id:supermarket_id
             });
         });
@@ -89,7 +97,7 @@ export default function MapCurrentLocation(props) {
                         icon={offerIcon}
                         eventHandlers={{
                             click: (e) => {
-                                handleOfferSupermarketClick(result._id)
+                                handleOfferSupermarketClick(result._id,result.geometry.coordinates.reverse())
                             },
                         }}
                     >
@@ -116,7 +124,8 @@ export default function MapCurrentLocation(props) {
                                     setClickedSupermarket({
                                         clicked:true,
                                         name:supermarket.properties.name || supermarket.properties.shop,
-                                        id:supermarket._id
+                                        id:supermarket._id,
+                                        isNear:true,//currentLocation.distanceTo(supermarket.geometry.coordinates.reverse()) <50 ? true : false,
                                     });
                                 }
                             }}

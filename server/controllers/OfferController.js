@@ -382,7 +382,17 @@ const show = async (req, res) => {
                 as: "supermarkets"
             }   
         },
-        {$project: {"price":1, "stock":1, "createdBy":1, "createdDate":1, "likes":1, "dislikes":1, "supermarkets._id":1,"supermarkets.properties.name":1, "supermarkets.properties.shop":1, "supermarkets.geometry.coordinates":1, "products._id":1 ,"products.name":1 } },
+        {
+            $unwind: "$supermarkets"
+        },
+        {
+            $group: {
+                _id: "$supermarkets._id",
+                supermarkets: { $first: "$supermarkets" },
+                offers: { $push: "$$ROOT" }
+            }
+        },
+        {$project: { "supermarkets._id":1,"supermarkets.properties.name":1, "supermarkets.properties.shop":1, "supermarkets.geometry.coordinates":1} },
     ]).then(response=>{
         res.json(response)
     }).catch(error => {

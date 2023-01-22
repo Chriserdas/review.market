@@ -25,6 +25,12 @@ const SupermarketSearch = (props) => {
             })
         }
         else {
+            setShowSearchResult(false);
+        }
+    }
+
+    useEffect(()=>{
+        if(searchValue === ""){
             axios.get('http://localhost:5000/api/getSupermarket')
             .then((response) => {
                 setSupermarkets(response.data);
@@ -32,10 +38,8 @@ const SupermarketSearch = (props) => {
                     setOffers(res.data);
                 });
             })
-
-            setShowSearchResult(false);
         }
-    }
+    },[searchValue])
 
     const handleSearchClick = (super_name)=>{
         setSearchValue(super_name);
@@ -50,7 +54,7 @@ const SupermarketSearch = (props) => {
         });
     }
     
-    let search = 
+    let search =
         <>
             <div className="createOffer_txt">{title}</div>
             <div className="createOffer_search">
@@ -79,6 +83,7 @@ const SupermarketSearch = (props) => {
                 }
             </div>
         </>
+        
 
     return (
         <div className="search_container">

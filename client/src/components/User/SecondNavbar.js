@@ -8,7 +8,6 @@ const SecondNavbar = (props)=>{
     const show = props.productInfo.show;
     const isClicked = props.isClicked
     const animate = useAnimation();
-    const isNear = props.productInfo.isNear;
     const userId = JSON.parse(localStorage.getItem("token")).user._id;
 
     const [searchValue,setSearchValue] = useState("");
@@ -44,6 +43,10 @@ const SecondNavbar = (props)=>{
     const [createOffer,setCreateOffer] = useState(false);
     const [showSearchResult,setShowSearchResult] = useState(false);
     const clickedSupermarket = props.getSupermarket;
+    const setClickedSupermarket = props.setClickedSupermarket;
+
+    const [clickCat,setClickCat] = useState(null);
+    const [catHovered,setCatHovered] = useState(null);
     useEffect(()=>{
         if(show){
             
@@ -57,7 +60,7 @@ const SecondNavbar = (props)=>{
             });
         }
 
-        if(isClicked === 'Search'){
+        if(isClicked === 'Search' ||isClicked==='Categories'){
             animate.start({
                 width:"400px",
             });
@@ -220,9 +223,25 @@ const SecondNavbar = (props)=>{
         }
     }
 
+    const handleOfferCategory = (id)=>{
+        setClickCat(id);
+
+        axios.post('http://localhost:5000/api/offer',{categoryId:id})
+        .then(response=>{
+            //props.setOffers(response.data.supermarkets);
+            if(response.data.length === 0){
+                props.setOffers(null);
+            }
+            else{
+                const supermarkets = response.data.map(offer=>offer.supermarkets);
+                props.setOffers(supermarkets)
+            }
+        })
+    }
+
     let showDiv = 
             <div>
-                {isNear===true ? 
+                {clickedSupermarket.isNear===true ? 
                     (
                         <div className="secondNavbar_near">
                             <div className="choose_container">
@@ -308,7 +327,23 @@ const SecondNavbar = (props)=>{
                             </div>
                             <div className="search_product">
                                 <div className="createOffer_txt">Create an Offer</div>
-                                <div className="supermarketClicked">{clickedSupermarket.name}</div>
+                                <div className="supermarketClicked">
+                                    <div className="superName">
+                                        {clickedSupermarket.name}
+                                    </div>
+                                    
+                                    {clickedSupermarket.clicked===true ? 
+                                        (
+                                            <div 
+                                                className="goBackToSearch" 
+                                                onClick={()=>{
+                                                    setClickedSupermarket({clicked:false})
+                                                }}
+                                            >back to search</div>
+                                        )
+                                        :""
+                                    }
+                                </div>
                                 <div className="createOffer_search_container">
                                     <div className="createOffer_search">
                                         <input
@@ -350,14 +385,73 @@ const SecondNavbar = (props)=>{
                     )
                 }
             </div>
+
     
+        let content;
+
+        if(show === true && isClicked === 'Current Location') {
+            content = showDiv;
+        }
+        if(isClicked === 'Search' && clickedSupermarket.clicked ===false){
+            content = 
+                <SupermarketSearch 
+                    title="Search Supermarkets" 
+                    setSupermarkets = {props.setSupermarkets} 
+                    getOffers={props.getOffers} 
+                    setOffers={props.setOffers}
+                    isClicked={isClicked}
+                />
+        }
+        else if(isClicked === 'Categories'){
+            
+            axios.get('http://localhost:5000/categories').then(response =>{ 
+                setCategories(response.data)
+                        
+            })
+
+            content = 
+                <>
+                    <div className="createOffer_txt">Categories</div>
+                    <div className="categories_container">
+                        {categories!==null ? 
+                            (
+                                categories.map(category => (
+                                    <div
+                                        key={category.name}
+                                        className="cat"
+                                        style={{ backgroundColor: clickCat === category.id || catHovered===category.id ? "rgba(80, 79, 79, 0.75)": "transparent"}}
+                                        onMouseEnter={()=>{
+                                            setCatHovered(category.id);
+                                        }}
+                                        onMouseLeave={()=>{
+                                            setCatHovered(null);
+                                        }}
+                                        onClick={()=>{
+                                            handleOfferCategory(category.id)
+                                        }}
+                                    >
+                                        <div>{category.name}</div> 
+                                    </div>
+                                ))
+                                
+                            )
+                            :""
+                        }
+                    </div>
+                </>
+        }
+        else{
+            content = showDiv;
+        }
 
     return (
         <motion.div className="secondNavbar"
             animate={animate}
         >
 
-            {show===true ? showDiv : <SupermarketSearch title="Search Supermarkets" setSupermarkets = {props.setSupermarkets} getOffers={props.getOffers} setOffers={props.setOffers}/>}
+            {/*{show===true ? showDiv : <SupermarketSearch title="Search Supermarkets" setSupermarkets = {props.setSupermarkets} getOffers={props.getOffers} setOffers={props.setOffers}/>}
+            {clickedSupermarket.clicked===true ? showDiv : ""}*/}
+            {content}
         </motion.div>
     );
 }

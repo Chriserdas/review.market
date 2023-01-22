@@ -23,7 +23,7 @@ const Map = (props)=>{
             });
         }
 
-        if(isClicked === 'Search' && !show){
+        if(isClicked === 'Search' && !show || isClicked === 'Categories'){
             animate.start({
                 width: "100%",
                 height:"100%",

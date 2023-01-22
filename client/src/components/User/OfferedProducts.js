@@ -51,7 +51,7 @@ const OfferedProducts = (props) => {
             });
         }
 
-        if(isClicked === 'Search' && !show) {
+        if(isClicked === 'Search' && !show || isClicked === 'Categories') {
             animate.start({
                 display: 'none',
             })
