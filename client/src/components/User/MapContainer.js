@@ -25,7 +25,7 @@ const MapContainer = (props)=>{
             });
         }
 
-        if(props.isClicked ==="Search" ||props.isClicked==='Categories'){
+        if(props.isClicked === "Search" || props.isClicked === 'Categories'){
             animate.start({
                 width:"calc(99vw - 500px)",
                 height:"95%",

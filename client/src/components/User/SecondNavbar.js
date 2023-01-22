@@ -49,18 +49,20 @@ const SecondNavbar = (props)=>{
     const [catHovered,setCatHovered] = useState(null);
     useEffect(()=>{
         if(show){
-            
+            setClickCat(null);
             animate.start({
                 width:"400px",
             });
         }
         else{
+            setClickCat(null);
             animate.start({
                 width:"0px",
             });
         }
 
         if(isClicked === 'Search' ||isClicked==='Categories'){
+            setClickCat(null);
             animate.start({
                 width:"400px",
             });
@@ -405,8 +407,7 @@ const SecondNavbar = (props)=>{
         else if(isClicked === 'Categories'){
             
             axios.get('http://localhost:5000/categories').then(response =>{ 
-                setCategories(response.data)
-                        
+                setCategories(response.data);
             })
 
             content = 
