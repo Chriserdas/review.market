@@ -176,58 +176,78 @@ app.get('/api/getSupermarket', async(req,res) => {
    })
 });
 
-//get categories,subcategories,products
-/*
-app.get('/api/productInfo', async(req,res) => {
-    Category.aggregate([
-        {
-        $lookup:
-            {
-            from: "products",
-            localField: "subcategories.uuid",
-            foreignField: "subcategory",
-            as: "products"
-            }
-        },
-        { $project: {"name":1, "subcategories.name":1, "products.name":1}}
-
-    ]).then((result)=>{
-        res.send(result);
+app.get('/api/history1', async(req,res) => {
+    let userId = req.body.userId
+    User.find({"_id": userId,},{"username":1, "score":1})
+    .then(response=>{
+        res.json(response)
     })
-});*/
+  });
 
 //for user history of likes,dislikes,offers
-app.post('/api/history', async(req,res) => {
-  User.aggregate([
-    {
+app.get('/api/history', async(req,res) => {
+    let userId = req.body.userId
+    User.aggregate([
+        {
+            $match: { "_id": userId }
+        },
+        {
+            $lookup:{
+                from:"offers",
+                localField:"_id",
+                foreignField:"likes",
+                as:"offerLiked"
+            }
+        },
+        {
         $lookup:{
             from:"offers",
             localField:"_id",
-            foreignField:"likes",
-            as:"offerLiked"
+            foreignField:"dislikes",
+            as:"offerDisliked"
         }
-    },
-    {
-      $lookup:{
-          from:"offers",
-          localField:"_id",
-          foreignField:"dislikes",
-          as:"offerDisliked"
-      }
-    },
-    {
-      $lookup:{
-          from:"offers",
-          localField:"_id",
-          foreignField:"createdBy",
-          as:"uploadedOffers"
-      }
-    },
-  
-    { $project: {"_id":1, "username":1 , "totalScore":1, "score":1 ,"token":1, "offerLiked._id":1, "offerDisliked._id":1, "uploadedOffers._id":1} }
-   ]).then((result)=>{
-        res.send(result);
-   })
+        },
+        {
+        $lookup:{
+            from:"offers",
+            localField:"_id",
+            foreignField:"createdBy",
+            as:"uploadedOffers"
+        }
+        },
+        {
+            $lookup:{
+                from:"products",
+                localField:"uploadedOffers.products",
+                foreignField:"_id",
+                as:"productsOffer"
+            }
+        },
+        {
+            $lookup:{
+                from:"products",
+                localField:"offerLiked.products",
+                foreignField:"_id",
+                as:"productsLiked"
+            }
+        },
+        {
+            $lookup:{
+                from:"products",
+                localField:"offerDisliked.products",
+                foreignField:"_id",
+                as:"productsDisliked"
+            }
+        },
+        { $project: {
+            "totalScore":1,"token":1, 
+            "productsOffer.name":1, "productsOffer._id":1, "productsLiked.name":1,
+            "productsLiked._id":1, "productsDisliked._id":1,"productsDisliked.name":1
+        } 
+        }
+    ]).then((result)=>{
+            res.send(result);
+    })
 });
 
 //tokens and reset score

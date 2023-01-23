@@ -29,22 +29,4 @@ router.post("/", async(req, res)=> {
     })
     
 }) 
-
-router.patch("/updateProfile", async(req, res)=> {
-    const { currentUsername, newUsername, newPassword} = req.body
-    User.findOne({username: currentUsername}, async(err, user) => {
-        if (err) {
-          res.status(500).send(err);
-        }
-        user.username = newUsername;
-        user.password = await bcrypt.hash(req.body.newPassword, salt)
-        user.save((err, updatedUser) => {
-          if (err) {
-            res.status(500).send(err)
-          }
-          res.send({ message: 'Username and password updated successfully!' });
-        });
-      });
-    
-}) 
 module.exports = router;
