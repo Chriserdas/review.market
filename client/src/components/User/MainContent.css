@@ -995,132 +995,6 @@
     margin-bottom: 10px;
 }
 
-/*.secondRowAcc{
-    position: relative;
-    width: 100%;
-    top:10px;
-    height: 80%;
-    color:#aaaaaa;
-    font-family: Manrope-Regular;
-    display: flex;
-    flex-direction: column;
-    top: 10%;;
-    left:20%;
-    gap:40px;
-    justify-content: flex-start;
-}
-
-.secondRowAcc div{
-    display: flex;
-    flex-direction: column;
-    font-size:19px;
-    justify-content:center;
-    width: 100%;
-}
-
-.secondRowAcc div input{
-    width:130px;
-    position: relative;
-    margin-right: 150px;
-    background-color: transparent;
-    border:none;
-    height: 20px;
-    font-family: Manrope-Regular;
-    color:white;
-    outline: none;
-    font-size: 17px;
-}
-
-.secondRowAcc div input::placeholder{
-    font-family: Manrope-Regular;
-    color:white;
-    user-select: text;
-}
-
-.secondRowAcc p{
-    position: relative;
-    top:-25px;
-    align-items: center;
-    user-select: text;
-    display: flex;
-}
-
-.secondRowAcc h1{
-    user-select: none;
-    background-color: #0A0A0A;
-    padding: 10px;
-    padding-left: 30px;
-    padding-right: 30px;
-    border-radius: 20px;
-    font-size:15px;
-}
-
-.secondRowAcc h3{
-    position: relative;
-    top:-10px !important;
-    font-size:18px;
-    color:white;
-    font-family: Manrope-Regular !important;
-    font-weight: normal !important;
-}
-
-.email{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    top:-50px;
-    font-size:19px;
-    justify-content:center;
-    width: 100%;
-    margin-bottom: -20px;
-}
-
-h1:hover{
-    cursor: pointer;
-    transform: scale(1.01);
-}
-
-.save{
-    display: flex;
-    justify-content: center!important;
-    text-align: center;
-    position: absolute;
-    top:65% !important;
-    left: -50px;
-    background-color:#1935e7;
-    width:140px !important;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    font-size: 15px!important;
-    font-family: Manrope-Bold;
-    border-radius:20px;
-    user-select: none;
-    transition: all 0.2s ease;
-}
-
-.save:hover{
-    border-radius:15px;
-    cursor: pointer;
-}
-
-.passAcc{
-    background-color: rgb(15, 14, 14) !important;
-    border-radius: 5px;
-    height:25px !important;
-    margin-top: 5px;
-}
-
-.oldpass{
-    position: relative;
-    top:-150px;
-    width:200px !important;
-    background-color:#1F1F1F;
-}
-
-.oldpass div{
-    margin-top:10px !important;
-}*/
-
 .secondRowAcc{
     position: relative;
     width: 100%;
@@ -1133,13 +1007,17 @@ h1:hover{
     left:20%;
     gap:40px;
     justify-content: flex-start;
+    width: 400px;
 }
 
 
 .username_acc div, .password_acc div{
     display: flex;
-    
     color:#aaaaaa !important;
+}
+
+.username_acc, .password_acc{
+    width:300px;
 }
 
 .secondRowAcc input{
@@ -1221,12 +1099,11 @@ h1:hover{
     width: 100%;
 }
 
-.secondRowHist div{
+/*.secondRowHist div{
     position: relative;
     width: 100%;
     height:50%;
-    background-color: #0A0A0A;
-}
+}*/
 
 .offers{
     position: relative;
@@ -1235,6 +1112,8 @@ h1:hover{
     font-family: Manrope-Bold;
     color:#aaaaaa;
     font-size:20px;
+    width: 100px;
+    z-index: 6;
 }
 
 .save{
@@ -1258,4 +1137,62 @@ h1:hover{
 .save:hover{
     border-radius:15px;
     cursor: pointer;
+}
+
+.email {
+    width: 200px;
+}
+
+.table_container {
+    position: relative;
+    width: 100%;
+    top:30px;
+    height: 250px;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.offers_table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.offers_header {
+    text-align: center;
+    background-color: rgb(7, 7, 7);
+    font-weight: bold;
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-family: Manrope-Bold;
+    color: white;
+}
+
+
+.table-data {
+    text-align: left;
+    padding: 8px;
+    font-family: Manrope-Regular;
+    color: white;
+    background-color: rgb(37, 37, 37);
+    /*border: 3px solid rgb(88, 88, 88);*/
+}
+
+.likes_dislikes{
+    width: 100%;;
+}
+
+.table_container::-webkit-scrollbar {
+    width: 1px;
+    height:5px;
+    background-color: transparent;
+    border-radius: 30px;
+}
+  
+.table_container::-webkit-scrollbar-thumb {
+    border-radius: 30px;
+    background-color: #555;
 }

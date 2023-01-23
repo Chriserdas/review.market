@@ -188,50 +188,6 @@ app.post('/api/AccountData', async(req,res) => {
 //for user history of likes,dislikes,offers
 app.post('/api/history', async(req,res) => {
     let userId = new ObjectId(req.body.userId);
-    /*Offer.aggregate([
-        
-        {
-            $match: {
-                $or: [
-                    { "createdBy": userId },
-                    { "likes": userId },
-                    { "dislikes": userId }
-                ]
-            }
-        },
-        /*{
-            $match: { "createdBy": userId }
-        },
-        {
-            $lookup:{
-                from:"products",
-                localField:"products",
-                foreignField:"_id",
-                as:"products"
-            }
-        },
-        {
-            $lookup:{
-                from:"users",
-                localField:"likes",
-                foreignField:"userId",
-                as:"userLikes"
-            }
-        },
-        {
-            $lookup:{
-                from:"users",
-                localField:"dislikes",
-                foreignField:"userId",
-                as:"userDislikes"
-            }
-        },
-        {$project: {"products.name":1, "products._id":1, "userLikes.username":1, "userDislikes.username":1 } }
-    ]).then((result)=>{
-        console.log(result);
-        res.send(result);
-    })*/
-    console.log(userId)
     Offer.aggregate([
         {
             $match:{
@@ -241,7 +197,6 @@ app.post('/api/history', async(req,res) => {
                     { createdBy: userId }
                 ]
             }
-            
         },
         {
             $lookup:{

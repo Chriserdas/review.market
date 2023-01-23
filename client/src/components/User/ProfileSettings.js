@@ -13,8 +13,13 @@ function ProfileSettings(props) {
     const [passwordValue,setPasswordValue] = useState({
         oldPassword:"",newPassword:""
     })
-    const [usernameValue,setUsernameValue] = useState(user.username);
 
+    const [offers,setOffers] = useState(null);
+    const [likes,setLikes] = useState(null);
+    const [usernameValue,setUsernameValue] = useState(user.username);
+    const [tokens,setTokens] = useState({
+        score:"",totalScore:"",tokens:"",totalTokens:""
+    });
 
     useEffect(() => {
 
@@ -27,11 +32,20 @@ function ProfileSettings(props) {
         else if(clicked=== 'History') {
             axios.post('http://localhost:5000/api/history',{userId:user._id})
             .then(response => {
-                console.log(response);
+
+                if(response.data.length!==0){
+                    setOffers(response.data.filter(object => object.createdByUser === true));
+                    setLikes(response.data.filter(object=>object.liked === true || object.disliked === true));
+                }
             })
         }
 
     },[clicked])
+
+    const handleProfile = () => {
+        if(passwordValue.oldPassword !=="" && passwordValue.newPassword !=="" ){}
+    }
+
     return (
         <div className="profile-settings">
             <div className="profile-options">
@@ -102,7 +116,6 @@ function ProfileSettings(props) {
                                         <input
                                             value={usernameValue}
                                             readOnly={!changeUsername}
-                                            //placeholder={user.username}
                                             style={{borderBottom: changeUsername ===true ? '1px solid white':'none'}}
                                             onChange={(e)=>{setUsernameValue(e.target.value)}}
                                         />
@@ -136,12 +149,14 @@ function ProfileSettings(props) {
                                             <input
                                                 className='passAcc' 
                                                 type="password"
-                                                
                                             />
                                         </div>
                                     </div>
                                 </div>
-                                <div className='save'>save changes</div>
+                                <div 
+                                    className='save'
+                                    onClick={()=>{handleProfile()}}
+                                >save changes</div>
                             </div>
 
                         </div>
@@ -154,12 +169,12 @@ function ProfileSettings(props) {
                                 <div className="username">{user.username}</div>
                                 <div className='tokens-scores'>
                                     <div>
-                                        <div>Total Score:</div>
-                                        <div>Score of Month:</div>
+                                        <div>Total Score: {tokens.totalScore}</div>
+                                        <div>Score of Month:{tokens.score}</div> 
                                     </div>
                                     <div>
-                                        <div>Total Tokens:</div>
-                                        <div>Tokens of Month:</div>
+                                        <div>Total Tokens:{tokens.totalTokens}</div>
+                                        <div>Tokens of Month:{tokens.tokens}</div>
                                     </div>
                                     
                                 </div> 
@@ -167,6 +182,66 @@ function ProfileSettings(props) {
                             <div className='secondRowHist'>
                                 <div>
                                     <div className='offers'>Offers</div>
+                                    <div className='table_container'>
+                                        <table>
+                                            <thead className='offers_table'>
+                                                <tr>
+                                                <th className='offers_header'>Product Name</th>
+                                                <th className='offers_header'>Supermarket</th>
+                                                <th className='offers_header'>Date</th>
+                                                </tr>    
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    offers!==null ? 
+                                                        (
+                                                            offers.map((offer,index)=>(
+                                                                <tr key={index}> 
+                                                                    <td className="table-data">{offer.products[0].name}</td>
+                                                                    <td className="table-data">{offer.supermarkets[0].properties.name || offer.supermarkets[0].properties.shop}</td>
+                                                                    <td className="table-data">{new Date(offer.createdDate).toLocaleDateString()}</td>
+                                                                </tr>
+                                                            ))
+
+                                                        )
+                                                        :<div>You have not created any offers yet</div>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div className="likes_dislikes">
+                                    <div className='offers'>Likes/Dislikes</div>
+                                    <div className='table_container'>
+                                        <table>
+                                            <thead className='offers_table'>
+                                                <tr>
+                                                <th className='offers_header'>Product Name</th>
+                                                <th className='offers_header'>Supermarket</th>
+                                                <th className='offers_header'>React</th>
+                                                <th className='offers_header'>Date</th>
+                                                </tr>    
+                                            </thead>
+                                            <tbody>
+                                                {
+                                                    likes!==null ? 
+                                                        (
+                                                            likes.map((offer,index)=>(
+                                                                <tr key={index}> 
+                                                                    <td className="table-data">{offer.products[0].name}</td>
+                                                                    <td className="table-data">{offer.supermarkets[0].properties.name || offer.supermarkets[0].properties.shop}</td>
+                                                                    <td className="table-data">{offer.liked===true? 'like' : "dislike"}</td>
+                                                                    <td className="table-data">{new Date(offer.createdDate).toLocaleDateString()}</td>
+                                                                </tr>
+                                                            ))
+
+                                                        )
+                                                        :<div>You have not reacted to any offers yet</div>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
