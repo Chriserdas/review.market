@@ -186,12 +186,21 @@ app.post('/api/AccountData', async(req,res) => {
 
 //for user history of likes,dislikes,offers
 app.post('/api/history', async(req,res) => {
-    let userId = req.body.userId
-    console.log(userId);
+    let userId = "63cd9520a530036cabbf7651"
     Offer.aggregate([
+        
         {
-            $match: { "createdBy": userId }
+            $match: {
+                $or: [
+                    { "createdBy": userId },
+                    { "likes": userId },
+                    { "dislikes": userId }
+                ]
+            }
         },
+        /*{
+            $match: { "createdBy": userId }
+        },*/
         {
             $lookup:{
                 from:"products",
@@ -218,6 +227,7 @@ app.post('/api/history', async(req,res) => {
         },
         {$project: {"products.name":1, "products._id":1, "userLikes.username":1, "userDislikes.username":1 } }
     ]).then((result)=>{
+        console.log(result);
         res.send(result);
     })
 });
