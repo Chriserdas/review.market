@@ -262,7 +262,7 @@ const userTokens = async () => {
            if(firstDay.getDate() === 1) {
             //for each user give 100 tokens
             users.forEach((user) => {
-                    user.token += 100;
+                    user.totalToken += 100;
                     user.totalScore += user.score //keep track of totalScore
                     user.score = 0; //reset score
                     user.save();
@@ -281,8 +281,9 @@ const userTokens = async () => {
                 users.forEach((user)=> {
                   let userScore = user.score
                   tokens = totalTokens * 0.8;
-                  user.token += (tokens * userScore) / totalscore;
-                  user.token = Math.round(user.token);
+                  user.totalToken += (tokens * userScore) / totalscore;
+                  user.totalToken = Math.round(user.totalToken);
+                  user.token = Math.round(100 + (tokens * userScore) / totalscore); //tokens each month only
                   user.save();
                 })
                 //console.log(totalTokens)
