@@ -20,8 +20,7 @@ router.post("/", async(req, res)=> {
 					},
 					'secret123'
 				)
-		
-				res.send({message: "Login Successfull", user: user},{ $project: {"_id":1, "username":1, "isAdmin":1}})
+				res.send({message: "Login Successfull", user: {username: user.username, isAdmin: user.isAdmin, _id: user._id}})
 			} else {
 				res.send({ message: "Password didn't match"})
 			}
