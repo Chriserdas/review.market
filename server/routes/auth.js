@@ -33,7 +33,7 @@ router.post("/", async(req, res)=> {
 router.patch("/updateProfile", async(req, res)=> {
     const { userId, newUsername, oldPassword, newPassword} = req.body
 
-    if(newUsername){
+    if(newUsername !== "" ){
         User.findOne({_id: userId}, async(err, user) => {
             if (err) {
               res.status(500).send(err);
@@ -47,19 +47,25 @@ router.patch("/updateProfile", async(req, res)=> {
             });
           });
     } 
-    if(newPassword && oldPassword != newPassword){
+    if(newPassword !== "" && oldPassword !== ""){
         User.findOne({_id: userId}, async(err, user) => {
             if (err) {
               res.status(500).send(err);
             }
-            const salt = await bcrypt.genSalt(10)
-            user.password = await bcrypt.hash(req.body.newPassword, salt)
-            user.save((err, updatedUser) => {
-              if (err) {
-                res.status(500).send(err)
-              }
+            const isPasswordValid = await bcrypt.compare(oldPassword,user.oldPassword)
+            if(isPasswordValid){
+              const salt = await bcrypt.genSalt(10)
+              user.password = await bcrypt.hash(req.body.newPassword, salt)
+              user.save((err, updatedUser) => {
+                if (err) {
+                  res.status(500).send(err)
+                }
               res.send({ message: 'Password updated successfully!' });
             });
+            }
+            else{
+              res.send({ message: 'Incorrect old password!' });
+            }
         });
     }
 }) 
