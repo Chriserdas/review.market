@@ -176,7 +176,7 @@ app.get('/api/getSupermarket', async(req,res) => {
    })
 });
 
-app.get('/api/history1', async(req,res) => {
+app.post('/api/AccountData', async(req,res) => {
     let userId = req.body.userId
     User.find({"_id": userId,},{"username":1, "score":1})
     .then(response=>{
@@ -185,8 +185,9 @@ app.get('/api/history1', async(req,res) => {
   });
 
 //for user history of likes,dislikes,offers
-app.get('/api/history', async(req,res) => {
+app.post('/api/history', async(req,res) => {
     let userId = req.body.userId
+    console.log(userId);
     User.aggregate([
         {
             $match: { "_id": userId }
@@ -239,14 +240,14 @@ app.get('/api/history', async(req,res) => {
                 as:"productsDisliked"
             }
         },
-        { $project: {
+        /*{// $project: {
             "totalScore":1,"token":1, 
             "productsOffer.name":1, "productsOffer._id":1, "productsLiked.name":1,
             "productsLiked._id":1, "productsDisliked._id":1,"productsDisliked.name":1
-        } 
-        }
-    ]).then((result)=>{
-            res.send(result);
+        } */
+    ])
+    .then((result)=>{
+        res.send(result);
     })
 });
 

@@ -1,4 +1,5 @@
 
+import axios from 'axios';
 import {React,useEffect,useState} from 'react'
 
 
@@ -18,10 +19,16 @@ function ProfileSettings(props) {
     useEffect(() => {
 
         if(clicked==='Account') {
-
+            axios.post('http://localhost:5000/api/AccountData',{userId:user._id})
+            .then(response => {
+                console.log(response);
+            })
         }
         else if(clicked=== 'History') {
-            console.log(user._id);
+            axios.post('http://localhost:5000/api/history',{userId:user._id})
+            .then(response => {
+                console.log(response);
+            })
         }
 
     },[clicked])

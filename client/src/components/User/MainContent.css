@@ -1162,7 +1162,7 @@ h1:hover{
 
 .username_acc div{
     display: flex;
-    align-items: baseline !important;
+    align-items: flex-start !important;
 }
 
 .username_acc p , .password_acc p{
@@ -1177,13 +1177,14 @@ h1:hover{
     border-radius: 20px;
     font-size:15px;
     width: 20px;
+    top:-15px;
     position: relative;
     left:-100px;
 }
 
 .oldpass{
     position: relative;
-    top:-130px;
+    top:-150px;
     display: flex;
     flex-direction: column !important;
     width:300px !important;
@@ -1199,6 +1200,8 @@ h1:hover{
     position: relative;
     top:5px;
     background-color: rgb(17, 16, 16);
+    border-radius: 5px;
+    height:30px;
 }
 
 .oldpass div{
