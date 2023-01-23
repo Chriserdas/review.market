@@ -7,6 +7,7 @@ import NavbarContext from './NavbarContext';
 import ShopClickedContext from './ShopClickedContext';
 import SupermarketContext from './SupermarketContext';
 import SupermarketsCon from './SupermarketsCon';
+import ProfileSettings from './ProfileSettings';
 
 
 function UserHome() {
@@ -43,9 +44,19 @@ function UserHome() {
         <ShopClickedContext.Provider value = {{showProduct,setShowProduct}}>
         <NavbarContext.Provider  value ={{isClicked,setIsClicked}}>
             <div className = "mainContent_container">
-                <Navbar/>
-                <SecondNavbar productInfo={showProduct} isClicked={isClicked}  setClicked={setIsClicked}  getSupermarket={clickedSupermarket} setClickedSupermarket={setClickedSupermarket} setSupermarkets={setSupermarkets} getOffers ={offers} setOffers={setOffers}/>
-                <MapContainer isClicked={isClicked} setClicked={setIsClicked} productInfo={showProduct} setShowProduct={setShowProduct} getOffers={offers} setOffers={setOffers}/>
+                {isClicked !=='Settings' ? 
+                    (
+                        <>
+                            <Navbar/>
+                            <SecondNavbar productInfo={showProduct} isClicked={isClicked}  setClicked={setIsClicked}  getSupermarket={clickedSupermarket} setClickedSupermarket={setClickedSupermarket} setSupermarkets={setSupermarkets} getOffers ={offers} setOffers={setOffers}/>
+                            <MapContainer isClicked={isClicked} setClicked={setIsClicked} productInfo={showProduct} setShowProduct={setShowProduct} getOffers={offers} setOffers={setOffers}/>
+                        </>
+                    ):
+                    <>
+                        <Navbar/>
+                        <ProfileSettings/>
+                    </>
+                }
             </div>
             
         </NavbarContext.Provider>

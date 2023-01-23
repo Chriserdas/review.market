@@ -197,7 +197,7 @@ app.get('/api/productInfo', async(req,res) => {
 });*/
 
 //for user history of likes,dislikes,offers
-app.get('/api/history', async(req,res) => {
+app.post('/api/history', async(req,res) => {
   User.aggregate([
     {
         $lookup:{

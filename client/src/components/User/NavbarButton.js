@@ -16,12 +16,12 @@ const NavbarButton = (props)=>{
 
             animateDiv.start({
                 x:"flex-start",
-                backgroundColor: "#ED474A",  
+                backgroundColor: "#1f39df",  
                 width: "100%"            
             });
 
             animateImg.start({
-                backgroundColor:"#ED474A",
+                backgroundColor:"#1f39df",
                 padding:"0px 0xp 0px 0px",
             });
 
@@ -34,12 +34,12 @@ const NavbarButton = (props)=>{
                 animateDiv.start({
                     x:"flex-start",
                     borderLeft:"1px solid white",
-                    backgroundColor: "#ED474A",
+                    backgroundColor: "#1f39df",
                     width: "100%"
                 });
 
                 animateImg.start({
-                    backgroundColor:"#ED474A",
+                    backgroundColor:"#1f39df",
                     padding:"0px 0xp 0px 0px",
                 });
     

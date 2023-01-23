@@ -117,8 +117,8 @@ const OfferedProducts = (props) => {
                 {offers===undefined ? "" : <Offers offers={offers} isNear={isNear}/>}
             </div>
             <div className="scrollArrowsContainer">
-                    <button onClick={handleScrollLeft} className="left_scroll">&lt;</button>
-                    <button onClick={handleScrollRight} className="right_scroll">&gt;</button>
+                <button onClick={handleScrollLeft} className="left_scroll">&lt;</button>
+                <button onClick={handleScrollRight} className="right_scroll">&gt;</button>
             </div>
             
         </motion.div>

@@ -109,7 +109,7 @@ const Offers = (props)=>{
                     
                     <div className="date">Created Date: {new Date(offer.createdDate).toLocaleDateString()}</div>
                 
-                    <div style={{display: isNear === false ? 'none' : 'flex' }}>Created By: {offer.user[0].username}</div>
+                    {<div style={{display: isNear === false ? 'none' : 'flex' }}>Created By: {offer.user[0].username}</div>}
                     
                 </div>   
             </div> 
