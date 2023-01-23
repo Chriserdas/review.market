@@ -178,7 +178,7 @@ app.get('/api/getSupermarket', async(req,res) => {
 
 app.post('/api/AccountData', async(req,res) => {
     let userId = req.body.userId
-    User.find({"_id": userId,},{"username":1, "score":1})
+    User.find({"_id": userId,},{"username":1, "score":1, "token":1, "totalScore":1})
     .then(response=>{
         res.json(response)
     })
@@ -188,65 +188,36 @@ app.post('/api/AccountData', async(req,res) => {
 app.post('/api/history', async(req,res) => {
     let userId = req.body.userId
     console.log(userId);
-    User.aggregate([
+    Offer.aggregate([
         {
-            $match: { "_id": userId }
-        },
-        {
-            $lookup:{
-                from:"offers",
-                localField:"_id",
-                foreignField:"likes",
-                as:"offerLiked"
-            }
-        },
-        {
-        $lookup:{
-            from:"offers",
-            localField:"_id",
-            foreignField:"dislikes",
-            as:"offerDisliked"
-        }
-        },
-        {
-        $lookup:{
-            from:"offers",
-            localField:"_id",
-            foreignField:"createdBy",
-            as:"uploadedOffers"
-        }
+            $match: { "createdBy": userId }
         },
         {
             $lookup:{
                 from:"products",
-                localField:"uploadedOffers.products",
+                localField:"products",
                 foreignField:"_id",
-                as:"productsOffer"
+                as:"products"
             }
         },
         {
             $lookup:{
-                from:"products",
-                localField:"offerLiked.products",
-                foreignField:"_id",
-                as:"productsLiked"
+                from:"users",
+                localField:"likes",
+                foreignField:"userId",
+                as:"userLikes"
             }
         },
         {
             $lookup:{
-                from:"products",
-                localField:"offerDisliked.products",
-                foreignField:"_id",
-                as:"productsDisliked"
+                from:"users",
+                localField:"dislikes",
+                foreignField:"userId",
+                as:"userDislikes"
             }
         },
-        /*{// $project: {
-            "totalScore":1,"token":1, 
-            "productsOffer.name":1, "productsOffer._id":1, "productsLiked.name":1,
-            "productsLiked._id":1, "productsDisliked._id":1,"productsDisliked.name":1
-        } */
-    ])
-    .then((result)=>{
+        {$project: {"products.name":1, "products._id":1, "userLikes.username":1, "userDislikes.username":1 } }
+    ]).then((result)=>{
         res.send(result);
     })
 });
