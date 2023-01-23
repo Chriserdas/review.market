@@ -1,4 +1,5 @@
 require("dotenv").config();
+const ObjectId = require('mongodb').ObjectId;
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -186,8 +187,8 @@ app.post('/api/AccountData', async(req,res) => {
 
 //for user history of likes,dislikes,offers
 app.post('/api/history', async(req,res) => {
-    let userId = "63cd9520a530036cabbf7651"
-    Offer.aggregate([
+    let userId = new ObjectId(req.body.userId);
+    /*Offer.aggregate([
         
         {
             $match: {
@@ -200,7 +201,7 @@ app.post('/api/history', async(req,res) => {
         },
         /*{
             $match: { "createdBy": userId }
-        },*/
+        },
         {
             $lookup:{
                 from:"products",
@@ -229,6 +230,68 @@ app.post('/api/history', async(req,res) => {
     ]).then((result)=>{
         console.log(result);
         res.send(result);
+    })*/
+    console.log(userId)
+    Offer.aggregate([
+        {
+            $match:{
+                $or: [
+                    { likes: { $in: [userId] } },
+                    { dislikes: { $in: [userId] } },
+                    { createdBy: userId }
+                ]
+            }
+            
+        },
+        {
+            $lookup:{
+                from:"products",
+                localField:"products",
+                foreignField:"_id",
+                as:"products"
+            }
+        },
+        {
+            $lookup:{
+                from:'supermarkets',
+                localField:"supermarkets",
+                foreignField:'_id',
+                as:"supermarkets"
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                name: 1,
+                'products.name':1,
+                'supermarkets.properties.name':1,
+                'supermarkets.properties.shop':1,
+                createdDate:1,
+                liked: {
+                    $cond: {
+                        if: { $in: [userId, "$likes"] },
+                        then: true,
+                        else: false
+                    }
+                },
+                disliked: {
+                    $cond: {
+                        if: { $in: [userId, "$dislikes"] },
+                        then: true,
+                        else: false
+                    }
+                },
+                createdByUser: {
+                    $cond: {
+                        if: {$eq: [userId, "$createdBy"]},
+                        then: true,
+                        else: false
+                    }
+                }
+            }
+        }
+    ]).then(result=>{
+        res.json(result)
     })
 });
 
