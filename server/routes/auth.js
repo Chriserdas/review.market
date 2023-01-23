@@ -21,7 +21,7 @@ router.post("/", async(req, res)=> {
 					'secret123'
 				)
 		
-				res.send({message: "Login Successfull", user: user})
+				res.send({message: "Login Successfull", user: user},{ $project: {"_id":1, "username":1, "isAdmin":1}})
 			} else {
 				res.send({ message: "Password didn't match"})
 			}
@@ -29,6 +29,40 @@ router.post("/", async(req, res)=> {
             res.send({message: "User not registered"})
         }
     })
+}) 
+
+router.patch("/updateProfile", async(req, res)=> {
+    const { userId, newUsername, oldPassword, newPassword} = req.body
+
+    if(newUsername){
+        User.findOne({_id: userId}, async(err, user) => {
+            if (err) {
+              res.status(500).send(err);
+            }
+            user.username = newUsername;
+            user.save((err, updatedUser) => {
+              if (err) {
+                res.status(500).send(err)
+              }
+              res.send({ message: 'Username updated successfully!' });
+            });
+          });
+    } 
+    if(newPassword && oldPassword != newPassword){
+        User.findOne({_id: userId}, async(err, user) => {
+            if (err) {
+              res.status(500).send(err);
+            }
+            const salt = await bcrypt.genSalt(10)
+            user.password = await bcrypt.hash(req.body.newPassword, salt)
+            user.save((err, updatedUser) => {
+              if (err) {
+                res.status(500).send(err)
+              }
+              res.send({ message: 'Password updated successfully!' });
+            });
+        });
+    }
 }) 
 
 
