@@ -51,8 +51,8 @@ const AuthenticateForm = (props)=>{
 
                             setInfo({
                                 isAuth:true,
-                                data:res.data.user,
-                                page:'/AdminHome'
+                                data:res.data,
+                                page:'/UserHome'
                             });
                             setServerResponse({
                                 message :res.data.message,

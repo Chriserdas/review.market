@@ -4,6 +4,7 @@ import current_location from '../../images/current_location.png';
 import categories from '../../images/categories.png';
 import settings from '../../images/setting.png';
 import logo from '../../images/logo.png';
+import admin from '../../images/admin.png';
 import search from '../../images/search.png'
 import NavbarButton from './NavbarButton';
 import MapContainer from './MapContainer';
@@ -13,7 +14,8 @@ import NavbarContext from './NavbarContext';
 const Navbar = ()=>{
 
     const {isClicked, setIsClicked} = useContext(NavbarContext);  
-    
+    const user = JSON.parse(localStorage.getItem("token")).user
+
     const handleClick = (name)=>{
         setIsClicked(name);
     }
@@ -59,6 +61,24 @@ const Navbar = ()=>{
                         clicked = {isClicked}
                     />
                 </div>
+
+                {user.isAdmin === true ?
+                    (
+                        <div className= "wrapper" onClick ={()=> handleClick("Admin")}>
+                            <NavbarButton
+                                imgSrc = {admin}
+                                text = "Admin"
+                                clicked = {isClicked}
+                            />
+                        </div>
+                    )
+                    :""
+                }
+
+                <div 
+                    className='logout'
+                    onClick={()=> window.location ='/'}
+                >Logout</div>   
 
             </div>
         </>

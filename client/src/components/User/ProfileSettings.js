@@ -26,7 +26,11 @@ function ProfileSettings(props) {
         if(clicked==='Account') {
             axios.post('http://localhost:5000/api/AccountData',{userId:user._id})
             .then(response => {
-                console.log(response);
+                setTokens({
+                    score:response.data[0].score,
+                    totalScore:response.data[0].totalScore,
+                    totalTokens:response.data[0].token
+                });
             })
         }
         else if(clicked=== 'History') {
@@ -97,15 +101,15 @@ function ProfileSettings(props) {
                         <div className='Info'>
                             <div className='firstRowAcc'>
                                 <div className='title'>My Account</div>
-                                <div className="username">{user.username}</div>
+                                <div className="username">Welcome, {user.username}</div>
                                 <div className='tokens-scores'>
                                     <div>
-                                        <div>Total Score:</div>
-                                        <div>Score of Month:</div>
+                                        <div>Total Score:{tokens.totalScore}</div>
+                                        <div>Score of Month:{tokens.score}</div>
                                     </div>
                                     <div>
-                                        <div>Total Tokens:</div>
-                                        <div>Tokens of Month:</div>
+                                        <div>Total Tokens:{tokens.totalTokens}</div>
+                                        <div>Tokens of Month:{tokens.tokens}</div>
                                     </div>
                                     
                                 </div> 
