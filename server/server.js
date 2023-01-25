@@ -183,7 +183,7 @@ app.post('/api/AccountData', async(req,res) => {
     .then(response=>{
         res.json(response)
     })
-  });
+});
 
 //for user history of likes,dislikes,offers
 app.post('/api/history', async(req,res) => {
@@ -320,6 +320,31 @@ const handleExpiredOffers = async () => {
 // Schedule to run every 7 days
 const job3 = new cron.CronJob('* * */7 * *', handleExpiredOffers, null, true);
 job3.start();
+
+//chart1
+app.post('/api/chart1', async(req,res) => {
+    let date = req.body.date
+    let year = parseInt(date.substring(0, 4));  //extract the year from the date
+    let month = parseInt(date.substring(5, 7))-1; //extract the month from the date
+    Offer.aggregate([
+        { 
+            $match: { 
+                $and: [
+                    { "createdDate": { $gte: new Date(year, month, 1) } }, 
+                    { "createdDate": { $lt: new Date(year, month + 1, 1) } }
+                ]
+            }
+        },
+        {
+            $group: {
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdDate" } },
+                offers: { $push: "$$ROOT" }
+            }
+        }
+    ]).then(response=>{
+        res.json(response)
+    })
+});
 
 app.get("/", (req, res) => {
     res.send("Server is ready");

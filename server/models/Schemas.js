@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
 
 const productSchema = new mongoose.Schema({
                         id:Number,
-                        name:String,
+                        name:{type:String, text:true},
                         price:Number,
                         image:String,
                         category:String,
@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema({
 
 const categorySchema = new mongoose.Schema({
                         id:String,
-                        name:String,
+                        name:{type:String, text:true},
                         subcategories:[
                                 {
                                         name:String,
@@ -43,7 +43,7 @@ const SupermarketSchema = new mongoose.Schema({
                 "brand":String,
                 "brand:wikidata":String,
                 "brand:wikipedia":String,
-                "name":String,
+                "name":{type:String, text:true},
                 "opening_hours":String,
                 "shop":String
         },
@@ -55,6 +55,8 @@ const SupermarketSchema = new mongoose.Schema({
         },
         id:String
 });
+
+SupermarketSchema.index({ 'geometry.coordinates': "2dsphere" });
 
 const OfferSchema = new mongoose.Schema({
                 products:{type: mongoose.Schema.Types.ObjectId},
