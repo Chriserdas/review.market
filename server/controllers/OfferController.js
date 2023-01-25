@@ -36,6 +36,49 @@ const calculateAvgPriceWeek = async (productId) => {
     return avgPriceWeek;
 }
 
+/*const chart2 = async(req,res)=> {
+    let categoryId = req.body.categoryId
+    let subcategoryId = req.body.subcategoryId
+    
+    const bothMatch = Offer.aggregate([
+        {
+            $lookup: {
+                from: "products",
+                localField: "products",
+                foreignField: "_id",
+                as: "products"
+            }
+        },
+        {
+            $match: { 
+                $and: [
+                    { "products.category": categoryId }, 
+                    { "products.subcategory": subcategoryId }
+                ]
+            }
+        },
+    ]).then((offers=>{
+        offers.forEach(async(offer)=>{
+            const avgPrice = await calculateAvgPrice(offer.products);
+            const avgPriceWeek = await calculateAvgPriceWeek(offer.products);
+        })
+    }))
+
+    const match = Offer.aggregate([
+        {
+            $lookup: {
+                from: "products",
+                localField: "products",
+                foreignField: "_id",
+                as: "products"
+            }
+        },
+        {
+            $match: {  "products.category": categoryId },
+        },
+    ]) 
+    
+}*/
 //add offer
 const store = async(req,res)=>{
     let userId = req.body.userId

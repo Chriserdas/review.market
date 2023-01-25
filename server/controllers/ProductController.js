@@ -1,19 +1,4 @@
-const {Product} = require("../models/Schemas");
-
-//show the list of products
-const show = (req,res)=> {
-    Product.find()
-    .then(response=>{
-        res.json({
-            response
-        })
-    })
-    .catch(error => {
-        res.json({
-            message:'An error occured!'
-        })
-    })
-};
+const {Product, Category} = require("../models/Schemas");
 
 //add products
 const store = (req,res)=>{
@@ -43,6 +28,33 @@ const store = (req,res)=>{
     }
 };
 
+//add categories, subcategories 
+const upload = (req,res)=>{
+    let categoryID = req.body.categoryID
+    if (mongoose.Types.ObjectId.isValid(categoryID)) {return res.status(404).send(`Category exist with id: ${categoryID}`)}
+    let category = new Category({
+                id:req.body.id,
+                name:req.body.name,
+                subcategories:[
+                    {
+                        name:req.body.name,
+                        uuid:req.body.uuid
+                    }
+                ]
+    });
+    Category.save()
+    .then(response =>{
+        res.json({
+            message:"Category added"
+        })
+    })
+    .catch(erro=>{
+        res.json({
+            message:'An error occured'
+        })
+
+    })
+};
 //update product
 const update = (req,res)=> {
     let productID = req.body.productID
@@ -126,4 +138,4 @@ const search= (req,res)=> {
     })
 };
 
-module.exports = {show,store,update,destroy,product,search};
+module.exports = {store,upload,update,destroy,product,search};
