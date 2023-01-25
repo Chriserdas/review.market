@@ -25,6 +25,13 @@ const AdminPanel = ()=>{
     const handleUpload = ()=>{
         if(file.file !==null && selected !== 'Choose Data'){
             
+            // Handle upload file 
+            axios.post('http://localhost:5000/uploadData',{file:file.file, selected:selected})
+            .then(response => {
+                console.log(response)
+            });
+             
+            
         }
     }
 

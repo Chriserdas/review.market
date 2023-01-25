@@ -27,7 +27,7 @@ const { features } = require("./data/supermarket.js");
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
 async function connect(){
     try{
-        await mongoose.connect(url, {
+        mongoose.connect(url, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
           });
@@ -53,8 +53,8 @@ app.use('/api/offer', offerRoutes);
 
 //insert product
 app.post('/uploadData', async(req, res) => {
-   let string = req.body.string
-   let data = req.body.data
+   let string = req.body.selected
+   let data = req.body.file
 
    if(string == "Products"){
         // Check if products with the same data already exist
@@ -74,8 +74,8 @@ app.post('/uploadData', async(req, res) => {
         }
         const createdCategory= await Category.insertMany(data.categories);
    }
-   if(string == "Supermarket"){
-        const existingSupermarkets = await Category.find({ "name": { $in: data.features.map(p => p.name) } });
+   if(string == "Supermarkets"){
+        const existingSupermarkets = await Supermarket.find({ "id": { $in: data.features.map(p => p.name) } });
 
         if (existingSupermarkets.length > 0) {
             res.send( { message: "Duplicate supermarket found."});
