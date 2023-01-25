@@ -19,6 +19,7 @@ const categories = require('./data/categories.js');
 const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
 const { use } = require("./routes/users");
+const { features } = require("./data/supermarket.js");
 
 
 
@@ -51,22 +52,47 @@ app.use('/api/offer', offerRoutes);
 
 
 //insert product
-app.get('/products', async(req, res) => {
-   const createdProduct = await Product.insertMany(products.products);
-   res.send({ createdProduct });
+app.post('/uploadData', async(req, res) => {
+   let string = req.body.string
+   let data = req.body.data
+
+   if(string == "Products"){
+        // Check if products with the same data already exist
+        const existingProducts = await Product.find({ "name": { $in: data.products.map(p => p.name) } });
+
+        if (existingProducts.length > 0) {
+            res.send( { message: "Duplicate product found."});
+        }
+        // If no duplicate products found, insert the new products
+        const createdProduct = await Product.insertMany(data.products);
+   }
+   if(string == "Categories"){
+        const existingCategories = await Category.find({ "name": { $in: data.categories.map(p => p.name) } });
+
+        if (existingCategories.length > 0) {
+            res.send( { message: "Duplicate category found."});
+        }
+        const createdCategory= await Category.insertMany(data.categories);
+   }
+   if(string == "Supermarket"){
+        const existingSupermarkets = await Category.find({ "name": { $in: data.features.map(p => p.name) } });
+
+        if (existingSupermarkets.length > 0) {
+            res.send( { message: "Duplicate supermarket found."});
+        }
+        const createdSupermarket = await Supermarket.insertMany(data.features);
+   }
 });
 
-//insert categories,subcategories
+/*
 app.get('/categories', async(req, res) => {
    const createdCategory= await Category.insertMany(categories.categories);
    res.send(createdCategory);
 });
-
-//insert users
-app.get('/user', async(req, res) => {
-    await User.remove({})
-    const createdUsers = await User.insertMany(users);
-    res.send({ createdUsers });
+//insert supermarket
+app.get('/supermarket', async(req, res) => {
+    const createdSupermarket = await Supermarket.insertMany(supermarket.features);
+    res.send({ createdSupermarket });
   });
 
 //insert supermarket
@@ -74,6 +100,13 @@ app.get('/supermarket', async(req, res) => {
   const createdSupermarket = await Supermarket.insertMany(supermarket.features);
   res.send({ createdSupermarket });
 });
+*/
+//insert users
+app.get('/user', async(req, res) => {
+    await User.remove({})
+    const createdUsers = await User.insertMany(users);
+    res.send({ createdUsers });
+  });
 
 //insert offer
 app.get('/offer', async(req,res) => {
