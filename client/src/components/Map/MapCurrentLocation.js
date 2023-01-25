@@ -1,5 +1,5 @@
 import React, { useEffect, useState,useRef, useContext } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap,Tooltip } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup,Circle, useMap,Tooltip } from "react-leaflet";
 import L from 'leaflet'
 import axios from "axios";
 import ShopClickedContext from "../User/ShopClickedContext";
@@ -65,7 +65,7 @@ export default function MapCurrentLocation(props) {
                 show:true,
                 offers:response.data,
                 super_name:response.data[0].supermarkets[0].properties.name || response.data[0].supermarkets[0].properties.shop,
-                isNear:true,//currentLocation.distanceTo(coordinates) <50 ? true : false,
+                isNear:currentLocation.distanceTo(coordinates) <50 ? true : false,
                 supermarket_id:supermarket_id
             });
         });
@@ -89,6 +89,7 @@ export default function MapCurrentLocation(props) {
             
             <LocationMarker/>
 
+            {currentLocation!==null ? <Circle center={currentLocation} radius={50} color={'transparent'} fillColor={'#1935e7'} fillOpacity={0.5}/> :""}
             {getOffers !== null ? (
                 getOffers.map(result=>(
                     <Marker 
@@ -125,7 +126,7 @@ export default function MapCurrentLocation(props) {
                                         clicked:true,
                                         name:supermarket.properties.name || supermarket.properties.shop,
                                         id:supermarket._id,
-                                        isNear:true,//currentLocation.distanceTo(supermarket.geometry.coordinates.reverse()) <50 ? true : false,
+                                        isNear:currentLocation.distanceTo(supermarket.geometry.coordinates.reverse()) <50 ? true : false,
                                     });
                                 }
                             }}

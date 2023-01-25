@@ -449,9 +449,6 @@ const SecondNavbar = (props)=>{
         <motion.div className="secondNavbar"
             animate={animate}
         >
-
-            {/*{show===true ? showDiv : <SupermarketSearch title="Search Supermarkets" setSupermarkets = {props.setSupermarkets} getOffers={props.getOffers} setOffers={props.setOffers}/>}
-            {clickedSupermarket.clicked===true ? showDiv : ""}*/}
             {content}
         </motion.div>
     );

@@ -44,7 +44,7 @@ function UserHome() {
         <ShopClickedContext.Provider value = {{showProduct,setShowProduct}}>
         <NavbarContext.Provider  value ={{isClicked,setIsClicked}}>
             <div className = "mainContent_container">
-                {isClicked !=='Settings' ? 
+                {isClicked !=='Settings' && isClicked !=='Admin'? 
                     (
                         <>
                             <Navbar/>
@@ -54,9 +54,10 @@ function UserHome() {
                     ):
                     <>
                         <Navbar/>
-                        <ProfileSettings/>
+                        <ProfileSettings isClicked={isClicked}/>
                     </>
                 }
+
             </div>
             
         </NavbarContext.Provider>
