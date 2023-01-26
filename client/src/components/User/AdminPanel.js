@@ -34,10 +34,19 @@ const AdminPanel = ()=>{
                 }
             })
             .then(response => {
-                console.log(response)
+                console.log(response);
             });
              
             
+        }
+    }
+
+    const handleDelete = ()=>{
+        if(selected !== 'Choose Data'){
+            axios.delete("https://localhost:5000/api/deleteAll", {selected:selected})
+            .then(response=>{
+                console.log(response);
+            });
         }
     }
 
@@ -84,7 +93,7 @@ const AdminPanel = ()=>{
 
                     <div 
                         style={{backgroundColor:'red'}}
-
+                        onClick={()=>{handleDelete()}}
                     >Delete All</div>
                 </div>
             </div>
