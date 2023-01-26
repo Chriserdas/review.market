@@ -1,5 +1,5 @@
-const categories = {
-    categories: [
+{
+    "categories": [
         {
           "id": "8016e637b54241f8ad242ed1699bf2da",
           "name": "Βρεφικά Είδη",
@@ -482,5 +482,3 @@ const categories = {
         }
       ]
 }
-
-module.exports = categories;
