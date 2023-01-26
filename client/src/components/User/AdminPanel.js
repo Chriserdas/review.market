@@ -43,7 +43,7 @@ const AdminPanel = ()=>{
 
     const handleDelete = ()=>{
         if(selected !== 'Choose Data'){
-            axios.delete("https://localhost:5000/api/deleteAll", {selected:selected})
+            axios.post("http://localhost:5000/api/deleteAll", {selected:selected})
             .then(response=>{
                 console.log(response);
             });

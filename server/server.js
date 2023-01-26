@@ -60,7 +60,8 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
        data.products.forEach(product => {
             Product.findOne({name: product.name}, function(err, existingProduct) {
                 if (!existingProduct) {
-                    Product.insertMany(product);
+                    Product.insertMany(product).then(result =>{
+                    });
                 }
             });
         });
@@ -83,29 +84,33 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
             });
         });
     }
+
+    res.send(string.toString() + " were uploaded!")
 });
 
-app.post('/deleteData', upload.single('file') ,async(req, res) => {
+app.post('/api/deleteAll',async(req, res) => {
     let string = req.body.selected
     if(string == "Products"){
-        await Product.remove({})
+        await Product.deleteMany({})
      }
     if(string == "Categories"){
-        await Category.remove({})
+        await Category.deleteMany({})
     }
     if(string == "Supermarkets"){
-        await Supermarket.remove({})
+        await Supermarket.deleteMany({})
      }
- });
+    
+    res.send(string.toString() + " were deleted!")
+});
 
-//insert users
+//insert users default
 app.get('/user', async(req, res) => {
     await User.remove({})
     const createdUsers = await User.insertMany(users);
     res.send({ createdUsers });
   });
 
-//insert offer
+//insert offer default
 app.get('/offer', async(req,res) => {
   await Offer.remove({})
   const createOffer = await Offer.insertMany(offer);
