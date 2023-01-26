@@ -20,6 +20,7 @@ const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
 const { use } = require("./routes/users");
 const { features } = require("./data/supermarket.js");
+const { product } = require("./controllers/ProductController");
 const upload = multer({storage: multer.memoryStorage()});
 
 
@@ -65,11 +66,15 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
             res.send( { message: "Duplicate product found."});
         }*/
         // If no duplicate products found, insert the new products
-        //const createdProduct = await Product.insertMany(data.products);
-        const newProducts = await Product.updateMany({ name: {$in:data.map(d => d.name)} }, { upsert: true }, (err=>{
-            if(err) {console.log(err)}
-        }))
-        console.log(newProducts);
+        /*const newProducts = await Product.updateOne({ name: {$in:data.map(d => d.name)} }, { upsert: true })
+        console.log(newProducts);*/
+        data.products.forEach(product=>{
+            let filter = { id: product.id };
+            Product.updateMany(filter, { upsert: true }, (err, res) => {
+                if (err) throw err;
+                console.log(`${res.matchedCount} documents matched the filter and ${res.modifiedCount} documents were updated`);
+            });
+        })
    }
    if(string == "Categories"){
         /*const existingCategories = await Category.find({ "name": { $in: data.categories.map(p => p.name) } });
@@ -78,6 +83,7 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
             res.send( { message: "Duplicate category found."});
         }
         const createdCategory= await Category.insertMany(data.categories);*/
+        
         const newProducts = await Category.updateOne({ id: {$in:data.map(d => d.id)} }, { upsert: true })
         console.log(newProducts);
    }
@@ -203,8 +209,8 @@ app.get('/api/getSupermarket', async(req,res) => {
     {
       $match: {
           $expr: {
-              $eq: [ { "$size": "$supermarkets" }, 0 ]
-          }
+                $eq: [ { "$size": "$supermarkets" }, 0 ]
+            }
       }
     },
     {$project: {"properties.name":1, "properties.shop":1, "geometry.coordinates":1 } }
