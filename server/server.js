@@ -57,7 +57,6 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
    let string = req.body.selected
    let data = req.file.buffer.toString();
 
-   console.log(string);
    if(string == "Products"){
         // Check if products with the same data already exist
         /*const existingProducts = await Product.find({ "name": { $in: data.products.map(p => p.name) } });
@@ -69,13 +68,8 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
         const createdProduct = await Product.insertMany(data.products);*/
         /*const newProducts = await Product.updateOne({ name: {$in:data.map(d => d.name)} }, { upsert: true })
         console.log(newProducts);*/
-        data.products.forEach(product=>{
-            let filter = { id: product.id };
-            Product.updateMany(filter, { upsert: true }, (err, res) => {
-                if (err) throw err;
-                console.log(`${res.matchedCount} documents matched the filter and ${res.modifiedCount} documents were updated`);
-            });
-        })
+        //await Product.updateOne({ id: {$in:data.map(d => d.id)} }, { upsert: true })
+        console.log(data);
    }
    if(string == "Categories"){
         /*const existingCategories = await Category.find({ "name": { $in: data.categories.map(p => p.name) } });
