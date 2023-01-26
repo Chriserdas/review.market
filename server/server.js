@@ -59,14 +59,16 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
    console.log(string);
    if(string == "Products"){
         // Check if products with the same data already exist
-        /*const existingProducts = await Product.find({ "name": { $in: data.products.map(p => p.name) } });
-
-        if (existingProducts.length > 0) {
+        //const existingProducts = await Product.find({ "name": { $in: data.map(p => p.name) } });
+        console.log(data)
+        /*if (existingProducts.length > 0) {
             res.send( { message: "Duplicate product found."});
-        }
+        }*/
         // If no duplicate products found, insert the new products
-        const createdProduct = await Product.insertMany(data.products);*/
-        const newProducts = await Product.updateOne({ name: {$in:data.map(d => d.name)} }, { upsert: true })
+        //const createdProduct = await Product.insertMany(data.products);
+        const newProducts = await Product.updateMany({ name: {$in:data.map(d => d.name)} }, { upsert: true }, (err=>{
+            if(err) {console.log(err)}
+        }))
         console.log(newProducts);
    }
    if(string == "Categories"){
@@ -101,12 +103,6 @@ app.get('/supermarket', async(req, res) => {
     const createdSupermarket = await Supermarket.insertMany(supermarket.features);
     res.send({ createdSupermarket });
   });
-
-//insert supermarket
-app.get('/supermarket', async(req, res) => {
-  const createdSupermarket = await Supermarket.insertMany(supermarket.features);
-  res.send({ createdSupermarket });
-});
 */
 //insert users
 app.get('/user', async(req, res) => {
