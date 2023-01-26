@@ -159,7 +159,7 @@ app.post('/api/getOffers', async(req,res) => {
           as:"user"
       }
     },
-    { $project: {"likes":1, "stock":1, "dislikes":1, "price":1, "_id":1,"createdDate":1, "createdBy":1,"products._id":1, "products.name":1, "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1, "user._id":1,"user.username":1 } }
+    { $project: {"criteria":1,"likes":1, "stock":1, "dislikes":1, "price":1, "_id":1,"createdDate":1, "createdBy":1,"products._id":1, "products.name":1, "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1, "user._id":1,"user.username":1 } }
    ]).then((result)=>{
         res.send(result);
    })
