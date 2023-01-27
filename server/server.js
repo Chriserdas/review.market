@@ -381,6 +381,25 @@ app.post('/api/chart1', async(req,res) => {
     })
 });
 
+//leaderboard
+app.get('/api/leaderboard', async(req,res) => {
+    User.aggregate([
+        { $sort: { totalScore: -1 } },
+        {
+            $project: {
+                _id: 1,
+                username: 1,
+                totalScore: 1,
+                token: 1,
+                totalToken: 1,
+            }
+        }
+    ], (error, results) => {
+        if (error) return console.error(error);
+        res.send(results);
+    });
+});
+
 app.get("/", (req, res) => {
     res.send("Server is ready");
 });
