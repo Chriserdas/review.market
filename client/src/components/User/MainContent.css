@@ -258,6 +258,29 @@
     -webkit-user-drag: none;
 }
 
+.delete{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    order:3;
+    left:-35px;
+    min-width:200px;
+}
+
+.delete p{
+    background-color: rgb(248, 7, 7);
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius:7px;
+    font-family: Toboggan;
+    color:white;
+}
+
+.delete p:hover{
+    cursor: pointer;
+}
+
 .product_name{
     position: relative;
     left:10px;

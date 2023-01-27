@@ -11,6 +11,7 @@ import {motion,useAnimation} from "framer-motion";
 const Offers = (props)=>{
 
     const userId = JSON.parse(localStorage.getItem("token")).user._id;
+    const isAdmin = JSON.parse(localStorage.getItem("token")).user.isAdmin;
     const [offers,setOffers] = useState(props.offers);
     const isNear = props.isNear;
     const [isHovered,setIsHovered] = useState(false)
@@ -66,9 +67,23 @@ const Offers = (props)=>{
                     <div className="image_container"> 
                         <img src ={offer.products[0].image} alt=""/>
                     </div>
-                    <div className="hot_logo"> 
-                        <img src={sale_logo} alt=""/>
-                    </div>
+                    {isAdmin===true ?  
+                        <div className="delete">
+                            <p
+                                onClick={()=>{
+                                    
+                                    axios.post('http://localhost:5000/api/offer/delete',{offerId:offer._id}).then(response => {
+                                        window.location = '/UserHome'
+                                    })
+
+                                }}
+                            >Delete</p>
+                        </div> 
+                        
+                        :<div className="hot_logo"> 
+                            <img src={sale_logo} alt=""/>
+                        </div>
+                    }
 
                     <div className="product_name">{offer.products[0].name}</div>
                 </div>

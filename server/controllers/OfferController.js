@@ -1,5 +1,6 @@
 const {Offer, User} = require("../models/Schemas");
 const mongoose = require("mongoose");
+const ObjectId = require('mongodb').ObjectId;
 
 // Function to calculate average offer price for previous day
 const calculateAvgPrice = async (productID) => {
@@ -268,18 +269,14 @@ const store = async(req,res)=>{
 
 //delete offer
 const destroy = (req,res)=>{
-    let offerID = req.body.offerID
-    Offer.findOneAndRemove(offerID)
-    .then(() => {
-        req.json({
-            message:'Offer deleted successfully!'
-        })
+    let offerId = req.body.offerId
+    console.log(offerId);
+    Offer.findOneAndDelete({_id: ObjectId(offerId)},(err,result)=>{
+        if(result){
+            res.send("Offer Deleted")
+        }
     })
-    .catch(error => {
-        req.json({
-            message:'An error occured'
-        })
-    })
+    
 };
 
 //update likes
