@@ -540,6 +540,7 @@ app.get("/chart2", (req, res) => {
         });
         //console.log(discount)
     });*/
+    
 });
 
 
