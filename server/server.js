@@ -404,6 +404,92 @@ app.get("/", (req, res) => {
     res.send("Server is ready");
 });
 
+// Function to calculate average offer price for previous day
+const calculateAvgPrice = async (productID,date) => {
+    const offers = await Offer.find({ products: productID, createdDate: { $eq: date } });
+    let sum = 0;
+    offers.forEach(offer => {
+        sum += offer.price;
+    });
+    let avgPrice = sum / offers.length;
+    if (isNaN(avgPrice)) {
+        avgPrice = 0;
+    }
+    return avgPrice;
+}
+
+const calculateAvgPriceWeek = async (productId) => {
+    const currentDate = new Date();
+    const previousWeek = new Date(currentDate);
+    previousWeek.setDate(currentDate.getDate() - 7);
+    // offer from previous week
+    const offers = await Offer.find({ products: productId, createdDate: { $gte: previousWeek } });
+    let sum = 0;
+    offers.forEach(offer => {
+        sum += offer.price;
+    });
+    let avgPriceWeek = sum / offers.length;
+    if (isNaN(avgPriceWeek)) {
+        avgPriceWeek = 0;
+    }
+    return avgPriceWeek;
+}
+
+app.get("/chart2", (req, res) => {
+    let categoryId = "ee0022e7b1b34eb2b834ea334cda52e7"
+    let subcategoryId = "a240e48245964b02ba73d1a86a2739be"
+    let date = "2023-01-28"
+    let year = parseInt(date.substring(0, 4));  //extract the year from the date
+    let month = parseInt(date.substring(5, 7))-1; //extract the month from the date
+    
+    Offer.aggregate([
+        {
+            $lookup: {
+                from: "products",
+                localField: "products",
+                foreignField: "_id",
+                as: "products"
+            }
+        },
+        { 
+            $match: { 
+                $and: [
+                    { "createdDate": { $gte: new Date(year, month, 1) } }, 
+                    { "createdDate": { $lt: new Date(year, month + 1, 1) } },
+                    { "products.category": categoryId }, 
+                    { "products.subcategory": subcategoryId }
+                ]
+            }
+        },
+        {
+            $group: {
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdDate" } },
+                offers: { $push: "$$ROOT" },
+            }
+        },
+    ]).then((response) => {
+        //res.send(response)
+        console.log(response[0].offers[0].products[0]._id.toString())
+        let sumPrice = 0;
+        let total = 0;
+        let offerCount = 0;
+        let discount = 0;
+        response.map(result=>{
+            const avgPrice = calculateAvgPrice(result.offers[0].products[0]._id.toString()); 
+            const avgPriceWeek = calculateAvgPriceWeek(result.offers[0].products[0]._id.toString());
+            sumPrice = Math.abs(avgPriceWeek - avgPrice);
+            total += sumPrice;
+            offerCount += 1;
+            discount = total / offerCount;
+            console.log(discount)
+        })
+        //console.log(discount)
+    });
+});
+
+
+
+
 
 const port = 5000;
 

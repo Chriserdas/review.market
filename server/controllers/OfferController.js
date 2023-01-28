@@ -1,5 +1,6 @@
 const {Offer, User} = require("../models/Schemas");
 const mongoose = require("mongoose");
+const { response } = require("express");
 const ObjectId = require('mongodb').ObjectId;
 
 // Function to calculate average offer price for previous day
@@ -59,12 +60,12 @@ const matchBoth = async(req,res)=> {
                 ]
             }
         },
-    ]).then((offers=>{
+    ]).then((response=>{
         let sumPrice = 0;
         let total = 0;
         let offerCount = 0;
         let result = 0;
-        offers.forEach(async(offer)=>{
+        response.forEach(async(offer)=>{
             const avgPrice = await calculateAvgPrice(offer.products); 
             const avgPriceWeek = await calculateAvgPriceWeek(offer.products);
             sumPrice = Math.abs(avgPriceWeek - avgPrice);
@@ -72,6 +73,7 @@ const matchBoth = async(req,res)=> {
             offerCount += 1;
             result = total / offerCount;
         })
+        console.log(result)
     }))
 }
 //add offer
