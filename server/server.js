@@ -93,6 +93,7 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
     res.send(string.toString() + " were uploaded!")
 });
 
+//delete data
 app.post('/api/deleteAll',async(req, res) => {
     let string = req.body.selected
     if(string == "Products"){
@@ -217,6 +218,7 @@ app.get('/api/getSupermarket', async(req,res) => {
    })
 });
 
+//profile
 app.post('/api/AccountData', async(req,res) => {
     let userId = req.body.userId
     User.find({"_id": userId,},{"username":1, "score":1, "token":1, "totalScore":1})
@@ -362,8 +364,8 @@ const job3 = new cron.CronJob('* * */7 * *', handleExpiredOffers, null, true);
 job3.start();
 
 //chart1
-app.post('/api/chart1', async(req,res) => {
-    let date = req.body.date
+app.get('/api/chart1', async(req,res) => {
+    let date = "2023-01-28"
     let year = parseInt(date.substring(0, 4));  //extract the year from the date
     let month = parseInt(date.substring(5, 7))-1; //extract the month from the date
     Offer.aggregate([
@@ -378,7 +380,19 @@ app.post('/api/chart1', async(req,res) => {
         {
             $group: {
                 _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdDate" } },
-                offers: { $push: "$$ROOT" }
+                offers: { $push: "$$ROOT" },
+                //offerCount: { $sum: { $size: "$offers" } }
+                /*offersCount: {
+                    $sum: {
+                      $size: { $ifNull: [ "$offers", [] ] }
+                    }
+                }*/
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                offerCount: {$size: "$offers"}
             }
         }
     ]).then(response=>{
@@ -483,7 +497,7 @@ app.get("/chart2", (req, res) => {
     let month = date_object.month();
     let year = date_object.year();
     let day = date_object.date();
-
+    
     for(let i = 1; i<=7; i++){
         let date = moment();
         let newDay = parseInt(day) - i;
@@ -542,8 +556,6 @@ app.get("/chart2", (req, res) => {
     });*/
     
 });
-
-
 
 
 
