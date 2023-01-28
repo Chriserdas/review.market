@@ -15,7 +15,7 @@ const offerRoutes = require('./routes/offer');
 const multer = require('multer');
 const users = require("./data/users");
 //const products = require('./data/products.js');
-//const categories = require('./data/categories.js');
+const categories = require('./data/categories.json');
 //const supermarket = require("./data/supermarket.js");
 const offer = require("./data/offer");
 const { use } = require("./routes/users");
@@ -23,6 +23,7 @@ const { use } = require("./routes/users");
 const { product } = require("./controllers/ProductController");
 const upload = multer({storage: multer.memoryStorage()});
 
+const moment = require('moment');
 
 //connect to database
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
@@ -51,6 +52,10 @@ app.use('/api/supermarket', supermarketRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/offer', offerRoutes);
 
+app.get('/categories', async(req, res) => {
+    const createdCategory= await Category.insertMany(categories.categories);
+    res.send(createdCategory);
+});
 
 //upload data
 app.post('/uploadData', upload.single('file') ,async(req, res) => {
@@ -405,8 +410,8 @@ app.get("/", (req, res) => {
 });
 
 // Function to calculate average offer price for previous day
-const calculateAvgPrice = async (productID,date) => {
-    const offers = await Offer.find({ products: productID, createdDate: { $eq: date } });
+const calculateAvgPrice = async (productId,date) => {
+    const offers = await Offer.find({ products: productId, createdDate: { $eq: date } });
     let sum = 0;
     offers.forEach(offer => {
         sum += offer.price;
@@ -418,8 +423,8 @@ const calculateAvgPrice = async (productID,date) => {
     return avgPrice;
 }
 
-const calculateAvgPriceWeek = async (productId) => {
-    const currentDate = new Date();
+const calculateAvgPriceWeek = async (productId,date) => {
+    const currentDate = date
     const previousWeek = new Date(currentDate);
     previousWeek.setDate(currentDate.getDate() - 7);
     // offer from previous week
@@ -435,14 +440,64 @@ const calculateAvgPriceWeek = async (productId) => {
     return avgPriceWeek;
 }
 
+async function getOffersPerDay(date,categoryId,subcategoryId){
+    
+    return new Promise((resolve, reject) => {
+        Offer.aggregate([
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "products",
+                    foreignField: "_id",
+                    as: "products"
+                }
+            },
+            { 
+                $match: { 
+                    $and: [
+                        { "createdDate": {$eq:date}},
+                        { "products.category": categoryId }, 
+                        { "products.subcategory": subcategoryId }
+                    ]
+                }
+            },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdDate" } },
+                    offers: { $push: "$$ROOT" },
+                }
+            },
+            
+        ]).then((response) => {
+            resolve(response);
+        })
+    })
+    
+}
+
 app.get("/chart2", (req, res) => {
     let categoryId = "ee0022e7b1b34eb2b834ea334cda52e7"
     let subcategoryId = "a240e48245964b02ba73d1a86a2739be"
     let date = "2023-01-28"
-    let year = parseInt(date.substring(0, 4));  //extract the year from the date
-    let month = parseInt(date.substring(5, 7))-1; //extract the month from the date
-    
-    Offer.aggregate([
+    let date_object = moment(date, "YYYY-MM-DD");
+    let month = date_object.month();
+    let year = date_object.year();
+    let day = date_object.date();
+
+    for(let i = 1; i<=7; i++){
+        let date = moment();
+        let newDay = parseInt(day) - i;
+
+        date.set({year, month, date:newDay})
+        
+        let d = date.format("YYYY-MM-DD");
+        console.log(d); 
+        getOffersPerDay(d,categoryId,subcategoryId)
+        .then(response=>{
+            console.log(response);
+        })
+    }
+    /*Offer.aggregate([
         {
             $lookup: {
                 from: "products",
@@ -482,9 +537,9 @@ app.get("/chart2", (req, res) => {
             offerCount += 1;
             discount = total / offerCount;
             console.log(discount)
-        })
+        });
         //console.log(discount)
-    });
+    });*/
 });
 
 

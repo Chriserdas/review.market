@@ -73,7 +73,8 @@ const AdminPanel = ()=>{
                                     className="category" 
                                     onClick={()=>{
                                         setClickedSelected(!clickSelected)
-                                        setSelected(result)}}
+                                        setSelected(result)
+                                    }}
                                 >{result}</div>
                             ))
                             }
