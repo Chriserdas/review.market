@@ -364,8 +364,8 @@ const job3 = new cron.CronJob('* * */7 * *', handleExpiredOffers, null, true);
 job3.start();
 
 //chart1
-app.get('/api/chart1', async(req,res) => {
-    let date = "2023-01-28"
+app.post('/api/chart1', async(req,res) => {
+    let date = req.body.date
     let year = parseInt(date.substring(0, 4));  //extract the year from the date
     let month = parseInt(date.substring(5, 7))-1; //extract the month from the date
     Offer.aggregate([
@@ -381,12 +381,6 @@ app.get('/api/chart1', async(req,res) => {
             $group: {
                 _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdDate" } },
                 offers: { $push: "$$ROOT" },
-                //offerCount: { $sum: { $size: "$offers" } }
-                /*offersCount: {
-                    $sum: {
-                      $size: { $ifNull: [ "$offers", [] ] }
-                    }
-                }*/
             }
         },
         {
