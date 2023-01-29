@@ -54,7 +54,7 @@ app.use('/api/offer', offerRoutes);
 
 //get categories
 app.get('/categories', async(req, res) => {
-    const createdCategory = await Category.find({})
+    const createdCategory= await Category.insertMany(categories.categories);
     res.send(createdCategory);
 });
 
@@ -368,7 +368,6 @@ job3.start();
 app.post('/api/chart1', async(req,res) => {
     let year = req.body.year; 
     let month = req.body.month; 
-    console.log(month);
     Offer.aggregate([
         { 
             $match: { 
@@ -450,7 +449,8 @@ const calculateAvgPriceWeek = async (productId,date) => {
 }
 
 async function getOffersPerDay(date,categoryId,subcategoryId){
-    
+    const start = new Date(date.setUTCHours(0,0,0,0));
+    const end = new Date(date.setUTCHours(23,59,59,999));
     return new Promise((resolve, reject) => {
         Offer.aggregate([
             {
@@ -458,16 +458,21 @@ async function getOffersPerDay(date,categoryId,subcategoryId){
                     from: "products",
                     localField: "products",
                     foreignField: "_id",
-                    as: "products"
+                    as: "products_joined"
                 }
             },
-            { 
-                $match: { 
-                    $and: [
-                        { "createdDate": {$eq:date}},
-                        { "products.category": categoryId }, 
-                        { "products.subcategory": subcategoryId }
-                    ]
+            {
+                $match: {
+                    "createdDate": { $gte: start, $lt: end },
+                    "products_joined.category": categoryId
+                }
+            },
+            {
+                $unwind: "$products_joined"
+            },
+            {
+                $match: {
+                    "products_joined.category": categoryId
                 }
             },
             {
@@ -476,7 +481,6 @@ async function getOffersPerDay(date,categoryId,subcategoryId){
                     offers: { $push: "$$ROOT" },
                 }
             },
-            
         ]).then((response) => {
             resolve(response);
         })
@@ -484,11 +488,19 @@ async function getOffersPerDay(date,categoryId,subcategoryId){
     
 }
 
-app.get("/chart2", (req, res) => {
-    let categoryId = "ee0022e7b1b34eb2b834ea334cda52e7"
-    let subcategoryId = "a240e48245964b02ba73d1a86a2739be"
-    let date = "2023-01-28"
-    let date_object = moment(date, "YYYY-MM-DD");
+app.post("/chart2", (req, res) => {
+    let categoryId = req.body.categoryId;
+    let subcategoryId = req.body.subcategoryId;
+    let date = new Date(req.body.date);
+    
+    for(let i = 1;i<=7;++i ){
+        date.setDate(date.getDate()-1);
+        getOffersPerDay(date, categoryId, new ObjectId(subcategoryId)).then((response) => {
+            console.log(response);
+        })
+    }
+
+    /*let date_object = moment(date, "YYYY-MM-DD");
     let month = date_object.month();
     let year = date_object.year();
     let day = date_object.date();
@@ -505,7 +517,7 @@ app.get("/chart2", (req, res) => {
         .then(response=>{
             console.log(response);
         })
-    }
+    }*/
     /*Offer.aggregate([
         {
             $lookup: {
