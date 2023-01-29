@@ -169,7 +169,10 @@ const Charts = ()=>{
         setCategory({show:false,name: result.name,id: result._id})
         setSubCategories(result.subCategories)
 
-        
+        axios.post('http://localhost:5000/api/chart2',{date:date,categoryId:result._id,subCategoryId:''})
+        .then(response => {
+
+        });
     }
  
     return (
