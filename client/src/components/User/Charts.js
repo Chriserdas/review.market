@@ -24,8 +24,25 @@ const Charts = ()=>{
     const [chartData,setChartData] = useState({
         datasets:null
     });
+
+    const [category,setCategory] = useState({
+        show:false,
+        name:"Choose Category",
+        id:"",
+    })
     
+    const [categories,setCategories] = useState(null);
+
+    const [subCategory,setSubCategory] = useState({
+        show:false,
+        name:"Choose Subcategory",
+        id:"",
+    });
+
+    const [subCategories,setSubCategories] = useState(null);
+
     const [chartOptions, setChartOptions] = useState({})
+    const [date, setDate] = useState(new Date().toISOString().substring(0, 10));
 
     const months = [
         'January',
@@ -139,7 +156,21 @@ const Charts = ()=>{
         })
     },[pickMonth.month,pickYear.year]);
 
+    useEffect(()=>{
+        if(category.show){
+            axios.get('http://localhost:5000/categories')
+            .then(response => {
+                setCategories(response.data);
+            })
+        }
+    },[category]);
     
+    const handleCategoryClick = (result)=>{
+        setCategory({show:false,name: result.name,id: result._id})
+        setSubCategories(result.subCategories)
+
+        
+    }
  
     return (
         <div className="charts_container">
@@ -199,7 +230,36 @@ const Charts = ()=>{
                 </div>
             </div>
             <div className="chart2">
+                    <div className="date_container">
+                        <input 
+                            type='date'
+                            value={date}
+                            onChange={(event) => setDate(event.target.value)}
+                        />
+                        <div className="chooseCategory">
+                            <div className="choose_category_title" onClick={()=>{setCategory({show: !category.show,name: category.name,id: category.id})}}>{category.name}</div>
+                            <div className="categories" style={{display:category.show ? 'flex' : 'none',flexDirection: 'column'}}>
+                                {categories !== null ? 
+                                    (
+                                        categories.map(result => (
+                                            <div 
+                                                key={result._id} 
+                                                className="category" 
+                                                onClick={()=>{
+                                                    handleCategoryClick(result)
+                                                }}
 
+                                            >{result.name}</div>
+                                        ))
+                                    )
+                                    : ""
+                                }
+                            </div>
+                        </div>
+                        <div className="chooseSubCategory">
+                            <div className="choose_category_title">{subCategory.name}</div>
+                        </div>
+                    </div>
             </div>
         </div>
     )

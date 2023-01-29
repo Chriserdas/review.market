@@ -1366,7 +1366,7 @@ label[for='file']:hover{
 .charts_container{
     position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     top:100px;
     width:100%;
     flex-wrap: wrap;
@@ -1378,13 +1378,21 @@ label[for='file']:hover{
     position: relative;
     display: flex;
     align-items: flex-start;
-    flex-direction: column;
+    flex-direction: row;
     width:50%;
+}
+
+.chart1_cont{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .DatePicker{
     display:flex;
     width:100%;
+    position: relative;
+    top:30px;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
@@ -1408,10 +1416,12 @@ label[for='file']:hover{
 .chosenMonth{
     display: flex;
     justify-content: center;
+    align-items: center;
     user-select: none;
     background-color:rgb(19, 19, 19);
     font-family:Toboggan;
     padding:10px;
+    height:25px;
     padding-top: 5px;
     padding-bottom: 5px;
     cursor:pointer;
@@ -1488,8 +1498,43 @@ label[for='file']:hover{
 
 .chart1_container{
     position: absolute;
-    top:200px;
+    top:230px;
     height:320px;
     width: 70%;
     left:50px;
 }
+
+.date_container{
+    width: 100%;
+    display:flex;
+    justify-content: center;
+    align-items: baseline;
+    position: relative;
+    top:30px;
+    gap:30px;
+}
+
+.date_container input{
+    background: transparent;
+    border:none;
+    height:20px;
+    font-family:Toboggan;
+    padding: 15px;
+    position: relative;
+    width: 115px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: -1px 3px 20px 0px rgba(14, 13, 13, 0.75);
+}
+
+
+
+::-webkit-datetime-edit {background: transparent;border:none;}
+::-webkit-datetime-edit-fields-wrapper { background-color: rgb(32, 31, 31); border:none; outline:none}
+::-webkit-datetime-edit-text { color: rgb(255, 81, 81); padding: 0 0.3em; }
+::-webkit-datetime-edit-month-field { color: white; font-family:Toboggan;}
+::-webkit-datetime-edit-day-field { color: white; font-family:Toboggan;}
+::-webkit-datetime-edit-year-field { color: white; font-family:Toboggan;}
+::-webkit-inner-spin-button { display: none;}
+::-webkit-calendar-picker-indicator {position: relative; left:5px; color:white;cursor: pointer;}
+::-webkit-clear-button{border:none;color:white; outline: none;}
