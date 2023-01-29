@@ -52,8 +52,9 @@ app.use('/api/supermarket', supermarketRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/offer', offerRoutes);
 
+//get categories
 app.get('/categories', async(req, res) => {
-    const createdCategory= await Category.insertMany(categories.categories);
+    const createdCategory = await Category.find({})
     res.send(createdCategory);
 });
 
