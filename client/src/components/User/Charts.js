@@ -166,10 +166,11 @@ const Charts = ()=>{
     },[category]);
     
     const handleCategoryClick = (result)=>{
-        setCategory({show:false,name: result.name,id: result._id})
+        console.log(result);
+        setCategory({show:false,name: result.name,id: result.id})
         setSubCategories(result.subCategories)
 
-        axios.post('http://localhost:5000/chart2',{date:date,categoryId:result._id,subCategoryId:''})
+        axios.post('http://localhost:5000/chart2',{date:date,categoryId:result.id,subCategoryId:''})
         .then(response => {
 
         });

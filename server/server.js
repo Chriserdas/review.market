@@ -419,7 +419,9 @@ app.get("/", (req, res) => {
 
 // Function to calculate average offer price for previous day
 const calculateAvgPrice = async (productId,date) => {
-    const offers = await Offer.find({ products: productId, createdDate: { $eq: date } });
+    const start = new Date(date.setUTCHours(0,0,0,0));
+    const end = new Date(date.setUTCHours(23,59,59,999));
+    const offers = await Offer.find({ products: productId, createdDate: {  $gte: start, $lt: end } });
     let sum = 0;
     offers.forEach(offer => {
         sum += offer.price;
@@ -462,17 +464,14 @@ async function getOffersPerDay(date,categoryId,subcategoryId){
                 }
             },
             {
-                $match: {
-                    "createdDate": { $gte: start, $lt: end },
-                    "products_joined.category": categoryId
-                }
-            },
-            {
                 $unwind: "$products_joined"
             },
             {
                 $match: {
-                    "products_joined.category": categoryId
+                    $and:[
+                        {"createdDate": { $gte: start, $lt: end }},
+                        {"products_joined.category": categoryId}
+                    ]
                 }
             },
             {
@@ -496,7 +495,23 @@ app.post("/chart2", (req, res) => {
     for(let i = 1;i<=7;++i ){
         date.setDate(date.getDate()-1);
         getOffersPerDay(date, categoryId, new ObjectId(subcategoryId)).then((response) => {
-            console.log(response);
+            if(response.length!==0){
+                let sumPrice = 0;
+                let total = 0;
+                let offerCount = 0;
+                let result = 0;
+                response[0].offers.forEach(async(offer)=>{
+                    const avgPrice = await calculateAvgPrice(offer.products,date); 
+                    const avgPriceWeek = await calculateAvgPriceWeek(offer.products,date);
+                    sumPrice = Math.abs(avgPriceWeek - avgPrice);
+                    total += sumPrice;
+                    offerCount += 1;
+                    result = total / offerCount;
+                    console.log(result);
+                })
+                
+                //console.log(total);
+            }
         })
     }
 
