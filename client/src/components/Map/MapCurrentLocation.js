@@ -65,7 +65,7 @@ export default function MapCurrentLocation(props) {
                 show:true,
                 offers:response.data,
                 super_name:response.data[0].supermarkets[0].properties.name || response.data[0].supermarkets[0].properties.shop,
-                isNear:currentLocation.distanceTo(coordinates) <50 ? true : false,
+                isNear:true,//currentLocation.distanceTo(coordinates) <50 ? true : false,
                 supermarket_id:supermarket_id
             });
         });
@@ -126,7 +126,7 @@ export default function MapCurrentLocation(props) {
                                         clicked:true,
                                         name:supermarket.properties.name || supermarket.properties.shop,
                                         id:supermarket._id,
-                                        isNear:currentLocation.distanceTo(supermarket.geometry.coordinates.reverse()) <50 ? true : false,
+                                        isNear:true//currentLocation.distanceTo(supermarket.geometry.coordinates.reverse()) <50 ? true : false,
                                     });
                                 }
                             }}

@@ -24,11 +24,11 @@ const AuthenticateForm = (props)=>{
     });
 
    useEffect(()=>{
-    
+    localStorage.clear();
     if(serverResponse.open){
         const timeout = setTimeout(()=>{
 
-            if(info.isAuth){
+            if(info.isAuth === true){
                 localStorage.setItem("isAuthenticated", "true");
                 /*localStorage.setItem("username", "true");*/
                 localStorage.setItem('token',JSON.stringify(info.data));
@@ -83,6 +83,7 @@ const AuthenticateForm = (props)=>{
                         });
 
                         setInfo({
+                            isAuth:false,
                             page:"/",
                         })
                     }

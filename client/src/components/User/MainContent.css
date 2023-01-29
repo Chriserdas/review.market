@@ -63,6 +63,7 @@
     align-items: center;
     margin-bottom: 20px;
     height:30px;
+    user-select: none;
     padding-top: 5px;
     padding-bottom: 8px;
     text-overflow: "";
@@ -1291,7 +1292,6 @@
     width:100%;
     height: calc(100% - 200px);
     align-items: center;
-    
 }
 
 .choose_type{
@@ -1361,4 +1361,135 @@ label[for='file']:hover{
 .up_container div:hover{
     transform:scale(1.02);
     cursor: pointer;
+}
+
+.charts_container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    top:100px;
+    width:100%;
+    flex-wrap: wrap;
+    height: calc(100% - 200px);
+    overflow: auto;
+}
+
+.chart1,.chart2{
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width:50%;
+}
+
+.DatePicker{
+    display:flex;
+    width:100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.monthPick{
+    display: flex;
+    position: relative;
+    left:30px;
+    justify-content: center;
+    width: 50%;
+    margin-right:20px;
+    align-items: center;
+    flex-direction: column;
+}
+
+.yearPick{
+    width:40%;
+}
+
+.chosenMonth{
+    display: flex;
+    justify-content: center;
+    user-select: none;
+    background-color:rgb(19, 19, 19);
+    font-family:Toboggan;
+    padding:10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor:pointer;
+    width:100px;
+    border-radius:20px;
+    color:rgb(212, 207, 207);
+}
+
+.months{
+    position: relative;
+    top:2px;
+    display: flex;
+    justify-content: flex-start;
+    width:400px;
+    flex-wrap: wrap;
+    background-color:rgb(19, 19, 19);
+    color: white;
+    padding-bottom: 10px;
+    border-radius: 12px;
+}
+
+.years{
+    position: relative;
+    top:2px;
+    left:10px;
+    max-height:300px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    justify-content: flex-start;
+    width:100px;
+    background-color:rgb(19, 19, 19);
+    color: white;
+}
+
+.year{
+    display: flex;
+    justify-content: center;
+    user-select: none;
+    font-size: 15px;
+    font-family:Toboggan;
+    padding:10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    cursor: pointer;
+    color:rgb(212, 207, 207);
+}
+
+.year:hover{
+    background-color:rgb(39, 39, 39);
+}
+
+.month{
+    display: flex;
+    justify-content: center;
+    user-select: none;
+    width:65px;
+    font-size: 15px;
+    font-family:Toboggan;
+    padding:10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 10px;
+    margin-top: 10px;
+    cursor:pointer;
+    border:2px solid rgb(39, 39, 39);
+    border-radius:20px;
+    color:rgb(212, 207, 207);
+}
+
+.month:hover{
+    background-color:rgb(39, 39, 39);
+}
+
+.chart1_container{
+    position: absolute;
+    top:200px;
+    height:320px;
+    width: 70%;
+    left:50px;
 }
