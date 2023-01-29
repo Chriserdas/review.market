@@ -365,9 +365,9 @@ job3.start();
 
 //chart1
 app.post('/api/chart1', async(req,res) => {
-    let date = req.body.date
-    let year = parseInt(date.substring(0, 4));  //extract the year from the date
-    let month = parseInt(date.substring(5, 7))-1; //extract the month from the date
+    let year = req.body.year; 
+    let month = req.body.month; 
+    console.log(month);
     Offer.aggregate([
         { 
             $match: { 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import {React,useState} from "react";
+import Charts from "./Charts";
 
 const AdminPanel = ()=>{
     const [clicked,setClicked] = useState("Upload");
@@ -98,6 +99,10 @@ const AdminPanel = ()=>{
                     >Delete All</div>
                 </div>
             </div>
+    }
+    if(clicked === 'Stats'){
+        content = <Charts/>
+            
     }
 
     return (
