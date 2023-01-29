@@ -487,6 +487,30 @@ async function getOffersPerDay(date,categoryId,subcategoryId){
     
 }
 
+function avgDiscount(data, date){
+    return new Promise((resolve, reject) => {
+                let sumPrice = 0;
+                let total = 0;
+                let offerCount = 0;
+                let result = 0;
+                const promises = data.map(async(offer)=>{
+                    const avgPrice = await calculateAvgPrice(offer.products,date); 
+                    const avgPriceWeek = await calculateAvgPriceWeek(offer.products,date);
+                    sumPrice = Math.abs(avgPriceWeek - avgPrice);
+                    total += sumPrice;
+                    offerCount += 1;
+                });
+                
+                Promise.all(promises).then(() => {
+                    result = total / offerCount;
+                    resolve(result);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+    });
+}
+
 app.post("/chart2", (req, res) => {
     let categoryId = req.body.categoryId;
     let subcategoryId = req.body.subcategoryId;
@@ -496,87 +520,12 @@ app.post("/chart2", (req, res) => {
         date.setDate(date.getDate()-1);
         getOffersPerDay(date, categoryId, new ObjectId(subcategoryId)).then((response) => {
             if(response.length!==0){
-                let sumPrice = 0;
-                let total = 0;
-                let offerCount = 0;
-                let result = 0;
-                response[0].offers.forEach(async(offer)=>{
-                    const avgPrice = await calculateAvgPrice(offer.products,date); 
-                    const avgPriceWeek = await calculateAvgPriceWeek(offer.products,date);
-                    sumPrice = Math.abs(avgPriceWeek - avgPrice);
-                    total += sumPrice;
-                    offerCount += 1;
-                    result = total / offerCount;
-                    console.log(result);
+                avgDiscount(response[0].offers, date).then(result=>{
+                    console.log(result)
                 })
-                
-                //console.log(total);
             }
         })
     }
-
-    /*let date_object = moment(date, "YYYY-MM-DD");
-    let month = date_object.month();
-    let year = date_object.year();
-    let day = date_object.date();
-    
-    for(let i = 1; i<=7; i++){
-        let date = moment();
-        let newDay = parseInt(day) - i;
-
-        date.set({year, month, date:newDay})
-        
-        let d = date.format("YYYY-MM-DD");
-        console.log(d); 
-        getOffersPerDay(d,categoryId,subcategoryId)
-        .then(response=>{
-            console.log(response);
-        })
-    }*/
-    /*Offer.aggregate([
-        {
-            $lookup: {
-                from: "products",
-                localField: "products",
-                foreignField: "_id",
-                as: "products"
-            }
-        },
-        { 
-            $match: { 
-                $and: [
-                    { "createdDate": { $gte: new Date(year, month, 1) } }, 
-                    { "createdDate": { $lt: new Date(year, month + 1, 1) } },
-                    { "products.category": categoryId }, 
-                    { "products.subcategory": subcategoryId }
-                ]
-            }
-        },
-        {
-            $group: {
-                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdDate" } },
-                offers: { $push: "$$ROOT" },
-            }
-        },
-    ]).then((response) => {
-        //res.send(response)
-        console.log(response[0].offers[0].products[0]._id.toString())
-        let sumPrice = 0;
-        let total = 0;
-        let offerCount = 0;
-        let discount = 0;
-        response.map(result=>{
-            const avgPrice = calculateAvgPrice(result.offers[0].products[0]._id.toString()); 
-            const avgPriceWeek = calculateAvgPriceWeek(result.offers[0].products[0]._id.toString());
-            sumPrice = Math.abs(avgPriceWeek - avgPrice);
-            total += sumPrice;
-            offerCount += 1;
-            discount = total / offerCount;
-            console.log(discount)
-        });
-        //console.log(discount)
-    });*/
-    
 });
 
 
