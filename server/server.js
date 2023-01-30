@@ -488,7 +488,7 @@ async function getOffersPerDay(date,categoryId,subcategoryId){
     
 }
 
-function avgDiscount(data, date){
+async function avgDiscount(data, date){
     return new Promise((resolve, reject) => {
                 let sumPrice = 0;
                 let total = 0;
