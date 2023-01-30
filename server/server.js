@@ -24,6 +24,7 @@ const { product } = require("./controllers/ProductController");
 const upload = multer({storage: multer.memoryStorage()});
 
 const moment = require('moment');
+const { date } = require("joi");
 
 //connect to database
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
@@ -516,26 +517,24 @@ app.post("/chart2", (req, res) => {
     let subcategoryId = req.body.subcategoryId;
     let date = new Date(req.body.date);
     let dates = [];
-    
+    let discounts = [];
     for(let i = 1;i<=7;++i ){
         let dateDiscount = new Date(date.setDate(date.getDate()-1));
         dates.push(dateDiscount)
-
-        /*let newDate = new Date(date);
-        let dateDiscount = new Date(newDate.setDate(newDate.getDate()-1));;
-        getOffersPerDay(dateDiscount, categoryId, new ObjectId(subcategoryId)).then((response) => {
-            if(response.length!==0){
-                avgDiscount(response[0].offers, date).then(result=>{
-                    discounts.push(dateDiscount,result)
-                })
-                console.log(discounts)
-            }
-        })*/
     }
-    console.log(dates)
+    const promises = dates.map(dateDiscount => {
+        return getOffersPerDay(dateDiscount, categoryId, subcategoryId).then((response) => {
+            if(response.length!==0){
+                return avgDiscount(response[0].offers, date).then(result => {
+                    discounts.push(dateDiscount,result);
+                })
+            }
+        })
+    });
+    Promise.all(promises).then(() => {
+        console.log(discounts);
+    });
 });
-
-
 
 const port = 5000;
 
