@@ -461,17 +461,18 @@ async function getOffersPerDay(date,categoryId,subcategoryId){
                     from: "products",
                     localField: "products",
                     foreignField: "_id",
-                    as: "products_joined"
+                    as: "products"
                 }
             },
             {
-                $unwind: "$products_joined"
+                $unwind: "$products"
             },
             {
                 $match: {
                     $and:[
                         {"createdDate": { $gte: start, $lt: end }},
-                        {"products_joined.category": categoryId}
+                        categoryId ? {"products.category": categoryId} : {},
+                        subcategoryId ? {"products.subcategory": subcategoryId} : {}
                     ]
                 }
             },
