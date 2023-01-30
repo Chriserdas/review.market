@@ -515,17 +515,21 @@ app.post("/chart2", (req, res) => {
     let categoryId = req.body.categoryId;
     let subcategoryId = req.body.subcategoryId;
     let date = new Date(req.body.date);
+    let discounts = [];
     
     for(let i = 1;i<=7;++i ){
-        date.setDate(date.getDate()-1);
-        getOffersPerDay(date, categoryId, new ObjectId(subcategoryId)).then((response) => {
+        //date.setDate(date.getDate()-1)
+        let newDate = new Date(date);
+        let dateDiscount = new Date(newDate.setDate(newDate.getDate()-1));;
+        getOffersPerDay(dateDiscount, categoryId, new ObjectId(subcategoryId)).then((response) => {
             if(response.length!==0){
                 avgDiscount(response[0].offers, date).then(result=>{
-                    console.log(result)
+                    discounts.push(dateDiscount,result)
                 })
             }
         })
     }
+    console.log(discounts)
 });
 
 
