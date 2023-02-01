@@ -243,9 +243,10 @@ const Charts = ()=>{
     useEffect(()=>{
         let sendSubcategory = false;
 
-        if(subCategory.name === 'Choose Subcategory'){
+        if(subCategory.name !== 'Choose Subcategory'){
             sendSubcategory = true;
         }
+        console.log(sendSubcategory);
 
         if(category.name !== 'Choose Category'){
             axios.post('http://localhost:5000/chart2',{date:date,categoryId:category.id,subCategoryId:sendSubcategory===true ? subCategory.id : ''})
