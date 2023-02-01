@@ -277,7 +277,7 @@ const Charts = ()=>{
                 responsive:true,
                 maintainAspectRatio:false,
                 height:'300px',
-                width:'150px',
+                width:'200px',
                 plugins:{
                     colors: {
                         enabled: false
@@ -303,7 +303,6 @@ const Charts = ()=>{
                         ticks:{
                             color:'#229673',
                             beginAtZero: true,
-                            callback: function(value) {if (value % 1 === 0) {return value;}}
                         },
                         grid: {
                             display: false
@@ -430,7 +429,7 @@ const Charts = ()=>{
                                 <Bar 
                                     style ={{width:'80%'}}
                                     data = {avgChartData}
-                                    option={chart2Options}
+                                    options={chart2Options}
                                 />
                             ):""
                         }

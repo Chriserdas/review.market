@@ -515,10 +515,12 @@ async function avgDiscount(data, date){
 
 app.post("/chart2", (req, res) => {
     let categoryId = req.body.categoryId;
-    let subcategoryId = req.body.subcategoryId;
+    let subcategoryId = req.body.subCategoryId;
     let date = new Date(req.body.date);
     let dates = [];
     let discounts = [];
+
+
     for(let i = 1;i<=7;++i ){
         let dateDiscount = new Date(date.setDate(date.getDate()-1));
         dates.push(dateDiscount)
