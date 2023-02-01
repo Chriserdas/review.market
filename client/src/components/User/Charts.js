@@ -29,7 +29,13 @@ const Charts = ()=>{
         show:false,
         name:"Choose Category",
         id:"",
-    })
+    });
+
+    const [avgChartData,setAvgChartData] = useState({
+        datasets:null
+    });
+
+    const [chart2Options, setChart2Options] = useState({})
     
     const [categories,setCategories] = useState(null);
 
@@ -165,16 +171,150 @@ const Charts = ()=>{
         }
     },[category]);
     
-    const handleCategoryClick = (result)=>{
-        console.log(result);
+    /*const handleCategoryClick = (result)=>{
         setCategory({show:false,name: result.name,id: result.id})
-        setSubCategories(result.subCategories)
+        setSubCategories(result.subcategories)
+        console.log(result.subcategories);
 
         axios.post('http://localhost:5000/chart2',{date:date,categoryId:result.id,subCategoryId:''})
         .then(response => {
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateA - dateB;
+            });
 
+            setAvgChartData({
+                labels: sortedData.map(d=>new Date(d.date).getDate()),
+                datasets: [
+                    {
+                        label:"Average Discount",
+                        data: sortedData.map(d=> d.result),
+                        borderColor:'transparent',
+                        backgroundColor:'#229673',
+                        color:'white',
+                        marginRight:'5px',
+                        width:'1px',
+                    }
+                ]
+            });
+
+            setChart2Options({
+                responsive:true,
+                maintainAspectRatio:false,
+                height:'300px',
+                width:'150px',
+                plugins:{
+                    colors: {
+                        enabled: false
+                    },
+                    legend:{
+                        position:"top"
+                    },
+                    title:{
+                        display:true,
+                        text:"Offers created on " + pickMonth.month + " " + pickYear.year,
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks:{
+                            color:'white',
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        ticks:{
+                            color:'#229673',
+                            beginAtZero: true,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                  }
+            })
         });
-    }
+    }*/
+
+    useEffect(()=>{
+        let sendSubcategory = false;
+
+        if(subCategory.name === 'Choose Subcategory'){
+            sendSubcategory = true;
+        }
+
+        if(category.name !== 'Choose Category'){
+            axios.post('http://localhost:5000/chart2',{date:date,categoryId:category.id,subCategoryId:sendSubcategory===true ? subCategory.id : ''})
+        .then(response => {
+            console.log(response);
+            const sortedData = response.data.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateA - dateB;
+            });
+
+            setAvgChartData({
+                labels: sortedData.map(d=>new Date(d.date).getDate()),
+                datasets: [
+                    {
+                        label:"Average Discount",
+                        data: sortedData.map(d=> d.result),
+                        borderColor:'transparent',
+                        backgroundColor:'#229673',
+                        color:'white',
+                        marginRight:'5px',
+                        width:'1px',
+                    }
+                ]
+            });
+
+            setChart2Options({
+                responsive:true,
+                maintainAspectRatio:false,
+                height:'300px',
+                width:'150px',
+                plugins:{
+                    colors: {
+                        enabled: false
+                    },
+                    legend:{
+                        position:"top"
+                    },
+                    title:{
+                        display:true,
+                        text:"Offers created on " + pickMonth.month + " " + pickYear.year,
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks:{
+                            color:'white',
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        ticks:{
+                            color:'#229673',
+                            beginAtZero: true,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                  }
+            })
+        });
+        }
+
+    },[date, category.name,subCategory.name]);
+
  
     return (
         <div className="charts_container">
@@ -250,7 +390,9 @@ const Charts = ()=>{
                                                 key={result._id} 
                                                 className="category" 
                                                 onClick={()=>{
-                                                    handleCategoryClick(result)
+                                                    setCategory({show:false,name: result.name,id: result.id});
+                                                    setSubCategory({show:false, name:'Choose Subcategory', id:''});
+                                                    setSubCategories(result.subcategories);
                                                 }}
 
                                             >{result.name}</div>
@@ -261,8 +403,36 @@ const Charts = ()=>{
                             </div>
                         </div>
                         <div className="chooseSubCategory">
-                            <div className="choose_category_title">{subCategory.name}</div>
+                            <div className="choose_category_title" onClick={()=>{setSubCategory({show: !subCategory.show,name: subCategory.name,id: subCategory.id})}}>{subCategory.name}</div>
+                            <div className="categories" style={{display:subCategory.show ? 'flex' : 'none',flexDirection: 'column'}}>
+                                {subCategories !== null ? 
+                                    (
+                                        subCategories.map(result => (
+                                            <div 
+                                                key={result._id} 
+                                                className="category" 
+                                                onClick={()=>{
+                                                    setSubCategory({show:false,name:result.name,id:result.uuid});
+                                                }}
+
+                                            >{result.name}</div>
+                                        ))
+                                    )
+                                    : ""
+                                }
+                            </div>
                         </div>
+                    </div>
+                    <div className="chart1_container">
+                        {avgChartData.datasets!==null && chart2Options!=={} ?
+                            (
+                                <Bar 
+                                    style ={{width:'80%'}}
+                                    data = {avgChartData}
+                                    option={chart2Options}
+                                />
+                            ):""
+                        }
                     </div>
             </div>
         </div>

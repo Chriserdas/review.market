@@ -471,7 +471,7 @@ async function getOffersPerDay(date,categoryId,subcategoryId){
                 $match: {
                     $and:[
                         {"createdDate": { $gte: start, $lt: end }},
-                        categoryId ? {"products.category": categoryId} : {},
+                        {"products.category": categoryId},
                         subcategoryId ? {"products.subcategory": subcategoryId} : {}
                     ]
                 }
@@ -527,13 +527,17 @@ app.post("/chart2", (req, res) => {
         return getOffersPerDay(dateDiscount, categoryId, subcategoryId).then((response) => {
             if(response.length!==0){
                 return avgDiscount(response[0].offers, date).then(result => {
-                    discounts.push(dateDiscount,result);
-                })
+                    discounts.push({date:dateDiscount,result:result});
+                });
+            }
+            else{
+                discounts.push({date:dateDiscount,result:0})
             }
         })
     });
     Promise.all(promises).then(() => {
         console.log(discounts);
+        res.send(discounts);
     });
 });
 

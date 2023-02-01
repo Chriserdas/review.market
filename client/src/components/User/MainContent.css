@@ -1382,11 +1382,11 @@ label[for='file']:hover{
     width:50%;
 }
 
-.chart1_cont{
+/*.chart1_cont{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-}
+}*/
 
 .DatePicker{
     display:flex;
@@ -1538,3 +1538,4 @@ label[for='file']:hover{
 ::-webkit-inner-spin-button { display: none;}
 ::-webkit-calendar-picker-indicator {position: relative; left:5px; color:white;cursor: pointer;}
 ::-webkit-clear-button{border:none;color:white; outline: none;}
+
