@@ -184,18 +184,18 @@ const Charts = ()=>{
             axios.post('http://localhost:5000/chart2',{date:date,categoryId:category.id,subCategoryId:sendSubcategory===true ? subCategory.id : ''})
         .then(response => {
             console.log(response);
-            const sortedData = response.data.sort((a, b) => {
+            /*const sortedData = response.data.sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
                 return dateA - dateB;
-            });
-
+            });*/
+            console.log(response.data.map(d => new Date(d.date).getDate() - 1))
             setAvgChartData({
-                labels: sortedData.map(d=>new Date(d.date).getDate()),
+                labels: response.data.map(d => new Date(d.date).getDate() - 1),
                 datasets: [
                     {
                         label:"Average Discount",
-                        data: sortedData.map(d=> d.result),
+                        data: response.data.map(d=> d.result),
                         borderColor:'transparent',
                         backgroundColor:'rgb(255, 81, 81)',
                         color:'white',

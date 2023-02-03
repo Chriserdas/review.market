@@ -510,13 +510,12 @@ app.post("/chart2", (req, res) => {
     let date = new Date(req.body.date);
     let dates = [];
     let discounts = [];
-
-    dates.push(date);
-    for(let i = 1;i<=6; ++i){
-
-        let discountDate = new Date(date.setDate(date.getDate()-1));
-        
-        dates.push(discountDate)
+    
+    console.log(date)
+    for(let i = 1;i<=7; ++i){
+        let discountDate = new Date(date);
+        dates.push(discountDate);
+        date.setDate(date.getDate() - 1);
     }
     const promises = dates.map(discountDate => {
         return getOffersPerDay(discountDate, categoryId, subcategoryId).then((response) => {
@@ -531,6 +530,10 @@ app.post("/chart2", (req, res) => {
         })
     });
     Promise.all(promises).then(() => {
+        discounts.sort((a, b) => {
+            return new Date(a.date) - new Date(b.date);
+        });
+        console.log(discounts)
         res.send(discounts);
     });
 });
