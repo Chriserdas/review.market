@@ -1,13 +1,14 @@
 
 import axios from 'axios';
 import {React,useEffect,useState} from 'react'
+import NotificationPopup from '../NotificationPopup';
 import AdminPanel from './AdminPanel';
 
 function ProfileSettings(props) {
     const [clicked,setClicked] = useState("Account");
 
     const [hovered,setHovered] = useState(null);
-    const user = JSON.parse(localStorage.getItem("token")).user
+    const [user,setUser] = useState(JSON.parse(localStorage.getItem("token")));
     const [changeUsername,setChangeUsername] = useState(false);
     const [changePassword,setChangePassword] = useState(false);
     const [passwordValue,setPasswordValue] = useState({
@@ -20,6 +21,11 @@ function ProfileSettings(props) {
     const [tokens,setTokens] = useState({
         score:"",totalScore:"",tokens:"",totalTokens:""
     });
+
+    const [notification,setNotification] = useState({
+        show:false,
+        message:''
+    })
 
     useEffect(() => {
 
@@ -47,10 +53,14 @@ function ProfileSettings(props) {
     },[clicked])
 
     const handleProfile = () => {
-       
-        if(usernameValue === ''){
+        let updateUsername = true;
+        setChangeUsername(false)
+
+        if(usernameValue === '' || usernameValue === user.username){
             setUsernameValue(user.username);
+            updateUsername = false;
         }
+
         if(passwordValue.oldPassword==="" || passwordValue.newPassword===""){
             setChangePassword(false)
             setPasswordValue({
@@ -62,12 +72,16 @@ function ProfileSettings(props) {
         axios.patch('http://localhost:5000/api/auth/updateProfile',
         {
             userId:user._id,
+            updateUsername:updateUsername,
             newUsername:usernameValue,
             oldPassword:passwordValue.oldPassword,
             newPassword:passwordValue.newPassword
         })
         .then(response => {
             console.log(response.data);
+            setUser(response.data.user);
+            setNotification({show:true,message:response.data.message});
+            localStorage.setItem("token", JSON.stringify(response.data.user));
         })
     }
 
@@ -275,7 +289,7 @@ function ProfileSettings(props) {
                             )
                         }     
                     </div>
-                
+                    
                 </>)
                 :<AdminPanel/>
             }

@@ -8,7 +8,7 @@ const SecondNavbar = (props)=>{
     const show = props.productInfo.show;
     const isClicked = props.isClicked
     const animate = useAnimation();
-    const userId = JSON.parse(localStorage.getItem("token")).user._id;
+    const userId = JSON.parse(localStorage.getItem("token"))._id;
 
     const [searchValue,setSearchValue] = useState("");
 

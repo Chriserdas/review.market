@@ -9,8 +9,8 @@ import Offers from "./Offers";
 const OfferedProducts = (props) => {
     const show = props.productInfo.show;
     const super_name = props.productInfo.super_name;
-    const isAdmin = JSON.parse(localStorage.getItem("token")).user.isAdmin;
-    const userId = JSON.parse(localStorage.getItem("token")).user._id;
+    const isAdmin = JSON.parse(localStorage.getItem("token")).isAdmin;
+    const userId = JSON.parse(localStorage.getItem("token"))._id;
     const isNear = props.productInfo.isNear;
     const offers = props.productInfo.offers;
     const animate = useAnimation();

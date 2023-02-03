@@ -14,7 +14,7 @@ import NavbarContext from './NavbarContext';
 const Navbar = ()=>{
 
     const {isClicked, setIsClicked} = useContext(NavbarContext);  
-    const user = JSON.parse(localStorage.getItem("token")).user
+    const user = JSON.parse(localStorage.getItem("token"))
 
     const handleClick = (name)=>{
         setIsClicked(name);

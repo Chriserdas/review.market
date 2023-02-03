@@ -10,8 +10,8 @@ import {motion,useAnimation} from "framer-motion";
 
 const Offers = (props)=>{
 
-    const userId = JSON.parse(localStorage.getItem("token")).user._id;
-    const isAdmin = JSON.parse(localStorage.getItem("token")).user.isAdmin;
+    const userId = JSON.parse(localStorage.getItem("token"))._id;
+    const isAdmin = JSON.parse(localStorage.getItem("token")).isAdmin;
     const [offers,setOffers] = useState(props.offers);
     const isNear = props.isNear;
 
