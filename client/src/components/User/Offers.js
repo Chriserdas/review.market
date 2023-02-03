@@ -14,8 +14,6 @@ const Offers = (props)=>{
     const isAdmin = JSON.parse(localStorage.getItem("token")).user.isAdmin;
     const [offers,setOffers] = useState(props.offers);
     const isNear = props.isNear;
-    const [isHovered,setIsHovered] = useState(false)
-    const animate = useAnimation();
 
     const handleLikeClick = (offerId,index,url,offerStock) => {
 

@@ -47,7 +47,28 @@ function ProfileSettings(props) {
     },[clicked])
 
     const handleProfile = () => {
-        if(passwordValue.oldPassword !=="" && passwordValue.newPassword !=="" ){}
+       
+        if(usernameValue === ''){
+            setUsernameValue(user.username);
+        }
+        if(passwordValue.oldPassword==="" || passwordValue.newPassword===""){
+            setChangePassword(false)
+            setPasswordValue({
+                oldPassword:'',
+                newPassword:""
+            });
+        }
+
+        axios.patch('http://localhost:5000/api/auth/updateProfile',
+        {
+            userId:user._id,
+            newUsername:usernameValue,
+            oldPassword:passwordValue.oldPassword,
+            newPassword:passwordValue.newPassword
+        })
+        .then(response => {
+            console.log(response.data);
+        })
     }
 
     return (

@@ -148,6 +148,7 @@ const Charts = ()=>{
                         }
                     },
                     y: {
+                        barThickness: 20,
                         ticks:{
                             color:'#229673',
                             beginAtZero: true,
@@ -171,74 +172,6 @@ const Charts = ()=>{
         }
     },[category]);
     
-    /*const handleCategoryClick = (result)=>{
-        setCategory({show:false,name: result.name,id: result.id})
-        setSubCategories(result.subcategories)
-        console.log(result.subcategories);
-
-        axios.post('http://localhost:5000/chart2',{date:date,categoryId:result.id,subCategoryId:''})
-        .then(response => {
-            const sortedData = response.data.sort((a, b) => {
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
-                return dateA - dateB;
-            });
-
-            setAvgChartData({
-                labels: sortedData.map(d=>new Date(d.date).getDate()),
-                datasets: [
-                    {
-                        label:"Average Discount",
-                        data: sortedData.map(d=> d.result),
-                        borderColor:'transparent',
-                        backgroundColor:'#229673',
-                        color:'white',
-                        marginRight:'5px',
-                        width:'1px',
-                    }
-                ]
-            });
-
-            setChart2Options({
-                responsive:true,
-                maintainAspectRatio:false,
-                height:'300px',
-                width:'150px',
-                plugins:{
-                    colors: {
-                        enabled: false
-                    },
-                    legend:{
-                        position:"top"
-                    },
-                    title:{
-                        display:true,
-                        text:"Offers created on " + pickMonth.month + " " + pickYear.year,
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks:{
-                            color:'white',
-                        },
-                        grid: {
-                            display: false
-                        }
-                    },
-                    y: {
-                        ticks:{
-                            color:'#229673',
-                            beginAtZero: true,
-                            callback: function(value) {if (value % 1 === 0) {return value;}}
-                        },
-                        grid: {
-                            display: false
-                        }
-                    }
-                  }
-            })
-        });
-    }*/
 
     useEffect(()=>{
         let sendSubcategory = false;
@@ -246,12 +179,10 @@ const Charts = ()=>{
         if(subCategory.name !== 'Choose Subcategory'){
             sendSubcategory = true;
         }
-        console.log(sendSubcategory);
 
         if(category.name !== 'Choose Category'){
             axios.post('http://localhost:5000/chart2',{date:date,categoryId:category.id,subCategoryId:sendSubcategory===true ? subCategory.id : ''})
         .then(response => {
-            console.log(response);
             const sortedData = response.data.sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);
@@ -265,10 +196,10 @@ const Charts = ()=>{
                         label:"Average Discount",
                         data: sortedData.map(d=> d.result),
                         borderColor:'transparent',
-                        backgroundColor:'#229673',
+                        backgroundColor:'rgb(255, 81, 81)',
                         color:'white',
                         marginRight:'5px',
-                        width:'1px',
+                        width:'5px',
                     }
                 ]
             });
@@ -276,9 +207,15 @@ const Charts = ()=>{
             setChart2Options({
                 responsive:true,
                 maintainAspectRatio:false,
-                height:'300px',
+                height:'350px',
                 width:'200px',
+                barPercentage: 0.2,
+                
                 plugins:{
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     colors: {
                         enabled: false
                     },
@@ -287,7 +224,7 @@ const Charts = ()=>{
                     },
                     title:{
                         display:true,
-                        text:"Offers created on " + pickMonth.month + " " + pickYear.year,
+                        text:"Average price of products in a week",
                     }
                 },
                 scales: {
@@ -301,7 +238,7 @@ const Charts = ()=>{
                     },
                     y: {
                         ticks:{
-                            color:'#229673',
+                            color:'rgb(255, 81, 81)',
                             beginAtZero: true,
                         },
                         grid: {
@@ -423,14 +360,30 @@ const Charts = ()=>{
                             </div>
                         </div>
                     </div>
-                    <div className="chart1_container">
+                    <div className="chart1_container" style={{top:'170px'}}>
+                        
                         {avgChartData.datasets!==null && chart2Options!=={} ?
                             (
-                                <Bar 
-                                    style ={{width:'80%'}}
-                                    data = {avgChartData}
-                                    options={chart2Options}
-                                />
+                                <>
+                                    <div>
+                                        <p
+                                            onClick={()=>{
+                                                setDate(new Date(new Date(date).getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().substr(0, 10));
+                                            }}
+                                        >&lt;</p>
+                                        <h1>{date}</h1>
+                                        <p
+                                            onClick={()=>{
+                                                setDate(new Date(new Date(date).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().substr(0, 10));
+                                            }}
+                                        >&gt;</p>
+                                    </div>
+                                    <Bar 
+                                        style ={{width:'90%',position:'relative',left:'5%'}}
+                                        data = {avgChartData}
+                                        options={chart2Options}
+                                    />
+                                </>
                             ):""
                         }
                     </div>

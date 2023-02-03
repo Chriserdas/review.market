@@ -159,7 +159,7 @@ app.post('/api/getOffers', async(req,res) => {
           as:"user"
       }
     },
-    { $project: {"criteria":1,"likes":1, "stock":1, "dislikes":1, "price":1, "_id":1,"createdDate":1, "createdBy":1,"products._id":1, "products.name":1, "products.image":1,"supermarkets.properties.name":1, "supermarkets.geometry.coordinates":1, "user._id":1,"user.username":1 } }
+    { $project: {"criteria":1,"likes":1, "stock":1, "dislikes":1, "price":1, "_id":1,"createdDate":1, "createdBy":1,"products._id":1, "products.name":1, "products.image":1,"supermarkets.properties.name":1,"supermarkets.properties.shop":1, "supermarkets.geometry.coordinates":1, "user._id":1,"user.username":1 } }
    ]).then((result)=>{
         res.send(result);
    })
@@ -521,24 +521,25 @@ app.post("/chart2", (req, res) => {
     let discounts = [];
 
 
-    for(let i = 1;i<=7;++i ){
-        let dateDiscount = new Date(date.setDate(date.getDate()-1));
-        dates.push(dateDiscount)
+    for(let i = 0;i<7; i++){
+
+        let discountDate = new Date(date.setDate(date.getDate()-1));
+        
+        dates.push(discountDate)
     }
-    const promises = dates.map(dateDiscount => {
-        return getOffersPerDay(dateDiscount, categoryId, subcategoryId).then((response) => {
+    const promises = dates.map(discountDate => {
+        return getOffersPerDay(discountDate, categoryId, subcategoryId).then((response) => {
             if(response.length!==0){
                 return avgDiscount(response[0].offers, date).then(result => {
-                    discounts.push({date:dateDiscount,result:result});
+                    discounts.push({date:discountDate,result:result});
                 });
             }
             else{
-                discounts.push({date:dateDiscount,result:0})
+                discounts.push({date:discountDate,result:0})
             }
         })
     });
     Promise.all(promises).then(() => {
-        console.log(discounts);
         res.send(discounts);
     });
 });

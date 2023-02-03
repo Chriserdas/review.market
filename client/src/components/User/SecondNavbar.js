@@ -243,148 +243,166 @@ const SecondNavbar = (props)=>{
 
     let showDiv = 
             <div>
-                {clickedSupermarket.isNear===true ? 
-                    (
-                        <div className="secondNavbar_near">
-                            <div className="choose_container">
-                                <div className="choose_name">Choose by category</div>
-                                <div className="choose_category">
-                                    <div className="choose_category_title" onClick={()=>setClickCategory(!clickCategory)}>{category.name} <div>&gt;</div></div>
-                                    <motion.div className="categories" animate={animateCategories}>
-                                        {categories !== null ? 
-                                            (
-                                                categories.map(result => (
-                                                    <div key={result._id} className="category" onClick={()=>handleCategoryClick(result)}>{result.name}</div>
-                                                ))
-                                            )
-                                            : ""
-                                        }
-                                    </motion.div>
-                                </div>
-
-                                <div className="choose_subcategory">
-                                    <div className="choose_category_title" onClick={()=>setClickSubCategory(!clickSubCategory)}>{subCategory.name} <div>&gt;</div></div>
-                                    <motion.div className="categories" animate={animateSubCategories}>
-                                        {subCategories !== null ? 
-                                            (
-                                                subCategories.map(result => (
-                                                    <div key={result.uuid} className="category" onClick={()=>handleSubCategoryClick(result)}>{result.name}</div>
-                                                ))
-                                            )
-                                            : <div style={{fontFamily:"Manrope-Regular"}}>Choose Category first!</div>
-                                        }
-                                    </motion.div>
-                                </div> 
-
-                                {showproducts ===true ? 
-                                    (
-                                        <div className="chooseProduct">
-                                            <div className="product_title" onClick={()=>setProductClick(!clickProduct)}> {product.name}<div>&gt;</div></div>
-
-                                            <motion.div className="all_products" animate={animateProducts}>
-                                                {products !== null ? 
-                                                    (
-                                                        products.map(product => (
-                                                            <div key ={product._id} className="category" onClick={()=>handleProductClick(product.name,product._id)}>{product.name}</div>
-                                                        ))
-                                                    )
-                                                    : <div style={{fontFamily:"Manrope-Regular"}}>No products to show!</div>
-                                                }
-                                            </motion.div>
-                                        </div>
-                                    ) 
-                                    :""
-                                }
-
-                                {(category.name !== "Choose Category" 
-                                    && subCategory.name!=="Choose Subcategory" 
-                                    && product.name !=="Choose Product") || createOffer ===true ?
-                                        
-                                        (
-                                            <div className="submit_offer_container">
-                                                <div className="productTitle">{product.name}</div>
-                                                <div className="submitOfferWrapper">
-                                                    <div className="set_price">Price:
-                                                        <input
-                                                            value={priceValue}
-                                                            onChange={handleOnChange}
-                                                        />
-                                                    </div>
-                                                    <div className="set_stock"> 
-                                                        Stock:
-                                                        <div 
-                                                        style={{backgroundColor: stock===true ? "green" : "red"}} 
-                                                        onClick={()=>{
-                                                            setStock(!stock);
-                                                        }}
-                                                        > {stock.toString()}</div>
-                                                    </div>
-                                                    
-                                                </div>
-                                                <div className="submit_offer" onClick={()=>handleSubmitOffer()}>Submit Offer</div>
-                                            </div>
-                                        )
-                                        :""
-                                }
-                            </div>
-                            <div className="search_product">
-                                <div className="createOffer_txt">Create an Offer</div>
-                                <div className="supermarketClicked">
-                                    <div className="superName">
-                                        {clickedSupermarket.name}
+                {show===true ||clickedSupermarket.clicked ===true ?
+                    (clickedSupermarket.isNear ?
+                        (
+                            <div className="secondNavbar_near">
+                                <div className="choose_container">
+                                    <div className="choose_name">Choose by category</div>
+                                    <div className="choose_category">
+                                        <div className="choose_category_title" onClick={()=>setClickCategory(!clickCategory)}>{category.name} <div>&gt;</div></div>
+                                        <motion.div className="categories" animate={animateCategories}>
+                                            {categories !== null ? 
+                                                (
+                                                    categories.map(result => (
+                                                        <div key={result._id} className="category" onClick={()=>handleCategoryClick(result)}>{result.name}</div>
+                                                    ))
+                                                )
+                                                : ""
+                                            }
+                                        </motion.div>
                                     </div>
-                                    
-                                    {clickedSupermarket.clicked===true ? 
+    
+                                    <div className="choose_subcategory">
+                                        <div className="choose_category_title" onClick={()=>setClickSubCategory(!clickSubCategory)}>{subCategory.name} <div>&gt;</div></div>
+                                        <motion.div className="categories" animate={animateSubCategories}>
+                                            {subCategories !== null ? 
+                                                (
+                                                    subCategories.map(result => (
+                                                        <div key={result.uuid} className="category" onClick={()=>handleSubCategoryClick(result)}>{result.name}</div>
+                                                    ))
+                                                )
+                                                : <div style={{fontFamily:"Manrope-Regular"}}>Choose Category first!</div>
+                                            }
+                                        </motion.div>
+                                    </div> 
+    
+                                    {showproducts ===true ? 
                                         (
-                                            <div 
-                                                className="goBackToSearch" 
-                                                onClick={()=>{
-                                                    setClickedSupermarket({clicked:false})
-                                                }}
-                                            >back to search</div>
-                                        )
+                                            <div className="chooseProduct">
+                                                <div className="product_title" onClick={()=>setProductClick(!clickProduct)}> {product.name}<div>&gt;</div></div>
+    
+                                                <motion.div className="all_products" animate={animateProducts}>
+                                                    {products !== null ? 
+                                                        (
+                                                            products.map(product => (
+                                                                <div key ={product._id} className="category" onClick={()=>handleProductClick(product.name,product._id)}>{product.name}</div>
+                                                            ))
+                                                        )
+                                                        : <div style={{fontFamily:"Manrope-Regular"}}>No products to show!</div>
+                                                    }
+                                                </motion.div>
+                                            </div>
+                                        ) 
                                         :""
                                     }
-                                </div>
-                                <div className="createOffer_search_container">
-                                    <div className="createOffer_search">
-                                        <input
-                                            value={searchValue}
-                                            placeholder="Search for products..."
-                                            onChange={handleSearch}
-                                        
-                                        />
-                    
-                                    </div>
-                                    <div className="search_results" style={{display:showSearchResult===true ? 'flex' : 'none'}}>
-                                        {showSearchResult===true && products!==null ?
+    
+                                    {(category.name !== "Choose Category" 
+                                        && subCategory.name!=="Choose Subcategory" 
+                                        && product.name !=="Choose Product") || createOffer ===true ?
                                             
                                             (
-                                                products.map(product=>(
-
-                                                    <div key={product._id} className="category" onClick={()=>{
-                                                        setProduct({name:product.name, id:product._id})
-                                                        setCreateOffer(true);
-                                                    }}>
-                                                        {product.name} 
+                                                <div className="submit_offer_container">
+                                                    <div className="productTitle">{product.name}</div>
+                                                    <div className="submitOfferWrapper">
+                                                        <div className="set_price">Price:
+                                                            <input
+                                                                value={priceValue}
+                                                                onChange={handleOnChange}
+                                                            />
+                                                        </div>
+                                                        <div className="set_stock"> 
+                                                            Stock:
+                                                            <div 
+                                                            style={{backgroundColor: stock===true ? "green" : "red"}} 
+                                                            onClick={()=>{
+                                                                setStock(!stock);
+                                                            }}
+                                                            > {stock.toString()}</div>
+                                                        </div>
+                                                        
                                                     </div>
-                                            
-                                                ))
-                                            ) 
+                                                    <div className="submit_offer" onClick={()=>handleSubmitOffer()}>Submit Offer</div>
+                                                </div>
+                                            )
                                             :""
-                                            
+                                    }
+                                </div>
+                                <div className="search_product">
+                                    <div className="createOffer_txt">Create an Offer</div>
+                                    <div className="supermarketClicked">
+                                        <div className="superName">
+                                            {clickedSupermarket.name}
+                                        </div>
+                                        
+                                        {clickedSupermarket.clicked===true ? 
+                                            (
+                                                <div 
+                                                    className="goBackToSearch" 
+                                                    onClick={()=>{
+                                                        setClickedSupermarket({clicked:false})
+                                                    }}
+                                                >back to search</div>
+                                            )
+                                            :""
                                         }
+                                    </div>
+                                    <div className="createOffer_search_container">
+                                        <div className="createOffer_search">
+                                            <input
+                                                value={searchValue}
+                                                placeholder="Search for products..."
+                                                onChange={handleSearch}
+                                            
+                                            />
+                        
+                                        </div>
+                                        <div className="search_results" style={{display:showSearchResult===true ? 'flex' : 'none'}}>
+                                            {showSearchResult===true && products!==null ?
+                                                
+                                                (
+                                                    products.map(product=>(
+    
+                                                        <div key={product._id} className="category" onClick={()=>{
+                                                            setProduct({name:product.name, id:product._id})
+                                                            setCreateOffer(true);
+                                                        }}>
+                                                            {product.name} 
+                                                        </div>
+                                                
+                                                    ))
+                                                ) 
+                                                :""
+                                                
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    )
-                    :
-                    (
-                        <div className="secondNavbar_not_near">
-                            You should be less than 50 meters away from the supermarket to create an offer
-                        </div>
-                    )
+                        )
+                        :
+                        (show ===true ?
+                            <div className="secondNavbar_not_near">
+                                You should be less than 50 meters away from the supermarket to create an offer
+                            </div>
+                            :
+                            (
+                                <>
+                                    <div className="secondNavbar_not_near">
+                                        You should be less than 50 meters away from the supermarket to create an offer
+                                        <div
+                                            onClick={()=>{
+                                                setClickedSupermarket({clicked:false})
+                                            }}
+                                        >back to search</div>
+                                    </div>
+                                </>
+                                
+                            )
+                        )
+                    ) 
+                    
+                    : ""
                 }
             </div>
 
@@ -448,6 +466,9 @@ const SecondNavbar = (props)=>{
     return (
         <motion.div className="secondNavbar"
             animate={animate}
+            transition={{ 
+                type: "tween",
+            }}
         >
             {content}
         </motion.div>

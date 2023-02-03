@@ -155,6 +155,11 @@
     align-items: baseline;
 }
 
+.super_name{
+    text-transform: capitalize;
+    font-family: Manrope-Bold;
+}
+
 .back{
     display: flex;
     justify-content: center;
@@ -440,15 +445,31 @@
 .secondNavbar_not_near{
     position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
     font-family: Toboggan;
     text-align: center;
     font-size:17px;
+    justify-content: center;
     color:white;
     width: 100%;
     height:100vh;
     user-select: none;
     z-index: 2;
+}
+
+.secondNavbar_not_near div{
+    position: relative;
+    top:20px;
+    font-family: Manrope-Regular;
+    color:rgb(228, 69, 69);
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.secondNavbar_not_near div:hover{
+    border-bottom: 1px solid rgb(228, 69, 69);
 }
 
 .createDate{
@@ -760,8 +781,9 @@
     top:40px;
     display:flex;
     justify-content: flex-start;
-    left: 0px;
+    left: 5px;
     font-size: 20px;
+    text-transform: capitalize;
     align-items: center;
     color:#949494;
 }
@@ -781,6 +803,7 @@
     border-radius: 20px;
     display: flex;
     align-items: center;
+    text-transform: none;
     justify-content: center;
     margin-right: 10px;
     font-family: Manrope-Light;
@@ -789,6 +812,8 @@
     height:25px;
     width: 120px;
 }
+
+
 
 .goBackToSearch:hover{
     background-color: #161616;
@@ -1117,12 +1142,6 @@
     width: 100%;
 }
 
-/*.secondRowHist div{
-    position: relative;
-    width: 100%;
-    height:50%;
-}*/
-
 .offers{
     position: relative;
     top:20px;
@@ -1242,6 +1261,7 @@
     display: flex;
     flex-direction: column;
     width:100%;
+    flex-wrap: wrap;
     height:100px;
     color:#aaaaaa;
 }
@@ -1379,7 +1399,8 @@ label[for='file']:hover{
     display: flex;
     align-items: flex-start;
     flex-direction: row;
-    width:50%;
+    min-width:50%;
+    height: 100%;
 }
 
 /*.chart1_cont{
@@ -1498,7 +1519,7 @@ label[for='file']:hover{
 
 .chart1_container{
     position: absolute;
-    top:230px;
+    top:220px;
     height:320px;
     width: 70%;
     left:50px;
@@ -1521,13 +1542,11 @@ label[for='file']:hover{
     font-family:Toboggan;
     padding: 15px;
     position: relative;
-    width: 115px;
+    min-width: 115px;
     cursor: pointer;
     border-radius: 10px;
     box-shadow: -1px 3px 20px 0px rgba(14, 13, 13, 0.75);
 }
-
-
 
 ::-webkit-datetime-edit {background: transparent;border:none;}
 ::-webkit-datetime-edit-fields-wrapper { background-color: rgb(32, 31, 31); border:none; outline:none}
@@ -1539,3 +1558,35 @@ label[for='file']:hover{
 ::-webkit-calendar-picker-indicator {position: relative; left:5px; color:white;cursor: pointer;}
 ::-webkit-clear-button{border:none;color:white; outline: none;}
 
+.chart1_container div{
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    color:white;
+    justify-content: center;
+    left:50px;
+    font-family: 'Courier New', Courier, monospace;
+    user-select: none;
+}
+
+.chart1_container div h1{
+    text-align: center;
+    padding:10px;
+    width:90%;
+    font-size: 15px;
+}
+
+.chart1_container div p{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    height:35px;
+    width:35px;
+    border-radius: 50%;
+    background-color: #0A0A0A;
+}
+
+.chart1_container div p:hover{
+    cursor: pointer;
+    background-color: #0e0d0d;
+}

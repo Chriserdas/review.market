@@ -66,6 +66,7 @@ const NavbarButton = (props)=>{
             animateImg.start({
                 backgroundColor:"#555555",
                 padding:"5px 5px 5px 5px",
+                duration:'0s'
             });
         }
     },[ishovered,clicked]);
@@ -81,9 +82,12 @@ const NavbarButton = (props)=>{
                         }}
 
                         animate = {animateDiv}
+                        
+                        
                     > 
                         <motion.img src={imgSrc} alt=""
                             animate = {animateImg}
+                            transition={{ type: "tween"}}
                         />
                         <motion.div className = "navbar_button_name"
                             animate = {animateText}

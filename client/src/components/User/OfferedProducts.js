@@ -86,6 +86,9 @@ const OfferedProducts = (props) => {
     return (
         <motion.div className="OfferedProducts_container"
             animate={animate}
+            transition={{ 
+                type: "tween",
+            }}
         >
             <div className="super_name_container"> 
 
