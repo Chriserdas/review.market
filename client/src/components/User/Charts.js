@@ -184,7 +184,7 @@ const Charts = ()=>{
             axios.post('http://localhost:5000/chart2',{date:date,categoryId:category.id,subCategoryId:sendSubcategory===true ? subCategory.id : ''})
         .then(response => {
             setAvgChartData({
-                labels: response.data.map(d => new Date(d.date).getDate() - 1),
+                labels: response.data.map(d => new Date(d.date).getDate()-1 === 0 ? new Date(d.date).getUTCDate() : new Date(d.date).getDate()-1),
                 datasets: [
                     {
                         label:"Average Discount",
