@@ -223,7 +223,7 @@ app.get('/api/getSupermarket', async(req,res) => {
 //profile
 app.post('/api/AccountData', async(req,res) => {
     let userId = req.body.userId
-    User.find({"_id": userId,},{"username":1, "score":1, "token":1, "totalScore":1})
+    User.find({"_id": userId,},{"username":1, "score":1, "token":1, "totalScore":1, "totalToken":1})
     .then(response=>{
         res.json(response)
     })
@@ -533,7 +533,6 @@ app.post("/chart2", (req, res) => {
         discounts.sort((a, b) => {
             return new Date(a.date) - new Date(b.date);
         });
-        console.log(discounts)
         res.send(discounts);
     });
 });

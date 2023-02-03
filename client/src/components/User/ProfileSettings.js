@@ -36,7 +36,9 @@ function ProfileSettings(props) {
                 setTokens({
                     score:response.data[0].score,
                     totalScore:response.data[0].totalScore,
-                    totalTokens:response.data[0].token
+                    tokens:response.data[0].token,
+                    totalTokens:response.data[0].totalToken
+
                 });
             })
         }
@@ -157,7 +159,7 @@ function ProfileSettings(props) {
                                             </div>
                                             <div>
                                                 <div>Total Tokens:{tokens.totalTokens}</div>
-                                                <div>Tokens of Month:{tokens.tokens}</div>
+                                                <div>Tokens:{tokens.tokens}</div>
                                             </div>
                                             
                                         </div> 
