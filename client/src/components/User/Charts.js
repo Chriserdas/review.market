@@ -183,6 +183,7 @@ const Charts = ()=>{
         if(category.name !== 'Choose Category'){
             axios.post('http://localhost:5000/chart2',{date:date,categoryId:category.id,subCategoryId:sendSubcategory===true ? subCategory.id : ''})
         .then(response => {
+            console.log(response);
             const sortedData = response.data.sort((a, b) => {
                 const dateA = new Date(a.date);
                 const dateB = new Date(b.date);

@@ -396,22 +396,13 @@ app.post('/api/chart1', async(req,res) => {
 });
 
 //leaderboard
-app.get('/api/leaderboard', async(req,res) => {
-    User.aggregate([
-        { $sort: { totalScore: -1 } },
-        {
-            $project: {
-                _id: 1,
-                username: 1,
-                totalScore: 1,
-                token: 1,
-                totalToken: 1,
-            }
-        }
-    ], (error, results) => {
-        if (error) return console.error(error);
-        res.send(results);
-    });
+app.post('/api/leaderboard', async(req,res) => {
+    const number = req.body.number;
+    if(number>=0){
+        const users = await User.find({},{username:1,totalScore:1,token:1,totalToken:1}).sort({totalScore:-1,username:1}).skip(number).limit(10)
+        res.send(users);
+    }
+    
 });
 
 app.get("/", (req, res) => {
@@ -520,8 +511,8 @@ app.post("/chart2", (req, res) => {
     let dates = [];
     let discounts = [];
 
-
-    for(let i = 0;i<7; i++){
+    dates.push(date);
+    for(let i = 1;i<=6; ++i){
 
         let discountDate = new Date(date.setDate(date.getDate()-1));
         

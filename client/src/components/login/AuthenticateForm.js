@@ -63,7 +63,7 @@ const AuthenticateForm = (props)=>{
                         }else{
                             setInfo({
                                 isAuth:true,
-                                data:res.data,
+                                data:res.data.user,
                                 page:'/UserHome'
                             });
                         

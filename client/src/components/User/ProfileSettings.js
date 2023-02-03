@@ -30,6 +30,7 @@ function ProfileSettings(props) {
     useEffect(() => {
 
         if(clicked==='Account') {
+            
             axios.post('http://localhost:5000/api/AccountData',{userId:user._id})
             .then(response => {
                 setTokens({
@@ -54,7 +55,7 @@ function ProfileSettings(props) {
 
     const handleProfile = () => {
         let updateUsername = true;
-        setChangeUsername(false)
+        //setChangeUsername(false)
 
         if(usernameValue === '' || usernameValue === user.username){
             setUsernameValue(user.username);
@@ -78,12 +79,22 @@ function ProfileSettings(props) {
             newPassword:passwordValue.newPassword
         })
         .then(response => {
-            console.log(response.data);
+            setChangeUsername(false);
+            setChangePassword(false);
             setUser(response.data.user);
-            setNotification({show:true,message:response.data.message});
+            //setNotification({show:true,message:response.data.message});
             localStorage.setItem("token", JSON.stringify(response.data.user));
         })
     }
+
+    useEffect(() => {
+        if(!changePassword) {
+            setPasswordValue({
+                oldPassword:'',
+                newPassword:''
+            });
+        }
+    },[changePassword])
 
     return (
         <div className="profile-settings">
@@ -183,13 +194,26 @@ function ProfileSettings(props) {
                                                     <input
                                                         className='passAcc' 
                                                         type="password"
-                                                        
+                                                        value={passwordValue.oldPassword}
+                                                        onChange={(e)=>{
+                                                            setPasswordValue({
+                                                                oldPassword:e.target.value,
+                                                                newPassword:passwordValue.newPassword
+                                                            })
+                                                        }}
                                                     />
                                                 </div>
                                                 <div>New Password
                                                     <input
                                                         className='passAcc' 
                                                         type="password"
+                                                        value={passwordValue.newPassword}
+                                                        onChange={(e)=>{
+                                                            setPasswordValue({
+                                                                oldPassword:passwordValue.oldPassword,
+                                                                newPassword:e.target.value
+                                                            })
+                                                        }}
                                                     />
                                                 </div>
                                             </div>
@@ -290,6 +314,7 @@ function ProfileSettings(props) {
                         }     
                     </div>
                     
+                   
                 </>)
                 :<AdminPanel/>
             }

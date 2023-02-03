@@ -1,5 +1,5 @@
 import axios from "axios";
-import {React,useState} from "react";
+import {React,useState,useEffect} from "react";
 import Charts from "./Charts";
 
 const AdminPanel = ()=>{
@@ -11,6 +11,9 @@ const AdminPanel = ()=>{
         name:'Choose File',
         file:null
     });
+    const [leaderBoard,setLeaderBoard] = useState(null);
+    const [userCounter,setUserCounter] = useState(0);
+
     const [clickSelected,setClickedSelected] = useState(false);
 
     const handleFileChange = (event)=>{
@@ -28,6 +31,7 @@ const AdminPanel = ()=>{
             const formData = new FormData();
             formData.append('file', file.file);
             formData.append('selected', selected);
+
             // Handle upload file 
             axios.post('http://localhost:5000/uploadData',formData,{
                 headers: {
@@ -50,6 +54,23 @@ const AdminPanel = ()=>{
             });
         }
     }
+
+    useEffect(()=>{
+        if(clicked === 'Leaderboard'){
+            axios.post('http://localhost:5000/api/leaderboard',{number:userCounter}).then(response=>{
+                setLeaderBoard(response.data);   
+            });
+        }
+    },[clicked]);
+
+    useEffect(()=>{
+        
+        axios.post('http://localhost:5000/api/leaderboard',{number:userCounter}).then(response=>{
+            setLeaderBoard(response.data);   
+        });
+    
+            
+    },[userCounter])
 
     let content;
 
@@ -103,6 +124,50 @@ const AdminPanel = ()=>{
     if(clicked === 'Stats'){
         content = <Charts/>
             
+    }
+    if(clicked === "Leaderboard"){
+        content = 
+            <div className="leaderboard_container">
+                <p className="leaderboard_back"
+                    onClick={()=>{
+                        if(userCounter !==0){
+                            setUserCounter(userCounter-10);
+                        }
+                            
+                    }}
+                >&lt;</p>
+                <div className="leaderboard">
+                    <table>
+                        <thead className='offers_table'>
+                            <tr>
+                            <th className='offers_header'>P</th>
+                            <th className='offers_header'>Username</th>
+                            <th className='offers_header'>Total Score</th>
+                            <th className='offers_header'>Total Tokens</th>
+                            <th className='offers_header'>Score Of The Month</th>
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            {leaderBoard!==null || leaderBoard.length>0 ? 
+                                (
+                                    leaderBoard.map((user,index) => (
+                                        <tr key={index}>
+                                            <td className="table-data">{index+1+userCounter}</td>
+                                            <td className="table-data">{user.username}</td>
+                                            <td className="table-data">{user.totalScore}</td>
+                                            <td className="table-data">{user.totalToken}</td>
+                                            <td className="table-data">{user.token}</td>
+                                        </tr>
+                                    ))
+                                ):<tr><td>No more users to show</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <p className="leaderboard_front"
+                    onClick={()=>{setUserCounter(userCounter+10)}}
+                >&gt;</p>
+            </div>
     }
 
     return (

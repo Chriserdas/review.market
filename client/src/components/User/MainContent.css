@@ -1210,7 +1210,7 @@
 
 
 .table-data {
-    text-align: left;
+    text-align: center; 
     padding: 8px;
     font-family: Manrope-Regular;
     color: white;
@@ -1589,4 +1589,55 @@ label[for='file']:hover{
 .chart1_container div p:hover{
     cursor: pointer;
     background-color: #0e0d0d;
+}
+
+.leaderboard_container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    top:100px;
+    width:100%;
+    height: calc(100% - 200px);
+    justify-content: center;
+}
+
+.leaderboard{
+    position: relative;
+    top:10%;
+    display: flex;
+    align-items: flex-start;
+    height:100%;
+    width:30%;
+    min-width: min-content;
+    justify-content: center;
+}
+
+.leaderboard_back{
+    margin-right: 10px;
+}
+
+.leaderboard_front{
+    margin-left: 10px;
+}
+
+.leaderboard_back, .leaderboard_front{
+    position: relative;
+    top:-10%;
+    user-select: none;
+    color:white;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-family: monospace;
+    font-size: 20px;
+    height:35px;
+    width:35px;
+    border-radius: 50%;
+    background-color: #0A0A0A;
+}
+
+.leaderboard_back:hover, .leaderboard_front:hover{
+    cursor: pointer;
+    background-color: #111111;
 }
