@@ -43,7 +43,7 @@ router.patch("/updateProfile", async(req, res)=> {
               if (err) {
                 res.status(500).send(err)
               }
-              res.send({ message: 'Username updated successfully!' });
+              res.send({ message: 'Username updated successfully!', user: {username: updatedUser.username, isAdmin: updatedUser.isAdmin, _id: updatedUser._id,email: updatedUser.email} });
             });
           });
     } 
@@ -60,7 +60,7 @@ router.patch("/updateProfile", async(req, res)=> {
                 if (err) {
                   res.status(500).send(err)
                 }
-              res.send({ message: 'Password updated successfully!' });
+              res.send({ message: 'Password updated successfully!', user: {username: updatedUser.username, isAdmin: updatedUser.isAdmin, _id: updatedUser._id,email: updatedUser.email} });
             });
             }
             else{
