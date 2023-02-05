@@ -1,5 +1,6 @@
 import axios from "axios";
 import {React,useState,useEffect} from "react";
+import NotificationPopup from "../NotificationPopup";
 import Charts from "./Charts";
 
 const AdminPanel = ()=>{
@@ -15,6 +16,11 @@ const AdminPanel = ()=>{
     const [userCounter,setUserCounter] = useState(0);
 
     const [clickSelected,setClickedSelected] = useState(false);
+    const [notification,setNotification] = useState({
+        show:false,
+        message:'',
+        color:''
+    });
 
     const handleFileChange = (event)=>{
         
@@ -144,7 +150,7 @@ const AdminPanel = ()=>{
                             <th className='offers_header'>Username</th>
                             <th className='offers_header'>Total Score</th>
                             <th className='offers_header'>Total Tokens</th>
-                            <th className='offers_header'>Score Of The Month</th>
+                            <th className='offers_header'>Tokens Of The Month</th>
                             </tr>    
                         </thead>
                         <tbody>
@@ -209,6 +215,9 @@ const AdminPanel = ()=>{
                 </div>
             </div>
             {content}
+            <NotificationPopup
+
+            />
         </div>
     )
 }

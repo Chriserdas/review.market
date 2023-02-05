@@ -5,14 +5,16 @@ import { Link } from "react-router-dom";
 export default function NotificationPopup(props){
     const message = props.message;
     const color = props.color;
-    const [activate,setActivate] = useState(props.activate);
+    const activate = props.activate;
     const controlAnimation = useAnimation();
+    const setActivate = props.setActivate;
     useEffect(()=>{
         if (activate) {
             controlAnimation.start({
                 y:[-1000,0,0,0,-1000],
             });
-            setActivate(false);
+            
+            console.log("entered");
         }
     },[activate]);
 
@@ -21,6 +23,9 @@ export default function NotificationPopup(props){
             initial={{y:"-100vh"}}
             animate={controlAnimation}
             transition={{duration:3}}
+            onAnimationComplete={() => {
+                setActivate({show:false});
+            }}
         >
             <div 
                 className="notification_popup" 

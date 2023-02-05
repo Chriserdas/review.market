@@ -26,6 +26,9 @@ const upload = multer({storage: multer.memoryStorage()});
 const moment = require('moment');
 const { date } = require("joi");
 
+const oneWeekFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+const oneMonthFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
 //connect to database
 const url = "mongodb://127.0.0.1:27017/reviewMarket";
 async function connect(){
@@ -54,10 +57,15 @@ app.use('/api/product', productRoutes);
 app.use('/api/offer', offerRoutes);
 
 //get categories
-app.get('/categories', async(req, res) => {
+app.get('/categories',async(req, res) => {
+    res.set({
+        'Cache-Control': 'public',
+        'Expires': oneMonthFromNow.toUTCString(),
+    });
     const createdCategory= await Category.insertMany(categories.categories);
     res.send(createdCategory);
 });
+
 
 //upload data
 app.post('/uploadData', upload.single('file') ,async(req, res) => {
@@ -116,7 +124,7 @@ app.get('/user', async(req, res) => {
     await User.remove({})
     const createdUsers = await User.insertMany(users);
     res.send({ createdUsers });
-  });
+});
 
 //insert offer default
 app.get('/offer', async(req,res) => {
@@ -208,11 +216,11 @@ app.get('/api/getSupermarket', async(req,res) => {
       }
     },
     {
-      $match: {
-          $expr: {
+        $match: {
+            $expr: {
                 $eq: [ { "$size": "$supermarkets" }, 0 ]
             }
-      }
+        }
     },
     {$project: {"properties.name":1, "properties.shop":1, "geometry.coordinates":1 } }
    ]).then((result)=>{
@@ -304,10 +312,10 @@ const userTokens = async () => {
            if(firstDay.getDate() === 1) {
             //for each user give 100 tokens
             users.forEach((user) => {
-                    user.totalToken += 100;
-                    user.totalScore += user.score //keep track of totalScore
-                    user.score = 0; //reset score
-                    user.save();
+                user.totalToken += 100;
+                user.totalScore += user.score //keep track of totalScore
+                user.score = 0; //reset score
+                user.save();
             });
            }
            let date = new Date();
@@ -328,12 +336,9 @@ const userTokens = async () => {
                   user.token = Math.round(100 + (tokens * userScore) / totalscore); //tokens each month only
                   user.save();
                 })
-                //console.log(totalTokens)
-                //console.log(totalscore)
-                //console.log(tokens)
             }
-      }
-  })
+        }
+    })
 }
 // Schedule to run every 24hours
 const job1 = new cron.CronJob('* */24 * * *', userTokens, null, true);
@@ -399,7 +404,7 @@ app.post('/api/chart1', async(req,res) => {
 app.post('/api/leaderboard', async(req,res) => {
     const number = req.body.number;
     if(number>=0){
-        const users = await User.find({},{username:1,totalScore:1,token:1,totalToken:1}).sort({totalScore:-1,username:1}).skip(number).limit(10)
+        const users = await User.find({},{username:1,score:1,token:1,totalToken:1}).sort({totalScore:-1,username:1}).skip(number).limit(10)
         res.send(users);
     }
     

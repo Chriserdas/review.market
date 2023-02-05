@@ -86,10 +86,13 @@ function ProfileSettings(props) {
             setChangePassword(false);
             setUser(response.data.user);
             setNotification({show:true,message:response.data.message,color:response.data.color});
+            
+            setTimeout(() => {
+                setNotification({show:false});
+            }, 3000);
             localStorage.setItem("token", JSON.stringify(response.data.user));
         })
     }
-
     useEffect(() => {
         if(!changePassword) {
             setPasswordValue({
@@ -317,12 +320,16 @@ function ProfileSettings(props) {
                         }     
                     </div>
                     
-                    {/*<NotificationPopup
-                        activate=
-                    />*/}
+                    
                 </>)
                 :<AdminPanel/>
             }
+            <NotificationPopup
+                activate= {notification.show}
+                color ={notification.color}
+                message={notification.message}
+                setActivate ={setNotification}
+            /> 
         </div>
     )
 }
