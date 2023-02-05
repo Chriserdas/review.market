@@ -61,7 +61,6 @@ const store = async(req,res)=>{
                     let offer = new Offer({
                         products: productId,
                         supermarkets: supermarketId,
-                        criteria: true,
                         price: price,
                         criteria:true,
                         createdBy: userId,
@@ -89,7 +88,6 @@ const store = async(req,res)=>{
                     let offer = new Offer({
                         products: productId,
                         supermarkets: supermarketId,
-                        criteria: true,
                         price: price,
                         criteria:true,
                         createdBy: userId,
@@ -118,7 +116,6 @@ const store = async(req,res)=>{
                     let offer = new Offer({
                         products: productId,
                         supermarkets: supermarketId,
-                        criteria: req.body.criteria,
                         price: price,
                         criteria: false,
                         createdBy: userId,
@@ -176,7 +173,6 @@ const store = async(req,res)=>{
                 let offer = new Offer({
                     products: productId,
                     supermarkets: supermarketId,
-                    criteria: true,
                     price: price,
                     criteria:true,
                     createdBy: userId,
@@ -205,7 +201,6 @@ const store = async(req,res)=>{
                 let offer = new Offer({
                     products: productId,
                     supermarkets: supermarketId,
-                    criteria: req.body.criteria,
                     price: price,
                     criteria: false,
                     createdBy: userId,
