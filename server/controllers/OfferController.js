@@ -21,6 +21,7 @@ const calculateAvgPrice = async (productID) => {
     return avgPrice;
 }
 
+//Function to calculate average offer price for previous week
 const calculateAvgPriceWeek = async (productId) => {
     const currentDate = new Date();
     const previousWeek = new Date(currentDate);
