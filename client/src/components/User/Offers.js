@@ -1,5 +1,6 @@
 import {React,useState,useEffect} from "react";
 import sale_logo from "../../images/sale_logo.png"
+import deal_logo from "../../images/deal.png"
 import likeImage from "../../images/like.png"
 import likeFilledImage from "../../images/like_filled.png"
 import notNearLike from "../../images/like_grey.png"
@@ -78,9 +79,17 @@ const Offers = (props)=>{
                             >Delete</p>
                         </div> 
                         
-                        :<div className="hot_logo"> 
-                            <img src={sale_logo} alt=""/>
-                        </div>
+                        :(offer.criteria===true 
+                            ?
+                                <div className="hot_logo">  
+                                    <img src={sale_logo} alt=""/>:""
+                                </div>
+                            :
+                                <div className="hot_logo">  
+                                    <img src={sale_logo} alt=""/>:""
+                                </div>
+                            
+                        )
                     }
 
                     <div className="product_name">{offer.products[0].name}</div>
