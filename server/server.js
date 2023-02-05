@@ -100,7 +100,7 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
         });
     }
 
-    res.send(string.toString() + " were uploaded!")
+    res.send({message:string.toString() + " were uploaded!",color:'green'})
 });
 
 //delete data
@@ -116,7 +116,7 @@ app.post('/api/deleteAll',async(req, res) => {
         await Supermarket.deleteMany({})
      }
     
-    res.send(string.toString() + " were deleted!")
+    res.send({message:string.toString() + " were deleted!",color:'#dd3b39'})
 });
 
 //insert users default
