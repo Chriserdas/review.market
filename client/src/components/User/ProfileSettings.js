@@ -84,13 +84,11 @@ function ProfileSettings(props) {
         .then(response => {
             setChangeUsername(false);
             setChangePassword(false);
-            setUser(response.data.user);
+            if(response.data.user!==undefined){
+                setUser(response.data.user);
+                localStorage.setItem("token", JSON.stringify(response.data.user));
+            }
             setNotification({show:true,message:response.data.message,color:response.data.color});
-            
-            setTimeout(() => {
-                setNotification({show:false});
-            }, 3000);
-            localStorage.setItem("token", JSON.stringify(response.data.user));
         })
     }
     useEffect(() => {

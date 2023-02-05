@@ -404,7 +404,7 @@ app.post('/api/chart1', async(req,res) => {
 app.post('/api/leaderboard', async(req,res) => {
     const number = req.body.number;
     if(number>=0){
-        const users = await User.find({},{username:1,score:1,token:1,totalToken:1}).sort({totalScore:-1,username:1}).skip(number).limit(10)
+        const users = await User.find({},{username:1,totalScore:1,token:1,totalToken:1}).sort({totalScore:-1,username:1}).skip(number).limit(10)
         res.send(users);
     }
     
