@@ -14,19 +14,15 @@ const productRoutes = require('./routes/product');
 const offerRoutes = require('./routes/offer');
 const multer = require('multer');
 const users = require("./data/users");
-//const products = require('./data/products.js');
-const categories = require('./data/categories.json');
-//const supermarket = require("./data/supermarket.js");
+const categories = require('../Data/categories.json');
 const offer = require("./data/offer");
 const { use } = require("./routes/users");
-//const { features } = require("./data/supermarket.js");
 const { product } = require("./controllers/ProductController");
 const upload = multer({storage: multer.memoryStorage()});
 
 const moment = require('moment');
 const { date } = require("joi");
 
-const oneWeekFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 const oneMonthFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
 //connect to database
@@ -516,7 +512,6 @@ app.post("/chart2", (req, res) => {
     let dates = [];
     let discounts = [];
     
-    console.log(date)
     for(let i = 1;i<=7; ++i){
         let discountDate = new Date(date);
         dates.push(discountDate);

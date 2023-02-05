@@ -13,8 +13,6 @@ export default function NotificationPopup(props){
             controlAnimation.start({
                 y:[-1000,0,0,0,-1000],
             });
-            
-            console.log("entered");
         }
     },[activate]);
 

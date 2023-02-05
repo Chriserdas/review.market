@@ -34,8 +34,6 @@ router.post("/", async(req, res)=> {
 router.patch("/updateProfile", async(req, res)=> {
     const { userId, newUsername, oldPassword, newPassword,updateUsername} = req.body
     const salt = await bcrypt.genSalt(10);
-
-    console.log(req.body);
     if(oldPassword !=='' || newPassword!==''){
 
         validatePassword(oldPassword,userId).then(async (response) => {
@@ -67,7 +65,6 @@ router.patch("/updateProfile", async(req, res)=> {
                                 if(err){
                                     res.status(500).send(err)
                                 }
-                                console.log(user);
                                 res.send({ message: "Password Updated",color:'green',user: {username: user.username, isAdmin: user.isAdmin, _id: user._id,email: user.email}});
                             }
                         );
@@ -88,7 +85,7 @@ router.patch("/updateProfile", async(req, res)=> {
             { returnOriginal: false },
             (err, user) => {
                 if(err){
-                    console.log(err);
+                    console.error(err);
                 }
                 res.send({ message: "Username Updated", color:'green', user: {username: user.username, isAdmin: user.isAdmin, _id: user._id,email: user.email}});
             }

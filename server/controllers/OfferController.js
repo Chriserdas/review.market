@@ -142,7 +142,6 @@ const store = async(req,res)=>{
         }
         else {
             if(price < avgPrice * 0.2){
-                console.log("price day")
                 let offer = new Offer({
                     products: productId,
                     supermarkets: supermarketId,
@@ -229,7 +228,6 @@ const store = async(req,res)=>{
 //delete offer
 const destroy = (req,res)=>{
     let offerId = req.body.offerId
-    console.log(offerId);
     Offer.findOneAndDelete({_id: ObjectId(offerId)},(err,result)=>{
         if(result){
             res.send("Offer Deleted")
