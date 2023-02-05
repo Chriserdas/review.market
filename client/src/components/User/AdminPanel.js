@@ -61,6 +61,7 @@ const AdminPanel = ()=>{
         if(selected !== 'Choose Data'){
             axios.post("http://localhost:5000/api/deleteAll", {selected:selected})
             .then(response=>{
+                setFile({name:'Choose File',file:null});
                 setNotification({
                     show:true,
                     message:response.data.message,
