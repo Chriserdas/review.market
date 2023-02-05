@@ -82,7 +82,7 @@ const Offers = (props)=>{
                         :(offer.criteria===true 
                             ?
                                 <div className="hot_logo">  
-                                    <img src={sale_logo} alt=""/>:""
+                                    <img src={deal_logo} alt=""/>:""
                                 </div>
                             :
                                 <div className="hot_logo">  
