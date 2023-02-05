@@ -24,7 +24,8 @@ function ProfileSettings(props) {
 
     const [notification,setNotification] = useState({
         show:false,
-        message:''
+        message:'',
+        color:''
     })
 
     useEffect(() => {
@@ -84,7 +85,7 @@ function ProfileSettings(props) {
             setChangeUsername(false);
             setChangePassword(false);
             setUser(response.data.user);
-            //setNotification({show:true,message:response.data.message});
+            setNotification({show:true,message:response.data.message,color:response.data.color});
             localStorage.setItem("token", JSON.stringify(response.data.user));
         })
     }
@@ -316,7 +317,9 @@ function ProfileSettings(props) {
                         }     
                     </div>
                     
-                   
+                    {/*<NotificationPopup
+                        activate=
+                    />*/}
                 </>)
                 :<AdminPanel/>
             }
