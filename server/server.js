@@ -75,8 +75,7 @@ app.post('/uploadData', upload.single('file') ,async(req, res) => {
        data.products.forEach(product => {
             Product.findOne({name: product.name}, function(err, existingProduct) {
                 if (!existingProduct) {
-                    Product.insertMany(product).then(result =>{
-                    });
+                    Product.insertMany(product);
                 }
             });
         });
@@ -173,6 +172,7 @@ app.post('/api/getOffers', async(req,res) => {
    })
 });
 
+//supermarkets location with offers
 app.get('/api/getCurrentLocation', async(req, res) => {
     Offer.aggregate([
         {
@@ -410,11 +410,12 @@ app.post('/api/leaderboard', async(req,res) => {
     
 });
 
+//server is running
 app.get("/", (req, res) => {
     res.send("Server is ready");
 });
 
-// Function to calculate average offer price for previous day
+//function to calculate average offer price
 const calculateAvgPrice = async (productId,date) => {
     const start = new Date(date.setUTCHours(0,0,0,0));
     const end = new Date(date.setUTCHours(23,59,59,999));
@@ -430,6 +431,7 @@ const calculateAvgPrice = async (productId,date) => {
     return avgPrice;
 }
 
+//function to calculate avg price a week before
 const calculateAvgPriceWeek = async (productId,date) => {
     const currentDate = date
     const previousWeek = new Date(currentDate);
@@ -447,6 +449,7 @@ const calculateAvgPriceWeek = async (productId,date) => {
     return avgPriceWeek;
 }
 
+//matches for chart2
 async function getOffersPerDay(date,categoryId,subcategoryId){
     const start = new Date(date.setUTCHours(0,0,0,0));
     const end = new Date(date.setUTCHours(23,59,59,999));
@@ -485,6 +488,7 @@ async function getOffersPerDay(date,categoryId,subcategoryId){
     
 }
 
+//calculate avgDiscount final
 async function avgDiscount(data, date){
     return new Promise((resolve, reject) => {
                 let sumPrice = 0;
@@ -509,6 +513,7 @@ async function avgDiscount(data, date){
     });
 }
 
+//chart2
 app.post("/chart2", (req, res) => {
     let categoryId = req.body.categoryId;
     let subcategoryId = req.body.subCategoryId;
@@ -542,9 +547,7 @@ app.post("/chart2", (req, res) => {
     });
 });
 
-const port = 5000;
-
 app.listen(5000, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running at http://localhost:5000`);
 });
 

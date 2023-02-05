@@ -35,7 +35,6 @@ router.patch("/updateProfile", async(req, res)=> {
     const { userId, newUsername, oldPassword, newPassword,updateUsername} = req.body
     const salt = await bcrypt.genSalt(10);
 
-    console.log(req.body);
     if(oldPassword !=='' || newPassword!==''){
 
         validatePassword(oldPassword,userId).then(async (response) => {
