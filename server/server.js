@@ -6,7 +6,6 @@ const app = express();
 const cors = require("cors");
 const cron = require('cron');
 const { User, Product, Category, Supermarket, Offer } = require("./models/Schemas");
-
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const supermarketRoutes = require('./routes/supermarket');
@@ -14,7 +13,6 @@ const productRoutes = require('./routes/product');
 const offerRoutes = require('./routes/offer');
 const multer = require('multer');
 const users = require("./data/users");
-const categories = require('../Data/categories.json');
 const offer = require("./data/offer");
 const { use } = require("./routes/users");
 const { product } = require("./controllers/ProductController");
@@ -58,7 +56,7 @@ app.get('/categories',async(req, res) => {
         'Cache-Control': 'public',
         'Expires': oneMonthFromNow.toUTCString(),
     });
-    const createdCategory= await Category.insertMany(categories.categories);
+    const createdCategory= await Category.find({});
     res.send(createdCategory);
 });
 

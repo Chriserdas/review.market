@@ -119,7 +119,7 @@ const SecondNavbar = (props)=>{
             })
             axios.get("http://localhost:5000/categories").then((response)=>{
                 setCategories(response.data);
-            })
+            });
         }
         else{
             animateCategories.start({
@@ -171,7 +171,7 @@ const SecondNavbar = (props)=>{
             })
         }
 
-    },[clickCategory,clickSubCategory,clickProduct])
+    },[clickCategory,clickSubCategory,clickProduct,categories,category])
 
 
     useEffect(()=>{
@@ -230,7 +230,6 @@ const SecondNavbar = (props)=>{
 
         axios.post('http://localhost:5000/api/offer',{categoryId:id})
         .then(response=>{
-            //props.setOffers(response.data.supermarkets);
             if(response.data.length === 0){
                 props.setOffers(null);
             }
@@ -241,6 +240,15 @@ const SecondNavbar = (props)=>{
         })
     }
 
+    useEffect(()=>{
+        if(isClicked==='Categories'){
+            axios.get('http://localhost:5000/categories').then(response =>{ 
+                setCategories(response.data);
+            })
+        }
+    },[isClicked])
+
+    
     let showDiv = 
             <div>
                 {show===true ||clickedSupermarket.clicked ===true ?
@@ -424,10 +432,6 @@ const SecondNavbar = (props)=>{
         }
         else if(isClicked === 'Categories'){
             
-            axios.get('http://localhost:5000/categories').then(response =>{ 
-                setCategories(response.data);
-            })
-
             content = 
                 <>
                     <div className="createOffer_txt">Categories</div>
